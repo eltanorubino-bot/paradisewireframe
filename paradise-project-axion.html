@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Axion Energy · Camino a la Victoria — Paradise</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@200;300;400;500;600;700;800&family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F4EF;
+  --paper:#EDEBE3;
+  --ink:#141413;
+  --muted:#8A8884;
+  --line:rgba(20,20,19,0.10);
+  --accent:#FF3D00;
+  --nav-bg:rgba(245,244,239,0.85);
+  --max:1440px;
+  --pad:32px;
+  --nav-h:64px;
+}
+[data-theme="dark"]{
+  --bg:#0a0a0a;
+  --paper:#141413;
+  --ink:#F5F4EF;
+  --muted:#8A8884;
+  --line:rgba(245,244,239,0.10);
+  --accent:#FF6B3D;
+  --nav-bg:rgba(10,10,10,0.85);
+}
+html{transition:background .35s ease}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Mona Sans',-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  font-weight:400;
+  line-height:1.45;
+  font-size:16px;
+  -webkit-font-smoothing:antialiased;
+  transition:background .35s ease, color .35s ease;
+}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+button{font-family:inherit;cursor:pointer;background:none;border:none;color:inherit}
+
+/* ===== NAV ===== */
+nav.topnav{
+  position:fixed;top:0;left:0;right:0;
+  height:var(--nav-h);z-index:100;
+  background:var(--nav-bg);
+  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--line);
+  display:flex;align-items:center;
+  padding:0 var(--pad);
+  transition:background .35s, border-color .35s;
+}
+.nav-inner{
+  width:100%;max-width:var(--max);margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+}
+.brand{font-weight:600;font-size:20px;letter-spacing:-0.02em;display:flex;align-items:baseline;gap:4px}
+.brand sup{font-size:9px;color:var(--muted);font-weight:500;letter-spacing:0}
+.nav-mid{
+  display:flex;align-items:center;gap:14px;
+  font-size:13px;color:var(--muted);
+}
+.nav-mid .back{
+  display:flex;align-items:center;gap:8px;
+  padding:6px 14px;border:1px solid var(--line);border-radius:999px;
+  font-size:12px;letter-spacing:0.02em;
+  transition:background .2s, border-color .2s;
+  color:var(--ink);
+}
+.nav-mid .back:hover{background:var(--paper);border-color:var(--ink)}
+.nav-mid .crumb{color:var(--ink);font-weight:500}
+.nav-cta{display:flex;align-items:center;gap:16px}
+.lang{font-size:11px;color:var(--muted);letter-spacing:0.08em}
+.lang span.active{color:var(--ink);font-weight:600}
+.btn-pill{
+  background:var(--ink);color:var(--bg);
+  padding:10px 18px;border-radius:999px;
+  font-size:13px;font-weight:500;
+  transition:opacity .2s, transform .2s;
+}
+.btn-pill:hover{opacity:0.9;transform:translateY(-1px)}
+.theme-toggle{width:42px;height:22px;background:none;border:none;padding:0;cursor:pointer;display:flex;align-items:center}
+.toggle-track{
+  position:relative;display:block;width:42px;height:22px;
+  background:transparent;border:1px solid var(--ink);
+  border-radius:999px;transition:opacity .25s;
+}
+.toggle-thumb{
+  position:absolute;top:2px;left:2px;
+  width:16px;height:16px;background:var(--ink);
+  border-radius:50%;
+  transition:transform .3s cubic-bezier(.5,.05,.2,1.2);
+}
+[data-theme="dark"] .toggle-thumb{transform:translateX(20px)}
+.theme-toggle:hover .toggle-track{opacity:0.7}
+
+/* ===== PROJECT HERO ===== */
+.proj-hero{
+  position:relative;
+  height:100vh;
+  min-height:600px;
+  background:#0a0a0a;
+  overflow:hidden;
+  padding-top:var(--nav-h);
+}
+.proj-hero-video{
+  position:absolute;top:var(--nav-h);left:0;right:0;bottom:0;
+  width:100%;height:calc(100vh - var(--nav-h));
+  object-fit:cover;
+  background:#0a0a0a;
+}
+.proj-hero-bg{
+  position:absolute;top:var(--nav-h);left:0;right:0;bottom:0;
+  background:radial-gradient(ellipse at 30% 50%,#7a1f1f 0%,#1a0a0a 70%,#0a0a0a 100%);
+  z-index:0;
+}
+.proj-hero-overlay{
+  position:absolute;top:var(--nav-h);left:0;right:0;bottom:0;
+  background:linear-gradient(180deg,rgba(0,0,0,0.4) 0%,transparent 30%,rgba(0,0,0,0.75) 100%);
+  z-index:2;pointer-events:none;
+}
+.proj-hero-content{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  padding:60px var(--pad);
+  z-index:3;
+  color:#fff;
+}
+.proj-hero-inner{
+  max-width:var(--max);margin:0 auto;
+  display:flex;justify-content:space-between;align-items:flex-end;
+  gap:32px;flex-wrap:wrap;
+}
+.proj-meta{
+  font-size:11px;letter-spacing:0.16em;text-transform:uppercase;
+  color:#ffffffcc;margin-bottom:18px;
+  display:flex;gap:14px;align-items:center;flex-wrap:wrap;
+}
+.proj-meta .dot{width:4px;height:4px;border-radius:50%;background:#ffffff66}
+.proj-title{
+  font-size:clamp(48px,9vw,128px);
+  line-height:0.95;letter-spacing:-0.03em;
+  font-weight:300;color:#fff;
+  max-width:1100px;
+}
+.proj-subtitle{
+  font-family:'Caveat',cursive;
+  font-size:clamp(28px,4vw,52px);
+  font-weight:500;color:#ffffffd6;
+  margin-top:6px;
+}
+.proj-year{
+  font-size:14px;letter-spacing:0.08em;color:#ffffffcc;
+  font-feature-settings:'tnum';
+  text-transform:uppercase;font-weight:500;
+}
+
+/* ===== INFO STRIP ===== */
+.proj-info{
+  background:var(--paper);
+  padding:48px var(--pad);
+  border-bottom:1px solid var(--line);
+  transition:background .35s;
+}
+.proj-info-inner{
+  max-width:var(--max);margin:0 auto;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:24px;
+}
+.info-item{display:flex;flex-direction:column;gap:6px}
+.info-item .lbl{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.info-item .val{font-size:16px;font-weight:500;letter-spacing:-0.01em}
+
+/* ===== DESCRIPTION ===== */
+.proj-desc{
+  padding:120px var(--pad);
+  background:var(--bg);
+  transition:background .35s;
+}
+.proj-desc-inner{
+  max-width:1000px;margin:0 auto;
+}
+.proj-desc .label{
+  font-size:11px;letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:36px;font-weight:500;
+}
+.proj-desc h2{
+  font-size:clamp(28px,3.5vw,48px);line-height:1.2;
+  font-weight:300;letter-spacing:-0.02em;
+  margin-bottom:36px;
+}
+.proj-desc h2 em{font-family:'Caveat',cursive;font-style:normal;color:var(--accent);font-weight:600;font-size:1.15em}
+.proj-desc p{
+  font-size:18px;line-height:1.6;
+  margin-bottom:28px;
+  color:var(--muted);
+  max-width:780px;
+}
+.proj-desc p strong{color:var(--ink);font-weight:500}
+
+/* Word-by-word reveal */
+.text-reveal .word{
+  display:inline-block;
+  opacity:var(--word-op,0.18);
+  transition:opacity 0.18s ease-out;
+}
+
+/* ===== GALLERY ===== */
+.proj-gallery{
+  padding:0 var(--pad) 80px;
+  background:var(--bg);
+  transition:background .35s;
+}
+.proj-gallery-inner{
+  max-width:var(--max);margin:0 auto;
+  display:grid;grid-template-columns:repeat(12,1fr);gap:16px;
+}
+.media{
+  position:relative;
+  background:#1a1a1a;
+  overflow:hidden;
+  aspect-ratio:4/3;
+}
+.media-thumb{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  color:#ffffff44;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
+}
+.media:nth-child(1){grid-column:span 8;aspect-ratio:16/9}
+.media:nth-child(1) .media-thumb{background:radial-gradient(circle at 30% 40%,#7a1f1f,#0a0a0a)}
+.media:nth-child(2){grid-column:span 4;aspect-ratio:3/4}
+.media:nth-child(2) .media-thumb{background:linear-gradient(135deg,#3a2a1a,#0a0a0a)}
+.media:nth-child(3){grid-column:span 4}
+.media:nth-child(3) .media-thumb{background:linear-gradient(135deg,#1a3a4a,#0a0a0a)}
+.media:nth-child(4){grid-column:span 4}
+.media:nth-child(4) .media-thumb{background:linear-gradient(135deg,#4a1a3a,#0a0a0a)}
+.media:nth-child(5){grid-column:span 4}
+.media:nth-child(5) .media-thumb{background:linear-gradient(135deg,#3a3a3a,#0a0a0a)}
+.media:nth-child(6){grid-column:span 12;aspect-ratio:21/9}
+.media:nth-child(6) .media-thumb{background:radial-gradient(circle at 70% 50%,#5a2a1a,#0a0a0a)}
+
+/* ===== PULL QUOTE ===== */
+.proj-pull{
+  padding:120px var(--pad);
+  background:var(--paper);
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  transition:background .35s;
+}
+.proj-pull-inner{
+  max-width:1100px;margin:0 auto;text-align:center;
+}
+.proj-pull blockquote{
+  font-size:clamp(28px,4vw,56px);
+  line-height:1.15;font-weight:300;letter-spacing:-0.02em;
+}
+.proj-pull blockquote em{font-family:'Caveat',cursive;font-style:normal;color:var(--accent);font-weight:600;font-size:1.1em}
+.proj-pull cite{
+  display:block;margin-top:32px;
+  font-size:11px;letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--muted);font-style:normal;font-weight:500;
+}
+.proj-pull cite strong{color:var(--ink);font-weight:600;margin-right:8px}
+
+/* ===== CREDITS ===== */
+.proj-credits{
+  padding:120px var(--pad);
+  background:var(--bg);
+  transition:background .35s;
+}
+.proj-credits-inner{
+  max-width:var(--max);margin:0 auto;
+  display:grid;
+  grid-template-columns:1fr 2fr;
+  gap:48px;
+}
+.proj-credits h3{
+  font-size:clamp(32px,4vw,56px);
+  font-weight:300;letter-spacing:-0.02em;line-height:1;
+}
+.credits-list{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0;
+}
+.credit-row{
+  display:grid;
+  grid-template-columns:140px 1fr;
+  gap:18px;
+  padding:18px 0;
+  border-bottom:1px solid var(--line);
+  align-items:baseline;
+}
+.credit-row .role{
+  font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--muted);font-weight:500;
+}
+.credit-row .name{font-size:15px;font-weight:500;letter-spacing:-0.01em}
+
+/* ===== NEXT PROJECT ===== */
+.next-proj{
+  background:#0a0a0a;
+  color:#F5F4EF;
+  padding:140px var(--pad);
+  text-align:center;
+  position:relative;overflow:hidden;
+  cursor:pointer;
+}
+.next-proj-bg{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse at 70% 40%,#7a4a1f 0%,#1a1208 70%,#0a0a0a 100%);
+  opacity:0.6;transition:opacity .4s;
+}
+.next-proj:hover .next-proj-bg{opacity:0.9}
+.next-proj-inner{position:relative;z-index:2;max-width:var(--max);margin:0 auto}
+.next-proj .lbl{
+  font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
+  color:#ffffff99;margin-bottom:22px;display:block;font-weight:500;
+}
+.next-proj .name{
+  font-size:clamp(48px,8vw,108px);
+  font-weight:300;letter-spacing:-0.025em;line-height:0.95;
+  display:inline-block;
+  transition:transform .4s cubic-bezier(.25,.46,.45,.94);
+}
+.next-proj:hover .name{transform:translateX(20px)}
+.next-proj .arr{font-size:48px;font-weight:300;color:#ffffff77;margin-left:18px;transition:transform .4s,color .4s}
+.next-proj:hover .arr{transform:translateX(30px);color:#fff}
+.next-proj .role{
+  font-size:13px;letter-spacing:0.06em;
+  color:#ffffffaa;margin-top:14px;text-transform:uppercase;
+}
+
+/* ===== FOOTER ===== */
+footer{
+  background:var(--bg);padding:48px var(--pad) 32px;
+  border-top:1px solid var(--line);transition:background .35s;
+}
+.foot-grid{
+  max-width:var(--max);margin:0 auto;
+  display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px;
+  padding-bottom:48px;border-bottom:1px solid var(--line);
+}
+.foot-brand{font-size:14px;color:var(--muted);max-width:320px;line-height:1.55}
+.foot-col h5{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;font-weight:500}
+.foot-col ul{list-style:none}
+.foot-col ul li{margin-bottom:8px;font-size:13px}
+.foot-col ul li a{transition:opacity .2s}
+.foot-col ul li a:hover{opacity:0.5}
+.foot-bottom{
+  max-width:var(--max);margin:24px auto 0;
+  display:flex;justify-content:space-between;font-size:11px;
+  color:var(--muted);letter-spacing:0.04em;flex-wrap:wrap;gap:12px;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width:900px){
+  :root{--pad:20px}
+  .nav-mid{display:none}
+  .lang{display:none}
+  .proj-info-inner{grid-template-columns:repeat(2,1fr);gap:20px}
+  .proj-credits-inner{grid-template-columns:1fr;gap:32px}
+  .credits-list{grid-template-columns:1fr}
+  .credit-row{grid-template-columns:120px 1fr;gap:14px}
+  .media:nth-child(n){grid-column:span 12;aspect-ratio:4/3}
+  .foot-grid{grid-template-columns:1fr 1fr;gap:24px}
+  .foot-brand{grid-column:span 2}
+  .proj-desc,.proj-pull,.proj-credits,.next-proj{padding:80px var(--pad)}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav class="topnav">
+  <div class="nav-inner">
+    <a href="paradise-wireframe-v1.html" class="brand">Paradise<sup>®LA</sup></a>
+    <div class="nav-mid">
+      <a href="paradise-wireframe-v1.html#work" class="back">← Selected Work</a>
+      <span class="crumb">Axion Energy · Camino a la Victoria</span>
+    </div>
+    <div class="nav-cta">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark / light">
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+      </button>
+      <span class="lang"><span class="active">EN</span> · ES</span>
+      <a href="paradise-wireframe-v1.html#contact" class="btn-pill">Let's talk →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== PROJECT HERO ===== -->
+<section class="proj-hero">
+  <div class="proj-hero-bg"></div>
+  <video class="proj-hero-video" autoplay muted loop playsinline preload="auto"
+         poster="data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 9'&gt;&lt;rect width='16' height='9' fill='%230a0a0a'/&gt;&lt;/svg&gt;">
+    <source src="https://sujan-experience.b-cdn.net/campari.mp4" type="video/mp4">
+    <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4">
+  </video>
+  <div class="proj-hero-overlay"></div>
+  <div class="proj-hero-content">
+    <div class="proj-hero-inner">
+      <div>
+        <div class="proj-meta">
+          <span>Axion Energy</span>
+          <span class="dot"></span>
+          <span>TVC + Content System</span>
+          <span class="dot"></span>
+          <span>Buenos Aires, AR</span>
+        </div>
+        <h1 class="proj-title">Camino a la Victoria</h1>
+        <div class="proj-subtitle">— a film that races itself</div>
+      </div>
+      <span class="proj-year">2026</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== INFO STRIP ===== -->
+<section class="proj-info">
+  <div class="proj-info-inner">
+    <div class="info-item"><span class="lbl">Client</span><span class="val">Axion Energy</span></div>
+    <div class="info-item"><span class="lbl">Year</span><span class="val">2026</span></div>
+    <div class="info-item"><span class="lbl">Scope</span><span class="val">TVC · Digital · Always-On</span></div>
+    <div class="info-item"><span class="lbl">Duration</span><span class="val">4 months</span></div>
+    <div class="info-item"><span class="lbl">Reach</span><span class="val">+12M views</span></div>
+  </div>
+</section>
+
+<!-- ===== DESCRIPTION ===== -->
+<section class="proj-desc">
+  <div class="proj-desc-inner">
+    <div class="label">[ s.001 · The brief ]</div>
+    <h2 class="text-reveal">Axion Energy needed more than a launch film. They needed a <em>content engine</em> that could run beside the brand for a full racing season.</h2>
+    <p class="text-reveal"><strong>The problem.</strong> A national fuel brand sponsoring a top-flight motorsport team — but with thirty-two race weekends a year, classic campaign cadences fell apart by week three. Either the brand was loud during the launch and silent the rest of the year, or it diluted the message into wallpaper.</p>
+    <p class="text-reveal"><strong>What we made.</strong> A hero TVC anchored the season — the cinematic centerpiece. Around it, a continuous content system: weekly race-recap edits, BTS reels, driver-POV vertical content, and adaptive cutdowns for every platform. One shoot, one creative core, twelve months of presence.</p>
+    <p class="text-reveal"><strong>The result.</strong> +12M organic views across channels, a 41% lift in unaided brand awareness in the target segment, and a campaign that didn't just survive the calendar — it owned it. Repeat engagement: 8.4x industry benchmark.</p>
+  </div>
+</section>
+
+<!-- ===== GALLERY ===== -->
+<section class="proj-gallery">
+  <div class="proj-gallery-inner">
+    <div class="media"><div class="media-thumb">[ key still · 16:9 ]</div></div>
+    <div class="media"><div class="media-thumb">[ vertical · 3:4 ]</div></div>
+    <div class="media"><div class="media-thumb">[ photo · 4:3 ]</div></div>
+    <div class="media"><div class="media-thumb">[ photo · 4:3 ]</div></div>
+    <div class="media"><div class="media-thumb">[ photo · 4:3 ]</div></div>
+    <div class="media"><div class="media-thumb">[ wide · 21:9 ]</div></div>
+  </div>
+</section>
+
+<!-- ===== PULL QUOTE ===== -->
+<section class="proj-pull">
+  <div class="proj-pull-inner">
+    <blockquote class="text-reveal">"Paradise didn't deliver a campaign. They delivered a <em>system</em> that kept producing for nine months after the launch."</blockquote>
+    <cite><strong>Mariana Aguirre</strong> Marketing Director, Axion Energy</cite>
+  </div>
+</section>
+
+<!-- ===== CREDITS ===== -->
+<section class="proj-credits">
+  <div class="proj-credits-inner">
+    <div>
+      <h3>Credits</h3>
+    </div>
+    <div class="credits-list">
+      <div class="credit-row"><span class="role">Direction</span><span class="name">Director Name 01</span></div>
+      <div class="credit-row"><span class="role">DP</span><span class="name">Cinematographer Name</span></div>
+      <div class="credit-row"><span class="role">Producer</span><span class="name">Fer Rubino</span></div>
+      <div class="credit-row"><span class="role">Exec Producer</span><span class="name">Luciano Porri</span></div>
+      <div class="credit-row"><span class="role">Production Co.</span><span class="name">Paradise LA</span></div>
+      <div class="credit-row"><span class="role">Art Direction</span><span class="name">Guille Cairo</span></div>
+      <div class="credit-row"><span class="role">Post / Edit</span><span class="name">Fede Castro</span></div>
+      <div class="credit-row"><span class="role">Color</span><span class="name">Colorist Name</span></div>
+      <div class="credit-row"><span class="role">Sound Design</span><span class="name">Sound Studio Name</span></div>
+      <div class="credit-row"><span class="role">Music</span><span class="name">Composer / Track</span></div>
+      <div class="credit-row"><span class="role">VFX / AI</span><span class="name">Paradise Pipeline</span></div>
+      <div class="credit-row"><span class="role">Agency</span><span class="name">Agency Name (if applicable)</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== NEXT PROJECT ===== -->
+<a href="paradise-project-axion.html" class="next-proj" style="display:block;text-decoration:none">
+  <div class="next-proj-bg"></div>
+  <div class="next-proj-inner">
+    <span class="lbl">Next Project · 02 / 06</span>
+    <h2><span class="name">Campari</span><span class="arr">→</span></h2>
+    <span class="role">Digital Content · Always-On</span>
+  </div>
+</a>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="foot-grid">
+    <div class="foot-brand">
+      <div class="brand" style="font-size:24px;margin-bottom:12px">Paradise<sup>®LA</sup></div>
+      Hybrid creative production company. Buenos Aires · Los Angeles.
+    </div>
+    <div class="foot-col">
+      <h5>Sections</h5>
+      <ul>
+        <li><a href="paradise-wireframe-v1.html#hero">Home</a></li>
+        <li><a href="paradise-wireframe-v1.html#work">Selected Work</a></li>
+        <li><a href="paradise-wireframe-v1.html#always-on">Always On Mode</a></li>
+        <li><a href="paradise-wireframe-v1.html#craft">Craft Mode</a></li>
+        <li><a href="paradise-wireframe-v1.html#studio">Team</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h5>Social</h5>
+      <ul>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">LinkedIn</a></li>
+        <li><a href="#">TikTok</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h5>Reach out</h5>
+      <ul>
+        <li><a href="mailto:hola@paradise.la">hola@paradise.la</a></li>
+        <li><a href="mailto:fer@paradise.la">fer@paradise.la</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 Paradise LA — All rights reserved</span>
+    <span>EN · ES · Privacy · Legal</span>
+  </div>
+</footer>
+
+<!-- Lenis smooth scroll -->
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+// ===== Smooth scroll =====
+if (typeof Lenis !== 'undefined') {
+  const lenis = new Lenis({
+    duration: 1.1,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smoothWheel: true,
+    smoothTouch: false
+  });
+  function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
+  requestAnimationFrame(raf);
+}
+
+// ===== Dark mode (read pref from localStorage, sync with main) =====
+(function(){
+  const KEY = 'paradise-theme';
+  const root = document.documentElement;
+  const tt = document.getElementById('themeToggle');
+  const saved = localStorage.getItem(KEY);
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  root.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+  tt?.addEventListener('click', () => {
+    const cur = root.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem(KEY, next);
+  });
+})();
+
+// ===== Word splitter =====
+function splitWords(el){
+  const walk = (node) => {
+    Array.from(node.childNodes).forEach(child => {
+      if (child.nodeType === 3) {
+        const parts = child.textContent.split(/(\s+)/);
+        if (parts.length === 1 && /^\s*$/.test(parts[0])) return;
+        const frag = document.createDocumentFragment();
+        parts.forEach(p => {
+          if (!p) return;
+          if (/^\s+$/.test(p)) frag.appendChild(document.createTextNode(p));
+          else {
+            const span = document.createElement('span');
+            span.className = 'word'; span.textContent = p;
+            frag.appendChild(span);
+          }
+        });
+        child.replaceWith(frag);
+      } else if (child.nodeType === 1 && child.tagName !== 'BR') {
+        walk(child);
+      }
+    });
+  };
+  walk(el);
+}
+
+// ===== Text reveal on scroll =====
+(function(){
+  const reveals = Array.from(document.querySelectorAll('.text-reveal'));
+  reveals.forEach(splitWords);
+  let raf;
+  function update() {
+    const vh = window.innerHeight;
+    reveals.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      const startY = vh * 0.85, endY = vh * 0.30;
+      let progress = (startY - rect.top) / (startY - endY);
+      progress = Math.max(0, Math.min(1, progress));
+      const words = el.querySelectorAll('.word');
+      const total = words.length || 1;
+      words.forEach((w, i) => {
+        const start = i / total, end = (i + 0.7) / total;
+        let wp = (progress - start) / (end - start);
+        wp = Math.max(0, Math.min(1, wp));
+        w.style.setProperty('--word-op', (0.18 + wp * 0.82).toFixed(3));
+      });
+    });
+  }
+  function schedule(){ if(raf) return; raf = requestAnimationFrame(()=>{raf=null;update();}); }
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule);
+  schedule();
+})();
+
+// Subtle parallax on hero video
+(function(){
+  const v = document.querySelector('.proj-hero-video');
+  if (!v) return;
+  let t;
+  window.addEventListener('scroll', () => {
+    if (t) return;
+    t = requestAnimationFrame(() => {
+      const y = window.scrollY;
+      v.style.transform = `translateY(${Math.min(y * 0.25, 200)}px) scale(${1 + y * 0.0002})`;
+      t = null;
+    });
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>
