@@ -6,41 +6,55 @@
 <title>Axion Energy · Camino a la Victoria — Paradise</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@200;300;400;500;600;700;800&family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&family=Mona+Sans:wght@200;300;400;500;600;700&family=Kapakana:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#F5F4EF;
-  --paper:#EDEBE3;
-  --ink:#141413;
-  --muted:#8A8884;
-  --line:rgba(20,20,19,0.10);
+  --bg:#E5E5E5;
+  --paper:#E5E5E5;
+  --ink:#000000;
+  --muted:#6E6E6E;
+  --line:rgba(0,0,0,0.16);
+  --line-strong:rgba(0,0,0,0.40);
   --accent:#FF3D00;
-  --nav-bg:rgba(245,244,239,0.85);
+  --nav-bg:rgba(229,229,229,0.92);
+  --pillar-bg:#DCDCDC;
+  --section-divider:rgba(0,0,0,0.12);
+  --movie-barcode:linear-gradient(90deg,
+    #6FB6E0 0%,#2C72A8 12%,#0A0A0A 28%,
+    #C72A1F 42%,#E84E1F 52%,#B92E5A 70%,
+    #C13E89 80%,#6FB6E0 100%);
+  --font-display:'Work Sans','Mona Sans',-apple-system,sans-serif;
+  --font-body:'Mona Sans','Work Sans',-apple-system,sans-serif;
+  --font-script:'Kapakana','Kapakana',cursive;
   --max:1440px;
   --pad:32px;
   --nav-h:64px;
 }
 [data-theme="dark"]{
-  --bg:#0a0a0a;
-  --paper:#141413;
-  --ink:#F5F4EF;
-  --muted:#8A8884;
-  --line:rgba(245,244,239,0.10);
+  --bg:#000000;
+  --paper:#0A0A0A;
+  --ink:#E5E5E5;
+  --muted:#888683;
+  --line:rgba(229,229,229,0.16);
+  --line-strong:rgba(229,229,229,0.40);
   --accent:#FF6B3D;
-  --nav-bg:rgba(10,10,10,0.85);
+  --nav-bg:rgba(0,0,0,0.92);
+  --pillar-bg:#0F0F0F;
+  --section-divider:rgba(229,229,229,0.10);
 }
 html{transition:background .35s ease}
 *{box-sizing:border-box;margin:0;padding:0}
 body{
-  font-family:'Mona Sans',-apple-system,sans-serif;
+  font-family:var(--font-body);
   background:var(--bg);
   color:var(--ink);
-  font-weight:400;
-  line-height:1.45;
+  font-weight:300;
+  line-height:1.5;
   font-size:16px;
   -webkit-font-smoothing:antialiased;
   transition:background .35s ease, color .35s ease;
 }
+h1,h2,h3,h4,h5{font-family:var(--font-display);font-weight:500;text-transform:uppercase;letter-spacing:-0.015em}
 a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
 button{font-family:inherit;cursor:pointer;background:none;border:none;color:inherit}
@@ -133,13 +147,15 @@ nav.topnav{
   text-transform:uppercase;font-weight:500;
 }
 .proj-title{
+  font-family:var(--font-display);
   font-size:clamp(40px,6.5vw,104px);
-  line-height:0.92;letter-spacing:-0.04em;
-  font-weight:700;color:var(--ink);
+  line-height:0.92;letter-spacing:-0.025em;
+  font-weight:500;color:var(--ink);
+  text-transform:uppercase;
   max-width:1300px;
 }
 .proj-subtitle{
-  font-family:'Caveat',cursive;
+  font-family:'Kapakana',cursive;
   font-size:clamp(20px,2.4vw,32px);
   font-weight:500;color:var(--muted);
   margin-top:-2px;
@@ -156,15 +172,8 @@ nav.topnav{
 .proj-progress-fill{
   position:absolute;inset:0;
   width:0%;
-  background:linear-gradient(90deg,
-    #0E2536 0%,
-    #1F4F73 18%,
-    #2A7AA0 38%,
-    #B8542B 60%,
-    #E8893A 80%,
-    #FFC857 100%);
+  background:var(--movie-barcode);
   transition:width 0.05s linear;
-  box-shadow:0 0 12px rgba(255,200,87,0.35);
 }
 
 /* Contained video frame — capped so hero fits in 100vh */
@@ -237,11 +246,13 @@ nav.topnav{
   color:var(--muted);margin-bottom:36px;font-weight:500;
 }
 .proj-desc h2{
-  font-size:clamp(30px,4vw,60px);line-height:1;
-  font-weight:700;letter-spacing:-0.035em;
+  font-family:var(--font-display);
+  font-size:clamp(28px,3.5vw,52px);line-height:1.05;
+  font-weight:500;letter-spacing:-0.02em;
+  text-transform:uppercase;
   margin-bottom:40px;
 }
-.proj-desc h2 em{font-family:'Caveat',cursive;font-style:normal;color:var(--accent);font-weight:600;font-size:1em;letter-spacing:-0.02em}
+.proj-desc h2 em{font-family:var(--font-script);font-style:italic;color:var(--ink);font-weight:500;font-size:1.2em;text-transform:none}
 .proj-desc p{
   font-size:18px;line-height:1.6;
   margin-bottom:28px;
@@ -427,10 +438,12 @@ nav.topnav{
   max-width:1100px;margin:0 auto;text-align:center;
 }
 .proj-pull blockquote{
-  font-size:clamp(32px,4.5vw,72px);
-  line-height:1;font-weight:700;letter-spacing:-0.04em;
+  font-family:var(--font-display);
+  font-size:clamp(28px,4vw,64px);
+  line-height:1.1;font-weight:500;letter-spacing:-0.02em;
+  text-transform:uppercase;
 }
-.proj-pull blockquote em{font-family:'Caveat',cursive;font-style:normal;color:var(--accent);font-weight:600;font-size:1em;letter-spacing:-0.02em}
+.proj-pull blockquote em{font-family:var(--font-script);font-style:italic;color:var(--ink);font-weight:500;font-size:1.15em;text-transform:none}
 .proj-pull cite{
   display:block;margin-top:32px;
   font-size:11px;letter-spacing:0.16em;text-transform:uppercase;
@@ -451,8 +464,10 @@ nav.topnav{
   gap:48px;
 }
 .proj-credits h3{
+  font-family:var(--font-display);
   font-size:clamp(36px,5vw,80px);
-  font-weight:700;letter-spacing:-0.04em;line-height:0.95;
+  font-weight:500;letter-spacing:-0.025em;line-height:0.95;
+  text-transform:uppercase;
 }
 .credits-list{
   display:grid;
@@ -494,8 +509,10 @@ nav.topnav{
   color:#ffffff99;margin-bottom:22px;display:block;font-weight:500;
 }
 .next-proj .name{
+  font-family:var(--font-display);
   font-size:clamp(48px,7.5vw,120px);
-  font-weight:700;letter-spacing:-0.04em;line-height:0.92;
+  font-weight:500;letter-spacing:-0.025em;line-height:0.92;
+  text-transform:uppercase;
   display:inline-block;
   transition:transform .4s cubic-bezier(.25,.46,.45,.94);
 }
