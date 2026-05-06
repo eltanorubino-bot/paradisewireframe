@@ -134,6 +134,41 @@ body.intro-active{overflow:hidden;height:100vh}
   font-size:10px;letter-spacing:0.18em;color:#ffffff66;text-transform:uppercase;
 }
 
+/* ============= BACK TO TOP ============= */
+.back-top{
+  position:fixed;
+  bottom:24px;right:24px;
+  z-index:90;
+  background:var(--ink);
+  color:var(--bg);
+  border:none;
+  padding:14px 22px 14px 18px;
+  border-radius:999px;
+  font-size:11px;
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+  font-weight:600;
+  cursor:pointer;
+  opacity:0;
+  pointer-events:none;
+  transform:translateY(12px);
+  transition:opacity .35s ease, transform .35s cubic-bezier(.25,.46,.45,.94), background .25s, color .25s;
+  display:flex;align-items:center;gap:10px;
+  font-family:'Mona Sans',sans-serif;
+  box-shadow:0 12px 30px rgba(0,0,0,0.18);
+}
+.back-top.visible{
+  opacity:1;
+  pointer-events:auto;
+  transform:none;
+}
+.back-top .arrow{
+  display:inline-block;
+  font-size:14px;
+  transition:transform .25s;
+}
+.back-top:hover .arrow{transform:translateY(-3px)}
+
 /* ============= TOP SCROLL PROGRESS BAR ============= */
 .scroll-progress{
   position:fixed;top:0;left:0;
@@ -425,13 +460,12 @@ section.section{
   position:relative;
   z-index:3;
   display:flex;
-  justify-content:space-between;
+  justify-content:flex-end;
   align-items:flex-end;
   color:#fff;
   flex-wrap:wrap;
   gap:24px;
 }
-.hero-foot .left{font-size:13px;color:#ffffffcc;max-width:380px;line-height:1.55}
 .scroll-cue{
   display:flex;
   align-items:center;
@@ -489,84 +523,165 @@ section.section{
   gap:24px;
 }
 .sec-title{
-  font-size:clamp(32px,5vw,72px);
-  line-height:1;
-  font-weight:300;
-  letter-spacing:-0.025em;
-  max-width:900px;
+  font-size:clamp(44px,8.5vw,132px);
+  line-height:0.92;
+  font-weight:700;
+  letter-spacing:-0.04em;
+  max-width:1200px;
 }
-.sec-title em{font-family:'Caveat',cursive;font-style:normal;font-weight:600;color:var(--accent);font-size:1.1em}
-.sec-sub{font-size:13px;color:var(--muted);letter-spacing:0.04em;max-width:300px;text-align:right}
+.sec-title em{font-family:'Caveat',cursive;font-style:normal;font-weight:600;color:var(--accent);font-size:0.95em;letter-spacing:-0.02em}
+.sec-sub{font-size:14px;color:var(--muted);letter-spacing:0.04em;max-width:320px;text-align:right;line-height:1.55}
 
-/* ============= 02 OUR WORK — FULLSCREEN SLIDER ============= */
+/* ============= 02 SELECTED WORK — HORIZONTAL SCROLL CARDS ============= */
 #work{
+  min-height:100vh;
   height:100vh;
-  min-height:600px;
   padding:0;
   background:#0a0a0a;
   position:relative;
   overflow:hidden;
 }
-#work .section-marker{color:#ffffff99;z-index:5}
+#work .section-marker{color:#ffffff99;z-index:5;top:calc(var(--nav-h) + 24px)}
 #work .section-marker .num{background:#F5F4EF;color:#0a0a0a}
 
-.work-slider{position:absolute;inset:0}
-.slide{
-  position:absolute;inset:0;
-  opacity:0;
-  transition:opacity .9s ease;
-  pointer-events:none;
+/* Horizontal track */
+.work-track-wrap{
+  position:absolute;
+  top:0;left:0;right:0;bottom:0;
 }
-.slide.active{opacity:1;pointer-events:auto}
-.slide-bg{
+.work-track{
+  display:flex;
+  height:100%;
+  width:max-content;
+  transition:transform 1s cubic-bezier(.65,.05,.25,1);
+  will-change:transform;
+}
+
+/* Each project card (one viewport wide) */
+.slide{
+  position:relative;
+  flex:0 0 100vw;
+  width:100vw;
+  height:100%;
+  padding:calc(var(--nav-h) + 96px) clamp(24px,5vw,80px) 130px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  gap:28px;
+  user-select:none;
+}
+.slide-inner{
+  width:100%;
+  max-width:1280px;
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+}
+
+/* Title row above the video */
+.slide-text-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:24px;
+  flex-wrap:wrap;
+}
+.slide-text-left{display:flex;flex-direction:column;gap:8px;max-width:80%}
+.slide-brand{
+  font-size:clamp(36px,5.5vw,96px);
+  font-weight:700;
+  line-height:0.92;
+  letter-spacing:-0.04em;
+  color:#fff;
+}
+.slide-role{
+  font-size:13px;color:#ffffffaa;letter-spacing:0.1em;text-transform:uppercase;font-weight:500;
+}
+.slide-year{
+  font-size:14px;color:#ffffffaa;
+  font-feature-settings:'tnum';letter-spacing:0.08em;
+}
+
+/* Color-graded finite progress bar */
+.slide-progress-track{
+  width:100%;height:3px;
+  background:rgba(255,255,255,0.10);
+  position:relative;overflow:hidden;
+  border-radius:2px;
+}
+.slide-progress-fill{
+  position:absolute;inset:0;
+  width:0%;
+  background:linear-gradient(90deg,
+    #0E2536 0%,
+    #1F4F73 18%,
+    #2A7AA0 38%,
+    #B8542B 60%,
+    #E8893A 80%,
+    #FFC857 100%);
+  transition:none;
+  box-shadow:0 0 12px rgba(255,200,87,0.35);
+}
+
+/* Video frame: contained 16:9, max width respects card padding */
+.slide-video-frame{
+  position:relative;
+  width:100%;
+  aspect-ratio:16/9;
+  max-height:calc(100vh - 380px);
+  background:#1a1a1a;
+  overflow:hidden;
+  cursor:pointer;
+  border-radius:2px;
+}
+.slide-video-bg{
   position:absolute;inset:0;
   background-size:cover;background-position:center;
-  filter:saturate(1.05);
 }
-.slide-bg::after{
-  content:attr(data-label);
+.slide:nth-child(1) .slide-video-bg{background:radial-gradient(ellipse at 30% 50%,#7a1f1f 0%,#1a0a0a 70%,#0a0a0a 100%)}
+.slide:nth-child(2) .slide-video-bg{background:radial-gradient(ellipse at 70% 40%,#7a4a1f 0%,#1a1208 70%,#0a0a0a 100%)}
+.slide:nth-child(3) .slide-video-bg{background:radial-gradient(ellipse at 40% 60%,#1f4a7a 0%,#0a1320 70%,#0a0a0a 100%)}
+.slide:nth-child(4) .slide-video-bg{background:radial-gradient(ellipse at 60% 50%,#1f7a4a 0%,#0a1f14 70%,#0a0a0a 100%)}
+.slide:nth-child(5) .slide-video-bg{background:radial-gradient(ellipse at 50% 50%,#7a1f5a 0%,#1a0a14 70%,#0a0a0a 100%)}
+.slide:nth-child(6) .slide-video-bg{background:radial-gradient(ellipse at 50% 50%,#3a3a3a 0%,#1a1a1a 70%,#0a0a0a 100%)}
+
+.slide-frame-label{
   position:absolute;top:50%;left:50%;
   transform:translate(-50%,-50%);
-  color:#ffffff1f;
-  font-size:13px;letter-spacing:0.18em;text-transform:uppercase;
-  pointer-events:none;font-weight:500;text-align:center;width:80%;
+  color:#ffffff20;
+  font-size:13px;letter-spacing:0.2em;
+  text-transform:uppercase;
+  pointer-events:none;font-weight:500;text-align:center;
 }
-.slide:nth-child(1) .slide-bg{background:radial-gradient(ellipse at 30% 50%,#7a1f1f 0%,#1a0a0a 70%,#0a0a0a 100%)}
-.slide:nth-child(2) .slide-bg{background:radial-gradient(ellipse at 70% 40%,#7a4a1f 0%,#1a1208 70%,#0a0a0a 100%)}
-.slide:nth-child(3) .slide-bg{background:radial-gradient(ellipse at 40% 60%,#1f4a7a 0%,#0a1320 70%,#0a0a0a 100%)}
-.slide:nth-child(4) .slide-bg{background:radial-gradient(ellipse at 60% 50%,#1f7a4a 0%,#0a1f14 70%,#0a0a0a 100%)}
-.slide:nth-child(5) .slide-bg{background:radial-gradient(ellipse at 50% 50%,#7a1f5a 0%,#1a0a14 70%,#0a0a0a 100%)}
-.slide:nth-child(6) .slide-bg{background:radial-gradient(ellipse at 50% 50%,#3a3a3a 0%,#1a1a1a 70%,#0a0a0a 100%)}
 
-.slide-overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(0,0,0,0.5) 0%,transparent 25%,transparent 55%,rgba(0,0,0,0.75) 100%);
+.slide-cta{
+  position:absolute;
+  bottom:20px;right:20px;
+  font-size:11px;color:#fff;
+  letter-spacing:0.16em;text-transform:uppercase;font-weight:600;
+  background:rgba(0,0,0,0.55);
+  border:1px solid rgba(255,255,255,0.4);
+  padding:11px 20px;border-radius:999px;
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  opacity:0;
+  transform:translateY(8px);
+  transition:opacity .35s ease, transform .35s ease, background .25s, color .25s;
+  text-decoration:none;
+  display:inline-flex;align-items:center;gap:8px;
   pointer-events:none;
 }
+.slide-video-frame:hover .slide-cta{
+  opacity:1;
+  transform:none;
+  pointer-events:auto;
+}
+.slide-cta:hover{background:#fff;color:var(--ink);border-color:#fff}
 
-.slide-meta{
-  position:absolute;
-  bottom:140px;left:48px;right:48px;
-  color:#fff;z-index:3;
-  display:flex;justify-content:space-between;align-items:flex-end;
-  gap:24px;flex-wrap:wrap;
-}
-.slide-meta .left{max-width:60%}
-.slide-meta .brand-name{
-  font-size:clamp(48px,8vw,108px);
-  font-weight:300;letter-spacing:-0.025em;line-height:0.95;display:block;
-}
-.slide-meta .role{
-  font-size:13px;color:#ffffffcc;letter-spacing:0.08em;text-transform:uppercase;
-  margin-top:14px;display:block;
-}
-.slide-meta .year{
-  font-size:13px;color:#ffffffcc;font-feature-settings:'tnum';letter-spacing:0.08em;
-}
-
+/* Bottom slider chrome */
 .slider-bar{
   position:absolute;
-  bottom:48px;left:48px;right:48px;
+  bottom:32px;left:clamp(24px,5vw,80px);right:clamp(24px,5vw,80px);
   display:flex;align-items:center;justify-content:space-between;
   z-index:5;color:#fff;flex-wrap:wrap;gap:16px;
 }
@@ -577,6 +692,7 @@ section.section{
   color:#fff;font-size:14px;
   display:flex;align-items:center;justify-content:center;
   transition:all .2s;
+  background:transparent;
 }
 .slider-controls button:hover{background:#fff;color:var(--ink);border-color:#fff}
 .slider-counter{
@@ -602,20 +718,19 @@ section.section{
 
 .work-cats-overlay{
   position:absolute;
-  top:24px;right:48px;
+  top:calc(var(--nav-h) + 24px);
+  right:clamp(24px,5vw,80px);
   display:flex;gap:18px;z-index:5;
-  font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
-  color:#ffffffaa;
+  font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
+  color:#ffffffaa;font-weight:500;
 }
 .work-cats-overlay span{cursor:pointer;transition:color .2s;padding:4px 0}
 .work-cats-overlay span:hover{color:#fff}
 .work-cats-overlay span.on{color:#fff;border-bottom:1px solid #fff}
-.work-progress{
-  position:absolute;
-  top:0;left:0;height:2px;
-  background:#fff;width:0%;
-  z-index:6;transition:width 0.1s linear;
-}
+
+/* drag affordance */
+.work-track.is-dragging{transition:none;cursor:grabbing}
+.work-track.is-dragging .slide{cursor:grabbing}
 
 /* ============= 03 ALWAYS ON MODE ============= */
 #always-on{background:#0a0a0a;color:#F5F4EF}
@@ -657,10 +772,10 @@ section.section{
   font-weight:600;
 }
 .move h3{
-  font-size:36px;
-  line-height:1.05;
-  font-weight:400;
-  letter-spacing:-0.02em;
+  font-size:clamp(28px,2.8vw,42px);
+  line-height:1;
+  font-weight:700;
+  letter-spacing:-0.03em;
   margin-bottom:18px;
   color:#fff;
 }
@@ -703,20 +818,135 @@ section.section{
 .craft-roster{
   border-top:1px solid var(--line);
 }
+.roster-item{
+  border-bottom:1px solid var(--line);
+}
 .craft-roster .roster-row{
   display:grid;
   grid-template-columns:80px 1fr auto;
   gap:24px;
   align-items:center;
-  padding:24px 0;
-  border-bottom:1px solid var(--line);
+  padding:22px 0;
   cursor:pointer;
   transition:padding-left .25s ease;
+  user-select:none;
 }
-.craft-roster .roster-row:hover{padding-left:16px}
-.craft-roster .role{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
-.craft-roster .name{font-size:24px;letter-spacing:-0.02em;font-weight:400}
-.craft-roster .reel-link{font-size:11px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.craft-roster .roster-row:hover{padding-left:14px}
+.roster-item.open .roster-row{padding-left:14px}
+.craft-roster .role{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.craft-roster .name{font-size:22px;letter-spacing:-0.02em;font-weight:500}
+.craft-roster .expand-cue{
+  font-size:11px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:8px;
+  transition:transform .35s cubic-bezier(.25,.46,.45,.94), color .25s;
+}
+.craft-roster .expand-cue .arrow{
+  display:inline-block;
+  transition:transform .35s cubic-bezier(.25,.46,.45,.94);
+}
+.roster-item.open .expand-cue{color:var(--ink)}
+.roster-item.open .expand-cue .arrow{transform:rotate(180deg)}
+
+/* Expandable detail panel */
+.roster-detail{
+  max-height:0;
+  overflow:hidden;
+  opacity:0;
+  transition:max-height .65s cubic-bezier(.65,.05,.25,1), opacity .4s ease, padding .4s ease;
+}
+.roster-item.open .roster-detail{
+  max-height:720px;
+  opacity:1;
+}
+.roster-detail-inner{
+  display:grid;
+  grid-template-columns:240px 1fr;
+  gap:32px;
+  padding:14px 0 36px;
+  align-items:start;
+}
+.director-photo{
+  aspect-ratio:3/4;
+  background:linear-gradient(180deg,#3a3a3a 0%,#0a0a0a 100%);
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,0.25);
+  font-size:48px;font-weight:200;
+  border-radius:2px;
+  position:relative;
+  overflow:hidden;
+}
+[data-theme="dark"] .director-photo{background:linear-gradient(180deg,#2a2a2a,#0a0a0a)}
+.director-info{display:flex;flex-direction:column;gap:18px}
+.director-bio{display:flex;flex-direction:column;gap:14px}
+.director-bio h4{
+  font-size:18px;letter-spacing:-0.01em;font-weight:600;
+}
+.director-bio p{
+  font-size:13.5px;line-height:1.6;color:var(--muted);max-width:560px;
+}
+.director-bio .specs{
+  display:flex;gap:18px;flex-wrap:wrap;
+  font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);
+  padding-top:6px;
+}
+.director-bio .specs span{
+  padding:5px 10px;border:1px solid var(--line);border-radius:999px;
+}
+.director-bio .reel-link-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--ink);font-weight:600;
+  border-bottom:1px solid var(--ink);
+  padding-bottom:3px;width:fit-content;
+  transition:gap .25s;
+}
+.director-bio .reel-link-cta:hover{gap:14px}
+
+/* Horizontal portfolio scroll */
+.director-portfolio{
+  margin-top:6px;
+}
+.portfolio-label{
+  font-size:11px;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--muted);font-weight:500;margin-bottom:14px;
+  display:flex;justify-content:space-between;
+}
+.portfolio-track{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+  padding-bottom:14px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--muted) transparent;
+}
+.portfolio-track::-webkit-scrollbar{height:4px}
+.portfolio-track::-webkit-scrollbar-track{background:var(--line);border-radius:2px}
+.portfolio-track::-webkit-scrollbar-thumb{background:var(--muted);border-radius:2px}
+.portfolio-item{
+  flex:0 0 240px;
+  aspect-ratio:4/3;
+  scroll-snap-align:start;
+  position:relative;
+  overflow:hidden;
+  border-radius:2px;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,0.18);
+  font-size:11px;letter-spacing:0.12em;text-transform:uppercase;font-weight:500;
+}
+.portfolio-item:nth-child(odd){background:linear-gradient(135deg,#2a1a3a,#0a0a0a)}
+.portfolio-item:nth-child(even){background:linear-gradient(135deg,#3a2a1a,#0a0a0a)}
+.portfolio-item:nth-child(3n){background:linear-gradient(135deg,#1a2a3a,#0a0a0a)}
+.portfolio-item:nth-child(5n){background:linear-gradient(135deg,#3a1a2a,#0a0a0a)}
+.portfolio-item:hover::after{
+  content:'PLAY ▶';
+  position:absolute;inset:0;
+  background:rgba(0,0,0,0.5);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:600;letter-spacing:0.16em;
+}
 .craft-aside{
   background:var(--aside-bg);
   padding:32px;
@@ -769,23 +999,23 @@ section.section{
   font-size:11px;letter-spacing:0.16em;color:var(--muted);font-weight:500;
 }
 .pillar h3{
-  font-size:32px;letter-spacing:-0.025em;font-weight:400;line-height:1.05;margin:14px 0 16px;
+  font-size:clamp(28px,3vw,44px);letter-spacing:-0.03em;font-weight:700;line-height:1;margin:14px 0 16px;
 }
-.pillar h3 em{font-family:'Caveat',cursive;font-style:normal;color:var(--accent);font-weight:600;font-size:1.1em}
+.pillar h3 em{font-family:'Caveat',cursive;font-style:normal;color:var(--accent);font-weight:600;font-size:1.05em;letter-spacing:-0.02em}
 .pillar p{font-size:14px;line-height:1.55;color:var(--muted);max-width:420px}
 
 /* ============= 06 STUDIO / TEAM ============= */
 #studio{background:var(--bg)}
 .studio-tagline{
-  font-size:clamp(40px,6vw,84px);
-  line-height:1;
-  letter-spacing:-0.03em;
-  font-weight:300;
-  max-width:1100px;
-  margin:0 auto 80px;
+  font-size:clamp(44px,8vw,124px);
+  line-height:0.92;
+  letter-spacing:-0.04em;
+  font-weight:700;
+  max-width:1200px;
+  margin:0 auto 72px;
   text-align:center;
 }
-.studio-tagline em{font-family:'Caveat',cursive;font-style:normal;font-weight:600;color:var(--accent)}
+.studio-tagline em{font-family:'Caveat',cursive;font-style:normal;font-weight:600;color:var(--accent);letter-spacing:-0.02em}
 .team-grid{
   display:grid;
   grid-template-columns:repeat(6,1fr);
@@ -831,7 +1061,7 @@ section.section{
 }
 .contact-card:hover{transform:translateY(-4px);background:#252522}
 .contact-card .ckind{font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#ffffff99;margin-bottom:24px;font-weight:500}
-.contact-card h3{font-size:40px;font-weight:300;letter-spacing:-0.02em;margin-bottom:16px;line-height:1.1;color:#fff}
+.contact-card h3{font-size:clamp(28px,3.2vw,44px);font-weight:700;letter-spacing:-0.03em;margin-bottom:16px;line-height:1;color:#fff}
 .contact-card p{font-size:14px;color:#ffffffaa;line-height:1.55;max-width:340px;margin-bottom:32px}
 .contact-cta{
   font-size:14px;
@@ -911,34 +1141,7 @@ footer{
   to{opacity:1;transform:none}
 }
 
-/* Slide click affordance + hover CTA */
-#work .slide.active{cursor:pointer}
-#work .slide.active::before{
-  content:'View project →';
-  position:absolute;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%) translateY(14px);
-  color:#fff;
-  font-size:12px;
-  letter-spacing:0.14em;
-  text-transform:uppercase;
-  background:rgba(0,0,0,0.55);
-  border:1px solid rgba(255,255,255,0.4);
-  padding:14px 28px;
-  border-radius:999px;
-  -webkit-backdrop-filter:blur(10px);
-  backdrop-filter:blur(10px);
-  opacity:0;
-  transition:opacity .35s ease, transform .35s cubic-bezier(.25,.46,.45,.94), background .25s, color .25s;
-  pointer-events:none;
-  z-index:4;
-  font-weight:500;
-  white-space:nowrap;
-}
-#work .slide.active:hover::before{
-  opacity:1;
-  transform:translate(-50%,-50%);
-}
+/* (slide click CTA now lives inside .slide-video-frame as .slide-cta) */
 
 /* Smooth video transform for parallax */
 .hero-video{transition:transform 0.05s linear}
@@ -983,6 +1186,11 @@ footer{
   .always-stat{grid-template-columns:1fr;gap:32px}
   .craft-layout{grid-template-columns:1fr}
   .craft-aside{position:static}
+  .roster-detail-inner{grid-template-columns:1fr;gap:20px}
+  .director-photo{aspect-ratio:4/3;max-width:none}
+  .craft-roster .name{font-size:18px}
+  .roster-item.open .roster-detail{max-height:1100px}
+  .portfolio-item{flex-basis:200px}
   .pillars{grid-template-columns:1fr}
   .team-grid{grid-template-columns:repeat(2,1fr)}
   .contact-cards{grid-template-columns:1fr}
@@ -1046,6 +1254,11 @@ footer{
 <!-- Top scroll progress bar -->
 <div class="scroll-progress" id="scrollProgress"></div>
 
+<!-- Back to top floating button -->
+<button class="back-top" id="backTop" aria-label="Back to top">
+  <span class="arrow">↑</span><span>Back to top</span>
+</button>
+
 <!-- ============= 00 NAV ============= -->
 <nav class="topnav">
   <div class="nav-inner">
@@ -1106,10 +1319,6 @@ footer{
     </h1>
   </div>
   <div class="container hero-foot">
-    <div class="left">
-      Small by choice, big by nature. We build content systems for brands that publish every day —<br>
-      not just for the launch.
-    </div>
     <div class="scroll-cue">
       <span>Scroll</span>
       <span class="arrow">↓</span>
@@ -1142,9 +1351,8 @@ footer{
   </div>
 </section>
 
-<!-- ============= 02 OUR WORK · FULLSCREEN SLIDER ============= -->
+<!-- ============= 02 SELECTED WORK · HORIZONTAL SCROLL CARDS ============= -->
 <section id="work">
-  <div class="work-progress" id="workProgress"></div>
   <div class="section-marker"><span class="num">02</span> Selected Work</div>
 
   <div class="work-cats-overlay">
@@ -1152,75 +1360,120 @@ footer{
     <span>Motion</span>
     <span>Digital</span>
     <span>Photo</span>
-    <span>Film & TV</span>
+    <span>Film &amp; TV</span>
   </div>
 
-  <div class="work-slider" id="workSlider">
-    <div class="slide active">
-      <div class="slide-bg" data-label="[ video bg · 16:9 · loop · muted · h264 · max 4MB ]"></div>
-      <div class="slide-overlay"></div>
-      <div class="slide-meta">
-        <div class="left">
-          <span class="brand-name">Axion Energy</span>
-          <span class="role">Camino a la Victoria · TVC + Content System</span>
+  <div class="work-track-wrap">
+    <div class="work-track" id="workTrack">
+
+      <article class="slide active" data-href="paradise-project-axion.html">
+        <div class="slide-inner">
+          <div class="slide-text-row">
+            <div class="slide-text-left">
+              <h3 class="slide-brand">Axion Energy</h3>
+              <span class="slide-role">Camino a la Victoria · TVC + Content System</span>
+            </div>
+            <span class="slide-year">2026</span>
+          </div>
+          <div class="slide-progress-track"><div class="slide-progress-fill"></div></div>
+          <div class="slide-video-frame" data-href="paradise-project-axion.html">
+            <div class="slide-video-bg"></div>
+            <span class="slide-frame-label">[ video · 16:9 · loop · muted · max 4MB ]</span>
+            <a class="slide-cta" href="paradise-project-axion.html">View project →</a>
+          </div>
         </div>
-        <span class="year">2026</span>
-      </div>
-    </div>
-    <div class="slide">
-      <div class="slide-bg" data-label="[ video placeholder ]"></div>
-      <div class="slide-overlay"></div>
-      <div class="slide-meta">
-        <div class="left">
-          <span class="brand-name">Campari</span>
-          <span class="role">Digital Content · Always-On</span>
+      </article>
+
+      <article class="slide" data-href="paradise-project-axion.html">
+        <div class="slide-inner">
+          <div class="slide-text-row">
+            <div class="slide-text-left">
+              <h3 class="slide-brand">Campari</h3>
+              <span class="slide-role">Digital Content · Always-On</span>
+            </div>
+            <span class="slide-year">2025</span>
+          </div>
+          <div class="slide-progress-track"><div class="slide-progress-fill"></div></div>
+          <div class="slide-video-frame" data-href="paradise-project-axion.html">
+            <div class="slide-video-bg"></div>
+            <span class="slide-frame-label">[ video · 16:9 ]</span>
+            <a class="slide-cta" href="paradise-project-axion.html">View project →</a>
+          </div>
         </div>
-        <span class="year">2025</span>
-      </div>
-    </div>
-    <div class="slide">
-      <div class="slide-bg" data-label="[ video placeholder ]"></div>
-      <div class="slide-overlay"></div>
-      <div class="slide-meta">
-        <div class="left">
-          <span class="brand-name">Converse</span>
-          <span class="role">Photoshooting</span>
+      </article>
+
+      <article class="slide" data-href="paradise-project-axion.html">
+        <div class="slide-inner">
+          <div class="slide-text-row">
+            <div class="slide-text-left">
+              <h3 class="slide-brand">Converse</h3>
+              <span class="slide-role">Photoshooting</span>
+            </div>
+            <span class="slide-year">2025</span>
+          </div>
+          <div class="slide-progress-track"><div class="slide-progress-fill"></div></div>
+          <div class="slide-video-frame" data-href="paradise-project-axion.html">
+            <div class="slide-video-bg"></div>
+            <span class="slide-frame-label">[ video · 16:9 ]</span>
+            <a class="slide-cta" href="paradise-project-axion.html">View project →</a>
+          </div>
         </div>
-        <span class="year">2025</span>
-      </div>
-    </div>
-    <div class="slide">
-      <div class="slide-bg" data-label="[ video placeholder ]"></div>
-      <div class="slide-overlay"></div>
-      <div class="slide-meta">
-        <div class="left">
-          <span class="brand-name">Red Bull</span>
-          <span class="role">Motion Graphics</span>
+      </article>
+
+      <article class="slide" data-href="paradise-project-axion.html">
+        <div class="slide-inner">
+          <div class="slide-text-row">
+            <div class="slide-text-left">
+              <h3 class="slide-brand">Red Bull</h3>
+              <span class="slide-role">Motion Graphics</span>
+            </div>
+            <span class="slide-year">2025</span>
+          </div>
+          <div class="slide-progress-track"><div class="slide-progress-fill"></div></div>
+          <div class="slide-video-frame" data-href="paradise-project-axion.html">
+            <div class="slide-video-bg"></div>
+            <span class="slide-frame-label">[ video · 16:9 ]</span>
+            <a class="slide-cta" href="paradise-project-axion.html">View project →</a>
+          </div>
         </div>
-        <span class="year">2025</span>
-      </div>
-    </div>
-    <div class="slide">
-      <div class="slide-bg" data-label="[ video placeholder ]"></div>
-      <div class="slide-overlay"></div>
-      <div class="slide-meta">
-        <div class="left">
-          <span class="brand-name">Adidas</span>
-          <span class="role">Film & TV</span>
+      </article>
+
+      <article class="slide" data-href="paradise-project-axion.html">
+        <div class="slide-inner">
+          <div class="slide-text-row">
+            <div class="slide-text-left">
+              <h3 class="slide-brand">Adidas</h3>
+              <span class="slide-role">Film &amp; TV</span>
+            </div>
+            <span class="slide-year">2024</span>
+          </div>
+          <div class="slide-progress-track"><div class="slide-progress-fill"></div></div>
+          <div class="slide-video-frame" data-href="paradise-project-axion.html">
+            <div class="slide-video-bg"></div>
+            <span class="slide-frame-label">[ video · 16:9 ]</span>
+            <a class="slide-cta" href="paradise-project-axion.html">View project →</a>
+          </div>
         </div>
-        <span class="year">2024</span>
-      </div>
-    </div>
-    <div class="slide">
-      <div class="slide-bg" data-label="[ video placeholder ]"></div>
-      <div class="slide-overlay"></div>
-      <div class="slide-meta">
-        <div class="left">
-          <span class="brand-name">Coca-Cola</span>
-          <span class="role">Motion + Digital</span>
+      </article>
+
+      <article class="slide" data-href="paradise-project-axion.html">
+        <div class="slide-inner">
+          <div class="slide-text-row">
+            <div class="slide-text-left">
+              <h3 class="slide-brand">Coca-Cola</h3>
+              <span class="slide-role">Motion + Digital</span>
+            </div>
+            <span class="slide-year">2024</span>
+          </div>
+          <div class="slide-progress-track"><div class="slide-progress-fill"></div></div>
+          <div class="slide-video-frame" data-href="paradise-project-axion.html">
+            <div class="slide-video-bg"></div>
+            <span class="slide-frame-label">[ video · 16:9 ]</span>
+            <a class="slide-cta" href="paradise-project-axion.html">View project →</a>
+          </div>
         </div>
-        <span class="year">2024</span>
-      </div>
+      </article>
+
     </div>
   </div>
 
@@ -1294,42 +1547,235 @@ footer{
     </div>
 
     <div class="craft-layout">
-      <div class="craft-roster reveal">
-        <div class="roster-row">
-          <span class="role">DIR</span>
-          <span class="name">Director Name 01</span>
-          <span class="reel-link">REEL →</span>
+      <div class="craft-roster reveal" id="craftRoster">
+
+        <div class="roster-item" data-id="dir-01">
+          <div class="roster-row">
+            <span class="role">DIR</span>
+            <span class="name">Director Name 01</span>
+            <span class="expand-cue"><span class="lbl">View</span> <span class="arrow">↓</span></span>
+          </div>
+          <div class="roster-detail">
+            <div class="roster-detail-inner">
+              <div class="director-photo" aria-hidden="true">DN</div>
+              <div class="director-info">
+                <div class="director-bio">
+                  <h4>Director Name 01</h4>
+                  <p>Based between Buenos Aires and Mexico City. Specialized in cinematic narrative for fashion and beverage brands. 12 years of experience, 3 Cannes Lions, regular collaborator with Coca-Cola and Adidas.</p>
+                  <div class="specs"><span>Cinematic narrative</span><span>Fashion</span><span>Beverages</span></div>
+                  <a href="#" class="reel-link-cta">View full reel →</a>
+                </div>
+                <div class="director-portfolio">
+                  <div class="portfolio-label"><span>Selected work · 6 pieces</span><span>← scroll →</span></div>
+                  <div class="portfolio-track">
+                    <div class="portfolio-item">[ reel · 1 ]</div>
+                    <div class="portfolio-item">[ reel · 2 ]</div>
+                    <div class="portfolio-item">[ reel · 3 ]</div>
+                    <div class="portfolio-item">[ reel · 4 ]</div>
+                    <div class="portfolio-item">[ reel · 5 ]</div>
+                    <div class="portfolio-item">[ reel · 6 ]</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="roster-row">
-          <span class="role">DIR</span>
-          <span class="name">Director Name 02</span>
-          <span class="reel-link">REEL →</span>
+
+        <div class="roster-item" data-id="dir-02">
+          <div class="roster-row">
+            <span class="role">DIR</span>
+            <span class="name">Director Name 02</span>
+            <span class="expand-cue"><span class="lbl">View</span> <span class="arrow">↓</span></span>
+          </div>
+          <div class="roster-detail">
+            <div class="roster-detail-inner">
+              <div class="director-photo">DN</div>
+              <div class="director-info">
+                <div class="director-bio">
+                  <h4>Director Name 02</h4>
+                  <p>Documentary-driven approach with a sharp commercial eye. Frequent collaborator with Red Bull and motorsport brands. Self-taught, started in skateboard culture.</p>
+                  <div class="specs"><span>Documentary</span><span>Sports</span><span>Action</span></div>
+                  <a href="#" class="reel-link-cta">View full reel →</a>
+                </div>
+                <div class="director-portfolio">
+                  <div class="portfolio-label"><span>Selected work · 5 pieces</span><span>← scroll →</span></div>
+                  <div class="portfolio-track">
+                    <div class="portfolio-item">[ reel · 1 ]</div>
+                    <div class="portfolio-item">[ reel · 2 ]</div>
+                    <div class="portfolio-item">[ reel · 3 ]</div>
+                    <div class="portfolio-item">[ reel · 4 ]</div>
+                    <div class="portfolio-item">[ reel · 5 ]</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="roster-row">
-          <span class="role">DIR</span>
-          <span class="name">Director Name 03</span>
-          <span class="reel-link">REEL →</span>
+
+        <div class="roster-item" data-id="dir-03">
+          <div class="roster-row">
+            <span class="role">DIR</span>
+            <span class="name">Director Name 03</span>
+            <span class="expand-cue"><span class="lbl">View</span> <span class="arrow">↓</span></span>
+          </div>
+          <div class="roster-detail">
+            <div class="roster-detail-inner">
+              <div class="director-photo">DN</div>
+              <div class="director-info">
+                <div class="director-bio">
+                  <h4>Director Name 03</h4>
+                  <p>Comedy & character-driven storytelling. Background in theater and improv, brings actors out at their best. Recent work for Mastercard and Nivea.</p>
+                  <div class="specs"><span>Comedy</span><span>Casting-led</span><span>Lifestyle</span></div>
+                  <a href="#" class="reel-link-cta">View full reel →</a>
+                </div>
+                <div class="director-portfolio">
+                  <div class="portfolio-label"><span>Selected work · 7 pieces</span><span>← scroll →</span></div>
+                  <div class="portfolio-track">
+                    <div class="portfolio-item">[ reel · 1 ]</div>
+                    <div class="portfolio-item">[ reel · 2 ]</div>
+                    <div class="portfolio-item">[ reel · 3 ]</div>
+                    <div class="portfolio-item">[ reel · 4 ]</div>
+                    <div class="portfolio-item">[ reel · 5 ]</div>
+                    <div class="portfolio-item">[ reel · 6 ]</div>
+                    <div class="portfolio-item">[ reel · 7 ]</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="roster-row">
-          <span class="role">DIR</span>
-          <span class="name">Director Name 04</span>
-          <span class="reel-link">REEL →</span>
+
+        <div class="roster-item" data-id="dir-04">
+          <div class="roster-row">
+            <span class="role">DIR</span>
+            <span class="name">Director Name 04</span>
+            <span class="expand-cue"><span class="lbl">View</span> <span class="arrow">↓</span></span>
+          </div>
+          <div class="roster-detail">
+            <div class="roster-detail-inner">
+              <div class="director-photo">DN</div>
+              <div class="director-info">
+                <div class="director-bio">
+                  <h4>Director Name 04</h4>
+                  <p>Visual experimentation, AI-augmented pipelines, post-heavy work. Background in motion graphics and CGI. Specializes in tech, beauty, and surreal narratives.</p>
+                  <div class="specs"><span>VFX-driven</span><span>AI pipeline</span><span>Beauty / Tech</span></div>
+                  <a href="#" class="reel-link-cta">View full reel →</a>
+                </div>
+                <div class="director-portfolio">
+                  <div class="portfolio-label"><span>Selected work · 6 pieces</span><span>← scroll →</span></div>
+                  <div class="portfolio-track">
+                    <div class="portfolio-item">[ reel · 1 ]</div>
+                    <div class="portfolio-item">[ reel · 2 ]</div>
+                    <div class="portfolio-item">[ reel · 3 ]</div>
+                    <div class="portfolio-item">[ reel · 4 ]</div>
+                    <div class="portfolio-item">[ reel · 5 ]</div>
+                    <div class="portfolio-item">[ reel · 6 ]</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="roster-row">
-          <span class="role">PHOTO</span>
-          <span class="name">Photographer 01</span>
-          <span class="reel-link">PORTFOLIO →</span>
+
+        <div class="roster-item" data-id="ph-01">
+          <div class="roster-row">
+            <span class="role">PHOTO</span>
+            <span class="name">Photographer 01</span>
+            <span class="expand-cue"><span class="lbl">View</span> <span class="arrow">↓</span></span>
+          </div>
+          <div class="roster-detail">
+            <div class="roster-detail-inner">
+              <div class="director-photo">PN</div>
+              <div class="director-info">
+                <div class="director-bio">
+                  <h4>Photographer 01</h4>
+                  <p>Editorial portrait and fashion work. Long-form collaborations with Vogue, Harper's, and luxury brands. Documentary instinct, controlled lighting.</p>
+                  <div class="specs"><span>Editorial</span><span>Portrait</span><span>Fashion</span></div>
+                  <a href="#" class="reel-link-cta">View portfolio →</a>
+                </div>
+                <div class="director-portfolio">
+                  <div class="portfolio-label"><span>Selected stills · 8 pieces</span><span>← scroll →</span></div>
+                  <div class="portfolio-track">
+                    <div class="portfolio-item">[ photo · 1 ]</div>
+                    <div class="portfolio-item">[ photo · 2 ]</div>
+                    <div class="portfolio-item">[ photo · 3 ]</div>
+                    <div class="portfolio-item">[ photo · 4 ]</div>
+                    <div class="portfolio-item">[ photo · 5 ]</div>
+                    <div class="portfolio-item">[ photo · 6 ]</div>
+                    <div class="portfolio-item">[ photo · 7 ]</div>
+                    <div class="portfolio-item">[ photo · 8 ]</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="roster-row">
-          <span class="role">PHOTO</span>
-          <span class="name">Photographer 02</span>
-          <span class="reel-link">PORTFOLIO →</span>
+
+        <div class="roster-item" data-id="ph-02">
+          <div class="roster-row">
+            <span class="role">PHOTO</span>
+            <span class="name">Photographer 02</span>
+            <span class="expand-cue"><span class="lbl">View</span> <span class="arrow">↓</span></span>
+          </div>
+          <div class="roster-detail">
+            <div class="roster-detail-inner">
+              <div class="director-photo">PN</div>
+              <div class="director-info">
+                <div class="director-bio">
+                  <h4>Photographer 02</h4>
+                  <p>Product, beverage, and tabletop specialist. Studio-based work, exquisite light control. Director of photography hybrid for hero stills + film simultaneously.</p>
+                  <div class="specs"><span>Product</span><span>Tabletop</span><span>Beverage</span></div>
+                  <a href="#" class="reel-link-cta">View portfolio →</a>
+                </div>
+                <div class="director-portfolio">
+                  <div class="portfolio-label"><span>Selected stills · 6 pieces</span><span>← scroll →</span></div>
+                  <div class="portfolio-track">
+                    <div class="portfolio-item">[ photo · 1 ]</div>
+                    <div class="portfolio-item">[ photo · 2 ]</div>
+                    <div class="portfolio-item">[ photo · 3 ]</div>
+                    <div class="portfolio-item">[ photo · 4 ]</div>
+                    <div class="portfolio-item">[ photo · 5 ]</div>
+                    <div class="portfolio-item">[ photo · 6 ]</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="roster-row">
-          <span class="role">PHOTO</span>
-          <span class="name">Photographer 03</span>
-          <span class="reel-link">PORTFOLIO →</span>
+
+        <div class="roster-item" data-id="ph-03">
+          <div class="roster-row">
+            <span class="role">PHOTO</span>
+            <span class="name">Photographer 03</span>
+            <span class="expand-cue"><span class="lbl">View</span> <span class="arrow">↓</span></span>
+          </div>
+          <div class="roster-detail">
+            <div class="roster-detail-inner">
+              <div class="director-photo">PN</div>
+              <div class="director-info">
+                <div class="director-bio">
+                  <h4>Photographer 03</h4>
+                  <p>Documentary lifestyle. Available-light, on-location, real people. Frequent collaborator on always-on content for sports and outdoor brands.</p>
+                  <div class="specs"><span>Lifestyle</span><span>Sports</span><span>Outdoor</span></div>
+                  <a href="#" class="reel-link-cta">View portfolio →</a>
+                </div>
+                <div class="director-portfolio">
+                  <div class="portfolio-label"><span>Selected stills · 7 pieces</span><span>← scroll →</span></div>
+                  <div class="portfolio-track">
+                    <div class="portfolio-item">[ photo · 1 ]</div>
+                    <div class="portfolio-item">[ photo · 2 ]</div>
+                    <div class="portfolio-item">[ photo · 3 ]</div>
+                    <div class="portfolio-item">[ photo · 4 ]</div>
+                    <div class="portfolio-item">[ photo · 5 ]</div>
+                    <div class="portfolio-item">[ photo · 6 ]</div>
+                    <div class="portfolio-item">[ photo · 7 ]</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+
       </div>
 
       <aside class="craft-aside reveal">
@@ -1578,6 +2024,25 @@ if (typeof Lenis !== 'undefined') {
   update();
 })();
 
+// ===== Back to top button =====
+(function(){
+  const btn = document.getElementById('backTop');
+  if (!btn) return;
+  function update(){
+    const visible = window.scrollY > window.innerHeight * 0.6;
+    btn.classList.toggle('visible', visible);
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  btn.addEventListener('click', () => {
+    if (typeof lenis !== 'undefined' && lenis && lenis.scrollTo) {
+      lenis.scrollTo(0, { duration: 1.4 });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+  update();
+})();
+
 // ===== Word splitter (for text animations) =====
 function splitWords(el){
   const walk = (node) => {
@@ -1762,52 +2227,170 @@ reveals.forEach(r=>io.observe(r));
   });
 })();
 
-// Work fullscreen slider
+// ===== Roster expand/collapse (Craft Mode) =====
 (function(){
-  const slides = document.querySelectorAll('#work .slide');
-  const thumbs = document.querySelectorAll('#slideThumbs .thumb-pill');
-  const counterNow = document.querySelector('.slider-counter .now');
-  const progress = document.getElementById('workProgress');
-  const total = slides.length;
-  const DURATION = 7500;
-  let cur = 0;
-  let timer, progTimer, tStart;
+  const items = document.querySelectorAll('.roster-item');
+  if (!items.length) return;
+  items.forEach(item => {
+    const row = item.querySelector('.roster-row');
+    row?.addEventListener('click', () => {
+      const wasOpen = item.classList.contains('open');
+      // close all
+      items.forEach(i => i.classList.remove('open'));
+      // open this one (unless it was the open one — toggle)
+      if (!wasOpen) {
+        item.classList.add('open');
+        // smooth scroll to keep it in view after expansion
+        setTimeout(() => {
+          const rect = item.getBoundingClientRect();
+          if (rect.top < 100) {
+            const y = window.scrollY + rect.top - 100;
+            if (typeof lenis !== 'undefined' && lenis && lenis.scrollTo) lenis.scrollTo(y, { duration: 0.8 });
+            else window.scrollTo({ top: y, behavior: 'smooth' });
+          }
+        }, 80);
+      }
+    });
+  });
+})();
 
-  function go(i){
-    cur = (i + total) % total;
-    slides.forEach((s,idx)=>s.classList.toggle('active',idx===cur));
-    thumbs.forEach((t,idx)=>t.classList.toggle('active',idx===cur));
-    if(counterNow) counterNow.textContent = String(cur+1).padStart(2,'0');
+// ===== Selected Work — horizontal scroll slider =====
+(function(){
+  const track = document.getElementById('workTrack');
+  const slides = Array.from(document.querySelectorAll('#workTrack .slide'));
+  const thumbs = Array.from(document.querySelectorAll('#slideThumbs .thumb-pill'));
+  const fills  = Array.from(document.querySelectorAll('.slide-progress-fill'));
+  const counterNow = document.querySelector('.slider-counter .now');
+  const workSection = document.getElementById('work');
+  const total = slides.length;
+  const DURATION = 8000;
+  if (!track || !total) return;
+
+  let cur = 0;
+  let autoTimer = null;
+  let progStart = 0;
+  let rafId = null;
+  let isInView = true;
+  let isHover = false;
+
+  function setX(px, animate){
+    track.style.transition = animate ? '' : 'none';
+    track.style.transform = `translate3d(${px}px, 0, 0)`;
+  }
+  function go(i, opts){
+    cur = ((i % total) + total) % total;
+    setX(-cur * window.innerWidth, true);
+    slides.forEach((s, idx) => s.classList.toggle('active', idx === cur));
+    thumbs.forEach((t, idx) => t.classList.toggle('active', idx === cur));
+    if (counterNow) counterNow.textContent = String(cur+1).padStart(2,'0');
     resetProgress();
   }
-  function next(){ go(cur+1); }
-  function prev(){ go(cur-1); }
+  const next = () => go(cur + 1);
+  const prev = () => go(cur - 1);
+
   function resetProgress(){
-    if(!progress) return;
-    progress.style.width = '0%';
-    tStart = Date.now();
-    clearInterval(progTimer);
-    progTimer = setInterval(()=>{
-      const e = (Date.now()-tStart)/DURATION;
-      progress.style.width = Math.min(100,e*100)+'%';
-    },80);
+    fills.forEach((f, idx) => { f.style.width = idx === cur ? '0%' : (idx < cur ? '100%' : '0%'); });
+    progStart = performance.now();
+    if (rafId) cancelAnimationFrame(rafId);
+    tickProgress();
   }
-  function startAuto(){ stopAuto(); timer = setInterval(next, DURATION); resetProgress(); }
-  function stopAuto(){ clearInterval(timer); clearInterval(progTimer); }
+  function tickProgress(){
+    if (!isInView || isHover) {
+      // freeze, but resume from where we are
+      progStart = performance.now() - (parseFloat(fills[cur].style.width || '0') / 100) * DURATION;
+      rafId = requestAnimationFrame(tickProgress);
+      return;
+    }
+    const elapsed = performance.now() - progStart;
+    const pct = Math.min(100, (elapsed / DURATION) * 100);
+    if (fills[cur]) fills[cur].style.width = pct + '%';
+    if (pct >= 100) {
+      next();
+      return;
+    }
+    rafId = requestAnimationFrame(tickProgress);
+  }
 
-  document.getElementById('nextSlide')?.addEventListener('click',()=>{next();startAuto();});
-  document.getElementById('prevSlide')?.addEventListener('click',()=>{prev();startAuto();});
-  thumbs.forEach((t,i)=>t.addEventListener('click',()=>{go(i);startAuto();}));
+  function startAuto(){
+    isHover = false;
+    if (!rafId) tickProgress();
+  }
+  function stopAuto(){
+    isHover = true;
+  }
 
-  const workSection = document.getElementById('work');
-  workSection?.addEventListener('mouseenter',stopAuto);
-  workSection?.addEventListener('mouseleave',startAuto);
+  // Controls
+  document.getElementById('nextSlide')?.addEventListener('click', () => { next(); });
+  document.getElementById('prevSlide')?.addEventListener('click', () => { prev(); });
+  thumbs.forEach((t, i) => t.addEventListener('click', () => go(i)));
 
-  // Pause auto-advance when section out of view
-  const obs = new IntersectionObserver(es=>{
-    es.forEach(e=>{ if(e.isIntersecting) startAuto(); else stopAuto(); });
-  },{threshold:0.3});
-  if(workSection) obs.observe(workSection);
+  // Hover pauses auto (computer only — touch doesn't trigger)
+  workSection?.addEventListener('mouseenter', stopAuto);
+  workSection?.addEventListener('mouseleave', startAuto);
+
+  // Pause auto when out of view
+  const io = new IntersectionObserver(es => {
+    es.forEach(e => {
+      isInView = e.isIntersecting;
+    });
+  }, { threshold: 0.25 });
+  if (workSection) io.observe(workSection);
+
+  // Drag/swipe support
+  let dragStartX = 0, dragDX = 0, dragging = false, dragStartTime = 0;
+  function onPointerDown(e){
+    // ignore drags that start on controls
+    if (e.target.closest('.slider-bar, .work-cats-overlay, .slide-cta')) return;
+    dragging = true;
+    dragStartX = (e.touches ? e.touches[0].clientX : e.clientX);
+    dragStartTime = performance.now();
+    dragDX = 0;
+    track.classList.add('is-dragging');
+  }
+  function onPointerMove(e){
+    if (!dragging) return;
+    const x = (e.touches ? e.touches[0].clientX : e.clientX);
+    dragDX = x - dragStartX;
+    const w = window.innerWidth;
+    setX(-cur * w + dragDX, false);
+  }
+  function onPointerUp(){
+    if (!dragging) return;
+    dragging = false;
+    track.classList.remove('is-dragging');
+    const w = window.innerWidth;
+    const dt = performance.now() - dragStartTime;
+    const velocity = dragDX / Math.max(1, dt); // px/ms
+    if (Math.abs(dragDX) > w * 0.18 || Math.abs(velocity) > 0.5) {
+      if (dragDX < 0) next(); else prev();
+    } else {
+      go(cur);
+    }
+    dragDX = 0;
+  }
+  // prevent click navigation if a drag happened
+  slides.forEach(slide => {
+    const frame = slide.querySelector('.slide-video-frame');
+    if (!frame) return;
+    frame.addEventListener('click', (e) => {
+      if (Math.abs(dragDX) > 6) { e.preventDefault(); return; }
+      const href = slide.getAttribute('data-href');
+      if (href && !e.target.closest('a')) window.location.href = href;
+    });
+  });
+
+  track.addEventListener('mousedown', onPointerDown);
+  window.addEventListener('mousemove', onPointerMove);
+  window.addEventListener('mouseup', onPointerUp);
+  track.addEventListener('touchstart', onPointerDown, { passive: true });
+  window.addEventListener('touchmove', onPointerMove, { passive: true });
+  window.addEventListener('touchend', onPointerUp);
+
+  // Resize: re-anchor track
+  window.addEventListener('resize', () => setX(-cur * window.innerWidth, false));
+
+  // Init
+  go(0);
 })();
 
 // Live clock for BUE / LAX
