@@ -6,35 +6,55 @@
 <title>Paradise — Wireframe v1</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@200;300;400;500;600;700;800&family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&family=Mona+Sans:wght@200;300;400;500;600;700&family=Kapakana:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#F5F4EF;
-  --paper:#EDEBE3;
-  --ink:#141413;
-  --muted:#8A8884;
-  --line:rgba(20,20,19,0.10);
+  /* Brandbook palette: only two colors */
+  --bg:#E5E5E5;
+  --paper:#E5E5E5;
+  --ink:#000000;
+  --muted:#6E6E6E;
+  --line:rgba(0,0,0,0.16);
+  --line-strong:rgba(0,0,0,0.40);
   --accent:#FF3D00;
-  --nav-bg:rgba(245,244,239,0.85);
-  --pillar-bg:#EDEBE3;
-  --pillar-bg-hover:#F5F4EF;
-  --aside-bg:#EDEBE3;
+  --nav-bg:rgba(229,229,229,0.92);
+  --pillar-bg:#DCDCDC;
+  --pillar-bg-hover:#D2D2D2;
+  --aside-bg:#DCDCDC;
+  --section-divider:rgba(0,0,0,0.12);
+  /* Movie barcode gradient (brandbook page 9 / page 12) */
+  --movie-barcode:linear-gradient(90deg,
+    #6FB6E0 0%,
+    #2C72A8 12%,
+    #0A0A0A 28%,
+    #C72A1F 42%,
+    #E84E1F 52%,
+    #B92E5A 70%,
+    #C13E89 80%,
+    #6FB6E0 100%);
+  /* Fonts */
+  --font-display:'Work Sans','Mona Sans',-apple-system,sans-serif;
+  --font-body:'Mona Sans','Work Sans',-apple-system,sans-serif;
+  --font-script:'Kapakana','Kapakana',cursive;
+  /* Sizes */
   --max:1440px;
   --pad:32px;
   --nav-h:64px;
   --section-pad:120px;
 }
 [data-theme="dark"]{
-  --bg:#0a0a0a;
-  --paper:#141413;
-  --ink:#F5F4EF;
-  --muted:#8A8884;
-  --line:rgba(245,244,239,0.10);
+  --bg:#000000;
+  --paper:#0A0A0A;
+  --ink:#E5E5E5;
+  --muted:#888683;
+  --line:rgba(229,229,229,0.16);
+  --line-strong:rgba(229,229,229,0.40);
   --accent:#FF6B3D;
-  --nav-bg:rgba(10,10,10,0.85);
-  --pillar-bg:#141413;
-  --pillar-bg-hover:#1c1c1a;
-  --aside-bg:#141413;
+  --nav-bg:rgba(0,0,0,0.92);
+  --pillar-bg:#0F0F0F;
+  --pillar-bg-hover:#181818;
+  --aside-bg:#0F0F0F;
+  --section-divider:rgba(229,229,229,0.10);
 }
 html{transition:background .35s ease}
 body{transition:background .35s ease, color .35s ease}
@@ -66,45 +86,22 @@ body.intro-active{overflow:hidden;height:100vh}
   mix-blend-mode:screen;
 }
 .intro-stack{
-  display:flex;flex-direction:column;align-items:center;gap:36px;
+  display:flex;flex-direction:column;align-items:center;gap:24px;
   position:relative;z-index:2;
+  width:100%;
+  padding:0 24px;
 }
-.intro-tape{
-  width:96px;
+.intro-logo-img{
+  width:min(92vw, 1500px);
+  max-height:78vh;
+  height:auto;
+  display:block;
   opacity:0;
-  transform:translateY(8px) scale(0.85);
-  animation:tapeIn 0.7s cubic-bezier(.25,.46,.45,.94) 0.15s forwards;
-  color:#fff;
+  transform:scale(0.94);
+  animation:introLogoIn 1.4s cubic-bezier(.25,.46,.45,.94) 0.25s forwards;
 }
-.intro-tape svg{display:block;width:100%}
-@keyframes tapeIn{ to{opacity:1;transform:none} }
-
-.intro-wordmark{
-  font-family:'Mona Sans',sans-serif;
-  font-weight:600;
-  font-size:clamp(64px,14vw,200px);
-  letter-spacing:-0.045em;
-  line-height:0.9;
-  display:flex;align-items:flex-start;gap:6px;
-  position:relative;
-}
-.intro-wordmark .wm-letter{
-  display:inline-block;
-  opacity:0;
-  transform:translateY(40px);
-  animation:wmLetter 0.7s cubic-bezier(.25,.46,.45,.94) forwards;
-  animation-delay:calc(var(--i,0) * 60ms + 700ms);
-}
-@keyframes wmLetter{ to{opacity:1;transform:none} }
-.intro-wordmark .wm-tm{
-  font-size:0.16em;
-  font-weight:500;
-  letter-spacing:0;
-  color:#ffffff80;
-  margin-left:6px;
-  margin-top:0.4em;
-  opacity:0;
-  animation:wmFadeIn 0.5s ease 1700ms forwards;
+@keyframes introLogoIn{
+  to{opacity:1;transform:none}
 }
 @keyframes wmFadeIn{to{opacity:1}}
 
@@ -192,15 +189,17 @@ body.intro-done .hero-stagger .word{
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
-  font-family:'Mona Sans',-apple-system,sans-serif;
+  font-family:var(--font-body);
   background:var(--bg);
   color:var(--ink);
-  font-weight:400;
-  line-height:1.4;
+  font-weight:300;
+  line-height:1.45;
   font-size:16px;
   overflow-x:hidden;
   -webkit-font-smoothing:antialiased;
 }
+/* Default typography per brandbook */
+h1,h2,h3,h4,h5{font-family:var(--font-display);font-weight:500;text-transform:uppercase;letter-spacing:-0.015em}
 a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
 button{font-family:inherit;cursor:pointer;background:none;border:none;color:inherit}
@@ -259,22 +258,27 @@ nav.topnav .nav-inner{
   gap:24px;
 }
 .brand{
-  font-weight:600;
-  font-size:20px;
-  letter-spacing:-0.02em;
+  font-family:var(--font-display);
+  font-weight:500;
+  font-size:22px;
+  letter-spacing:-0.01em;
   display:flex;
   align-items:baseline;
   gap:4px;
+  text-transform:none;
 }
-.brand sup{font-size:9px;color:var(--muted);font-weight:500;letter-spacing:0}
+.brand sup{font-size:9px;color:var(--muted);font-weight:400;letter-spacing:0.04em}
 .nav-links{
   display:flex;
   gap:28px;
   align-items:center;
 }
 .nav-links a{
-  font-size:13px;
+  font-family:var(--font-display);
+  font-size:11px;
   font-weight:500;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
   position:relative;
   padding:6px 0;
   transition:opacity .2s;
@@ -292,16 +296,38 @@ nav.topnav .nav-inner{
 }
 .lang span.active{color:var(--ink);font-weight:600}
 .btn-pill{
+  font-family:var(--font-display);
   background:var(--ink);
   color:var(--bg);
-  padding:10px 18px;
+  padding:11px 20px;
   border-radius:999px;
-  font-size:13px;
-  font-weight:500;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
   transition:transform .2s, background .2s, color .2s;
 }
 .btn-pill:hover{transform:translateY(-1px);opacity:0.9}
 .menu-toggle{display:none;font-size:14px;font-weight:500}
+
+/* Nav live clock (BUE) */
+.nav-clock{
+  display:flex;align-items:center;gap:8px;
+  font-size:11px;letter-spacing:0.12em;color:var(--muted);
+  font-feature-settings:'tnum';
+  text-transform:uppercase;font-weight:500;
+}
+.nav-clock .dot{
+  width:6px;height:6px;border-radius:50%;
+  background:#22c55e;
+  box-shadow:0 0 8px rgba(34,197,94,0.7);
+  animation:livePulse 2s ease-in-out infinite;
+  flex-shrink:0;
+}
+@keyframes livePulse{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:0.45;transform:scale(0.85)}
+}
 
 /* Dark mode toggle */
 .theme-toggle{
@@ -440,20 +466,24 @@ section.section{
 }
 .hero-tag .dot{width:6px;height:6px;border-radius:50%;background:#0f0;box-shadow:0 0 12px #0f0;display:inline-block}
 .hero-headline{
-  font-size:clamp(40px,7vw,96px);
-  line-height:1.02;
-  letter-spacing:-0.025em;
-  font-weight:300;
+  font-family:var(--font-display);
+  font-size:clamp(36px,6vw,84px);
+  line-height:1.05;
+  letter-spacing:-0.02em;
+  font-weight:500;
+  text-transform:uppercase;
   margin-bottom:48px;
-  max-width:1000px;
+  max-width:1100px;
   color:#fff;
 }
 .hero-headline em{
-  font-family:'Caveat',cursive;
-  font-style:normal;
-  font-weight:600;
-  font-size:1.05em;
+  font-family:var(--font-script);
+  font-style:italic;
+  font-weight:500;
+  font-size:1.15em;
   color:#fff;
+  text-transform:none;
+  letter-spacing:0;
 }
 .hero-headline strong{font-weight:700}
 .hero-foot{
@@ -523,13 +553,15 @@ section.section{
   gap:24px;
 }
 .sec-title{
+  font-family:var(--font-display);
   font-size:clamp(44px,8.5vw,132px);
   line-height:0.92;
-  font-weight:700;
-  letter-spacing:-0.04em;
+  font-weight:500;
+  letter-spacing:-0.025em;
+  text-transform:uppercase;
   max-width:1200px;
 }
-.sec-title em{font-family:'Caveat',cursive;font-style:normal;font-weight:600;color:var(--accent);font-size:0.95em;letter-spacing:-0.02em}
+.sec-title em{font-family:var(--font-script);font-style:italic;font-weight:500;color:var(--ink);font-size:1.05em;letter-spacing:-0.01em;text-transform:none}
 .sec-sub{font-size:14px;color:var(--muted);letter-spacing:0.04em;max-width:320px;text-align:right;line-height:1.55}
 
 /* ============= 02 SELECTED WORK — HORIZONTAL SCROLL CARDS ============= */
@@ -537,12 +569,13 @@ section.section{
   min-height:100vh;
   height:100vh;
   padding:0;
-  background:#0a0a0a;
+  background:var(--bg);
   position:relative;
   overflow:hidden;
+  transition:background .35s;
 }
-#work .section-marker{color:#ffffff99;z-index:5;top:calc(var(--nav-h) + 24px)}
-#work .section-marker .num{background:#F5F4EF;color:#0a0a0a}
+#work .section-marker{color:var(--muted);z-index:5;top:calc(var(--nav-h) + 24px)}
+#work .section-marker .num{background:var(--ink);color:var(--bg)}
 
 /* Horizontal track */
 .work-track-wrap{
@@ -589,39 +622,37 @@ section.section{
 }
 .slide-text-left{display:flex;flex-direction:column;gap:8px;max-width:80%}
 .slide-brand{
+  font-family:var(--font-display);
   font-size:clamp(36px,5.5vw,96px);
-  font-weight:700;
+  font-weight:500;
   line-height:0.92;
-  letter-spacing:-0.04em;
-  color:#fff;
+  letter-spacing:-0.025em;
+  text-transform:uppercase;
+  color:var(--ink);
 }
 .slide-role{
-  font-size:13px;color:#ffffffaa;letter-spacing:0.1em;text-transform:uppercase;font-weight:500;
+  font-family:var(--font-display);
+  font-size:13px;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;font-weight:500;
 }
 .slide-year{
-  font-size:14px;color:#ffffffaa;
-  font-feature-settings:'tnum';letter-spacing:0.08em;
+  font-family:var(--font-display);
+  font-size:14px;color:var(--muted);
+  font-feature-settings:'tnum';letter-spacing:0.1em;
+  text-transform:uppercase;font-weight:500;
 }
 
-/* Color-graded finite progress bar */
+/* Color-graded finite progress bar — brandbook movie barcode */
 .slide-progress-track{
   width:100%;height:3px;
-  background:rgba(255,255,255,0.10);
+  background:var(--line);
   position:relative;overflow:hidden;
   border-radius:2px;
 }
 .slide-progress-fill{
   position:absolute;inset:0;
   width:0%;
-  background:linear-gradient(90deg,
-    #0E2536 0%,
-    #1F4F73 18%,
-    #2A7AA0 38%,
-    #B8542B 60%,
-    #E8893A 80%,
-    #FFC857 100%);
+  background:var(--movie-barcode);
   transition:none;
-  box-shadow:0 0 12px rgba(255,200,87,0.35);
 }
 
 /* Video frame: contained 16:9, max width respects card padding */
@@ -683,28 +714,29 @@ section.section{
   position:absolute;
   bottom:32px;left:clamp(24px,5vw,80px);right:clamp(24px,5vw,80px);
   display:flex;align-items:center;justify-content:space-between;
-  z-index:5;color:#fff;flex-wrap:wrap;gap:16px;
+  z-index:5;color:var(--ink);flex-wrap:wrap;gap:16px;
 }
 .slider-controls{display:flex;align-items:center;gap:18px}
 .slider-controls button{
   width:40px;height:40px;
-  border:1px solid #ffffff44;border-radius:50%;
-  color:#fff;font-size:14px;
+  border:1px solid var(--line-strong);border-radius:50%;
+  color:var(--ink);font-size:14px;
   display:flex;align-items:center;justify-content:center;
   transition:all .2s;
   background:transparent;
 }
-.slider-controls button:hover{background:#fff;color:var(--ink);border-color:#fff}
+.slider-controls button:hover{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .slider-counter{
-  font-size:13px;color:#fff;letter-spacing:0.04em;font-feature-settings:'tnum';
-  min-width:80px;text-align:center;
+  font-family:var(--font-display);
+  font-size:13px;color:var(--ink);letter-spacing:0.06em;font-feature-settings:'tnum';
+  min-width:80px;text-align:center;font-weight:500;
 }
 .slider-counter .now{font-weight:600}
-.slider-counter .total{color:#ffffff66}
+.slider-counter .total{color:var(--muted)}
 .slide-thumbnails{display:flex;gap:8px;align-items:center}
 .thumb-pill{
   width:54px;height:32px;border-radius:4px;
-  background:#ffffff14;border:1px solid transparent;
+  background:#1a1a1a;border:1px solid transparent;
   cursor:pointer;transition:all .2s;
   background-size:cover;background-position:center;
 }
@@ -714,40 +746,41 @@ section.section{
 .thumb-pill:nth-child(4){background:linear-gradient(135deg,#1f7a4a,#1a1a1a)}
 .thumb-pill:nth-child(5){background:linear-gradient(135deg,#7a1f5a,#1a1a1a)}
 .thumb-pill:nth-child(6){background:linear-gradient(135deg,#3a3a3a,#0a0a0a)}
-.thumb-pill.active{border-color:#fff;transform:scale(1.1)}
+.thumb-pill.active{border-color:var(--ink);transform:scale(1.1)}
 
 .work-cats-overlay{
   position:absolute;
   top:calc(var(--nav-h) + 24px);
   right:clamp(24px,5vw,80px);
   display:flex;gap:18px;z-index:5;
-  font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
-  color:#ffffffaa;font-weight:500;
+  font-family:var(--font-display);
+  font-size:11px;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--muted);font-weight:500;
 }
 .work-cats-overlay span{cursor:pointer;transition:color .2s;padding:4px 0}
-.work-cats-overlay span:hover{color:#fff}
-.work-cats-overlay span.on{color:#fff;border-bottom:1px solid #fff}
+.work-cats-overlay span:hover{color:var(--ink)}
+.work-cats-overlay span.on{color:var(--ink);border-bottom:1px solid var(--ink)}
 
 /* drag affordance */
 .work-track.is-dragging{transition:none;cursor:grabbing}
 .work-track.is-dragging .slide{cursor:grabbing}
 
 /* ============= 03 ALWAYS ON MODE ============= */
-#always-on{background:#0a0a0a;color:#F5F4EF}
+#always-on{background:var(--bg);color:var(--ink);transition:background .35s, color .35s}
 #always-on .sec-title,#always-on .sec-sub{color:inherit}
-#always-on .sec-sub{color:#ffffff99}
-#always-on .section-marker{color:#ffffff99}
-#always-on .section-marker .num{background:#F5F4EF;color:#0a0a0a}
+#always-on .sec-sub{color:var(--muted)}
+#always-on .section-marker{color:var(--muted)}
+#always-on .section-marker .num{background:var(--ink);color:var(--bg)}
 .movements{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:0;
-  border-top:1px solid #ffffff1f;
-  border-bottom:1px solid #ffffff1f;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
 }
 .move{
   padding:48px 32px;
-  border-right:1px solid #ffffff1f;
+  border-right:1px solid var(--line);
   position:relative;
   min-height:340px;
   display:flex;
@@ -756,33 +789,37 @@ section.section{
 }
 .move:last-child{border-right:none}
 .move .step{
+  font-family:var(--font-display);
   font-size:11px;
   letter-spacing:0.16em;
   text-transform:uppercase;
-  color:#ffffff66;
+  color:var(--muted);
   margin-bottom:18px;
   display:flex;
   align-items:center;
   gap:10px;
+  font-weight:500;
 }
 .move .step .n{
-  background:#ffffff1a;
-  color:#fff;
+  background:var(--ink);
+  color:var(--bg);
   padding:3px 8px;
   font-weight:600;
 }
 .move h3{
+  font-family:var(--font-display);
   font-size:clamp(28px,2.8vw,42px);
   line-height:1;
-  font-weight:700;
-  letter-spacing:-0.03em;
+  font-weight:500;
+  letter-spacing:-0.02em;
+  text-transform:uppercase;
   margin-bottom:18px;
-  color:#fff;
+  color:var(--ink);
 }
 .move p{
   font-size:14px;
   line-height:1.55;
-  color:#ffffffcc;
+  color:var(--muted);
   max-width:340px;
 }
 .move .arrow-next{
@@ -790,11 +827,11 @@ section.section{
   right:-12px;top:50%;
   transform:translateY(-50%);
   width:24px;height:24px;
-  background:var(--ink);
-  border:1px solid #ffffff1f;
+  background:var(--bg);
+  border:1px solid var(--line);
   display:flex;align-items:center;justify-content:center;
   font-size:14px;
-  color:#ffffff99;
+  color:var(--muted);
   border-radius:50%;
 }
 .move:last-child .arrow-next{display:none}
@@ -804,16 +841,13 @@ section.section{
   grid-template-columns:repeat(3,1fr);
   gap:48px;
 }
-.stat .big{font-size:48px;font-weight:300;letter-spacing:-0.03em;color:#fff;line-height:1}
-.stat .lbl{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#ffffff99;margin-top:8px}
+.stat .big{font-family:var(--font-display);font-size:64px;font-weight:300;letter-spacing:-0.03em;color:var(--ink);line-height:1}
+.stat .lbl{font-family:var(--font-display);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-top:8px;font-weight:500}
 
 /* ============= 04 CRAFT MODE ============= */
-#craft{background:var(--bg)}
+#craft{background:var(--bg);transition:background .35s}
 .craft-layout{
-  display:grid;
-  grid-template-columns:1.4fr 1fr;
-  gap:48px;
-  align-items:start;
+  display:block;
 }
 .craft-roster{
   border-top:1px solid var(--line);
@@ -999,23 +1033,26 @@ section.section{
   font-size:11px;letter-spacing:0.16em;color:var(--muted);font-weight:500;
 }
 .pillar h3{
-  font-size:clamp(28px,3vw,44px);letter-spacing:-0.03em;font-weight:700;line-height:1;margin:14px 0 16px;
+  font-family:var(--font-display);
+  font-size:clamp(28px,3vw,44px);letter-spacing:-0.02em;font-weight:500;line-height:1;margin:14px 0 16px;text-transform:uppercase;
 }
-.pillar h3 em{font-family:'Caveat',cursive;font-style:normal;color:var(--accent);font-weight:600;font-size:1.05em;letter-spacing:-0.02em}
+.pillar h3 em{font-family:var(--font-script);font-style:italic;color:var(--ink);font-weight:500;font-size:1.1em;text-transform:none}
 .pillar p{font-size:14px;line-height:1.55;color:var(--muted);max-width:420px}
 
 /* ============= 06 STUDIO / TEAM ============= */
 #studio{background:var(--bg)}
 .studio-tagline{
+  font-family:var(--font-display);
   font-size:clamp(44px,8vw,124px);
   line-height:0.92;
-  letter-spacing:-0.04em;
-  font-weight:700;
+  letter-spacing:-0.025em;
+  font-weight:500;
+  text-transform:uppercase;
   max-width:1200px;
   margin:0 auto 72px;
   text-align:center;
 }
-.studio-tagline em{font-family:'Caveat',cursive;font-style:normal;font-weight:600;color:var(--accent);letter-spacing:-0.02em}
+.studio-tagline em{font-family:var(--font-script);font-style:italic;font-weight:500;color:var(--ink);text-transform:none;font-size:1.05em}
 .team-grid{
   display:grid;
   grid-template-columns:repeat(6,1fr);
@@ -1039,10 +1076,10 @@ section.section{
 .team-meta .rl{font-size:10px;color:#ffffff99;letter-spacing:0.08em;text-transform:uppercase;margin-top:4px}
 
 /* ============= 07 CONTACT ============= */
-#contact{background:#0a0a0a;color:#F5F4EF;overflow:hidden}
+#contact{background:var(--bg);color:var(--ink);overflow:hidden;transition:background .35s, color .35s}
 #contact .sec-title,#contact .section-marker{color:inherit}
-#contact .section-marker{color:#ffffff99}
-#contact .section-marker .num{background:#F5F4EF;color:#0a0a0a}
+#contact .section-marker{color:var(--muted)}
+#contact .section-marker .num{background:var(--ink);color:var(--bg)}
 .contact-cards{
   display:grid;
   grid-template-columns:repeat(2,1fr);
@@ -1050,53 +1087,66 @@ section.section{
   margin-top:32px;
 }
 .contact-card{
-  background:#1f1f1d;
-  border:1px solid #ffffff14;
+  background:var(--pillar-bg);
+  border:1px solid var(--line);
   padding:48px 36px;
   display:flex;
   flex-direction:column;
   justify-content:space-between;
   min-height:340px;
-  transition:transform .3s, background .3s;
+  transition:transform .3s, background .3s, border-color .3s;
 }
-.contact-card:hover{transform:translateY(-4px);background:#252522}
-.contact-card .ckind{font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#ffffff99;margin-bottom:24px;font-weight:500}
-.contact-card h3{font-size:clamp(28px,3.2vw,44px);font-weight:700;letter-spacing:-0.03em;margin-bottom:16px;line-height:1;color:#fff}
-.contact-card p{font-size:14px;color:#ffffffaa;line-height:1.55;max-width:340px;margin-bottom:32px}
+.contact-card:hover{transform:translateY(-4px);background:var(--pillar-bg-hover)}
+.contact-card .ckind{font-family:var(--font-display);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:24px;font-weight:500}
+.contact-card h3{font-family:var(--font-display);font-size:clamp(26px,3vw,40px);font-weight:500;letter-spacing:-0.02em;margin-bottom:16px;line-height:1;color:var(--ink);text-transform:uppercase}
+.contact-card p{font-size:14px;color:var(--muted);line-height:1.55;max-width:340px;margin-bottom:32px}
 .contact-cta{
-  font-size:14px;
-  font-weight:500;
+  font-family:var(--font-display);
+  font-size:11px;
+  font-weight:600;letter-spacing:0.14em;text-transform:uppercase;
   display:inline-flex;
   align-items:center;
   gap:10px;
   padding:14px 22px;
-  border:1px solid #ffffff44;
+  border:1px solid var(--line-strong);
   border-radius:999px;
   align-self:flex-start;
   transition:all .25s;
-  color:#fff;
+  color:var(--ink);
 }
-.contact-cta:hover{background:#fff;color:var(--ink);border-color:#fff}
+.contact-cta:hover{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .contact-loc{
   margin-top:48px;
-  border-top:1px solid #ffffff1f;
+  border-top:1px solid var(--line);
   padding-top:32px;
   display:flex;
   justify-content:space-between;
   flex-wrap:wrap;
   gap:24px;
-  font-size:13px;
-  color:#ffffffaa;
+  font-family:var(--font-display);
+  font-size:12px;letter-spacing:0.06em;text-transform:uppercase;
+  color:var(--muted);font-weight:500;
 }
 .contact-loc .city{display:flex;flex-direction:column;gap:4px}
-.contact-loc .city .ct{color:#fff;font-weight:500}
+.contact-loc .city .ct{color:var(--ink);font-weight:500}
 
 /* ============= FOOTER ============= */
 footer{
   background:var(--bg);
   padding:48px var(--pad) 32px;
   border-top:1px solid var(--line);
+  transition:background .35s;
 }
+.foot-tagline{
+  max-width:var(--max);
+  margin:0 auto 48px;
+  font-family:var(--font-display);
+  font-size:clamp(40px,7vw,108px);
+  letter-spacing:-0.025em;line-height:0.95;
+  font-weight:500;text-transform:uppercase;
+  color:var(--ink);
+}
+.foot-tagline em{font-family:var(--font-script);font-style:italic;font-weight:500;text-transform:none;font-size:1.1em}
 .foot-grid{
   max-width:var(--max);
   margin:0 auto;
@@ -1107,7 +1157,7 @@ footer{
   border-bottom:1px solid var(--line);
 }
 .foot-brand{font-size:14px;color:var(--muted);max-width:320px;line-height:1.55}
-.foot-col h5{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;font-weight:500}
+.foot-col h5{font-family:var(--font-display);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;font-weight:500}
 .foot-col ul{list-style:none}
 .foot-col ul li{margin-bottom:8px;font-size:13px}
 .foot-col ul li a{transition:opacity .2s}
@@ -1117,9 +1167,11 @@ footer{
   margin:24px auto 0;
   display:flex;
   justify-content:space-between;
+  font-family:var(--font-display);
   font-size:11px;
   color:var(--muted);
-  letter-spacing:0.04em;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
   flex-wrap:wrap;
   gap:12px;
 }
@@ -1176,6 +1228,7 @@ footer{
   .nav-links{display:none}
   .menu-toggle{display:block}
   .nav-cta .lang{display:none}
+  .nav-cta .nav-clock{display:none}
   .slide-meta{bottom:140px;left:20px;right:20px}
   .slide-meta .left{max-width:100%}
   .slider-bar{left:20px;right:20px;bottom:24px;flex-direction:column;align-items:flex-start;gap:18px}
@@ -1210,37 +1263,10 @@ footer{
 <div class="intro-overlay" id="introOverlay" role="status" aria-label="Loading">
   <div class="intro-grain"></div>
   <div class="intro-stack">
-    <!-- Tape grading mark (placeholder SVG — replace with Paradise's actual film tape logo) -->
-    <div class="intro-tape" aria-hidden="true">
-      <svg viewBox="0 0 120 70" xmlns="http://www.w3.org/2000/svg">
-        <rect x="0" y="0" width="120" height="70" rx="4" fill="currentColor"/>
-        <g fill="#0a0a0a">
-          <rect x="6" y="9" width="9" height="13" rx="1.5"/>
-          <rect x="22" y="9" width="9" height="13" rx="1.5"/>
-          <rect x="38" y="9" width="9" height="13" rx="1.5"/>
-          <rect x="54" y="9" width="9" height="13" rx="1.5"/>
-          <rect x="70" y="9" width="9" height="13" rx="1.5"/>
-          <rect x="86" y="9" width="9" height="13" rx="1.5"/>
-          <rect x="102" y="9" width="9" height="13" rx="1.5"/>
-        </g>
-        <rect x="6" y="27" width="108" height="16" fill="#0a0a0a"/>
-        <rect x="10" y="30" width="100" height="10" fill="currentColor" opacity="0.15"/>
-        <g fill="#0a0a0a">
-          <rect x="6" y="48" width="9" height="13" rx="1.5"/>
-          <rect x="22" y="48" width="9" height="13" rx="1.5"/>
-          <rect x="38" y="48" width="9" height="13" rx="1.5"/>
-          <rect x="54" y="48" width="9" height="13" rx="1.5"/>
-          <rect x="70" y="48" width="9" height="13" rx="1.5"/>
-          <rect x="86" y="48" width="9" height="13" rx="1.5"/>
-          <rect x="102" y="48" width="9" height="13" rx="1.5"/>
-        </g>
-      </svg>
-    </div>
-
-    <!-- Wordmark with letter-by-letter stagger -->
-    <div class="intro-wordmark" aria-label="Paradise LA">
-      <span class="wm-letter" style="--i:0">P</span><span class="wm-letter" style="--i:1">a</span><span class="wm-letter" style="--i:2">r</span><span class="wm-letter" style="--i:3">a</span><span class="wm-letter" style="--i:4">d</span><span class="wm-letter" style="--i:5">i</span><span class="wm-letter" style="--i:6">s</span><span class="wm-letter" style="--i:7">e</span><span class="wm-tm">®LA</span>
-    </div>
+    <img class="intro-logo-img"
+         src="assets/paradise_logo_intro.png"
+         alt="Paradise"
+         width="2500" height="1397">
   </div>
 
   <div class="intro-meta">
@@ -1272,6 +1298,10 @@ footer{
       <a href="#contact">Contact</a>
     </div>
     <div class="nav-cta">
+      <span class="nav-clock" id="navClock" aria-label="Studio time">
+        <span class="dot" aria-hidden="true"></span>
+        <span class="text">BUE · 13:30</span>
+      </span>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark / light">
         <span class="toggle-track"><span class="toggle-thumb"></span></span>
       </button>
@@ -1308,11 +1338,6 @@ footer{
   </button>
 
   <div class="container hero-content">
-    <div class="hero-tag">
-      <span class="dot"></span>
-      <span>[s.001] · Home — Manifesto</span>
-      <span style="margin-left:auto;color:#ffffff77">BUE 13:30 · LAX 09:30</span>
-    </div>
     <h1 class="hero-headline hero-stagger">
       Hybrid creative production company.<br>
       <strong>Production, judgment & technology</strong> at the pace of brands that need <em>continuous presence</em>.
@@ -1552,16 +1577,16 @@ footer{
         <div class="roster-item" data-id="dir-01">
           <div class="roster-row">
             <span class="role">DIR</span>
-            <span class="name">Director Name 01</span>
+            <span class="name">Lucia Valdemoros</span>
             <span class="expand-cue"><span class="lbl">View</span> <span class="arrow">↓</span></span>
           </div>
           <div class="roster-detail">
             <div class="roster-detail-inner">
-              <div class="director-photo" aria-hidden="true">DN</div>
+              <div class="director-photo" aria-hidden="true">LV</div>
               <div class="director-info">
                 <div class="director-bio">
-                  <h4>Director Name 01</h4>
-                  <p>Based between Buenos Aires and Mexico City. Specialized in cinematic narrative for fashion and beverage brands. 12 years of experience, 3 Cannes Lions, regular collaborator with Coca-Cola and Adidas.</p>
+                  <h4>Lucia Valdemoros</h4>
+                  <p><em>[ bio placeholder — replace with real ]</em> Cinematic narrative direction. Strong actor performance and image-craft. Style sits between film and editorial.</p>
                   <div class="specs"><span>Cinematic narrative</span><span>Fashion</span><span>Beverages</span></div>
                   <a href="#" class="reel-link-cta">View full reel →</a>
                 </div>
@@ -1584,16 +1609,16 @@ footer{
         <div class="roster-item" data-id="dir-02">
           <div class="roster-row">
             <span class="role">DIR</span>
-            <span class="name">Director Name 02</span>
+            <span class="name">Juanjo Cobo</span>
             <span class="expand-cue"><span class="lbl">View</span> <span class="arrow">↓</span></span>
           </div>
           <div class="roster-detail">
             <div class="roster-detail-inner">
-              <div class="director-photo">DN</div>
+              <div class="director-photo">JC</div>
               <div class="director-info">
                 <div class="director-bio">
-                  <h4>Director Name 02</h4>
-                  <p>Documentary-driven approach with a sharp commercial eye. Frequent collaborator with Red Bull and motorsport brands. Self-taught, started in skateboard culture.</p>
+                  <h4>Juanjo Cobo</h4>
+                  <p><em>[ bio placeholder — replace with real ]</em> Documentary-driven approach with a sharp commercial instinct. Action, movement, real-time storytelling.</p>
                   <div class="specs"><span>Documentary</span><span>Sports</span><span>Action</span></div>
                   <a href="#" class="reel-link-cta">View full reel →</a>
                 </div>
@@ -1615,16 +1640,16 @@ footer{
         <div class="roster-item" data-id="dir-03">
           <div class="roster-row">
             <span class="role">DIR</span>
-            <span class="name">Director Name 03</span>
+            <span class="name">Valentin Caride</span>
             <span class="expand-cue"><span class="lbl">View</span> <span class="arrow">↓</span></span>
           </div>
           <div class="roster-detail">
             <div class="roster-detail-inner">
-              <div class="director-photo">DN</div>
+              <div class="director-photo">VC</div>
               <div class="director-info">
                 <div class="director-bio">
-                  <h4>Director Name 03</h4>
-                  <p>Comedy & character-driven storytelling. Background in theater and improv, brings actors out at their best. Recent work for Mastercard and Nivea.</p>
+                  <h4>Valentin Caride</h4>
+                  <p><em>[ bio placeholder — replace with real ]</em> Character-driven storytelling. Comedy and lifestyle work that pulls performance out of casting.</p>
                   <div class="specs"><span>Comedy</span><span>Casting-led</span><span>Lifestyle</span></div>
                   <a href="#" class="reel-link-cta">View full reel →</a>
                 </div>
@@ -1645,51 +1670,19 @@ footer{
           </div>
         </div>
 
-        <div class="roster-item" data-id="dir-04">
-          <div class="roster-row">
-            <span class="role">DIR</span>
-            <span class="name">Director Name 04</span>
-            <span class="expand-cue"><span class="lbl">View</span> <span class="arrow">↓</span></span>
-          </div>
-          <div class="roster-detail">
-            <div class="roster-detail-inner">
-              <div class="director-photo">DN</div>
-              <div class="director-info">
-                <div class="director-bio">
-                  <h4>Director Name 04</h4>
-                  <p>Visual experimentation, AI-augmented pipelines, post-heavy work. Background in motion graphics and CGI. Specializes in tech, beauty, and surreal narratives.</p>
-                  <div class="specs"><span>VFX-driven</span><span>AI pipeline</span><span>Beauty / Tech</span></div>
-                  <a href="#" class="reel-link-cta">View full reel →</a>
-                </div>
-                <div class="director-portfolio">
-                  <div class="portfolio-label"><span>Selected work · 6 pieces</span><span>← scroll →</span></div>
-                  <div class="portfolio-track">
-                    <div class="portfolio-item">[ reel · 1 ]</div>
-                    <div class="portfolio-item">[ reel · 2 ]</div>
-                    <div class="portfolio-item">[ reel · 3 ]</div>
-                    <div class="portfolio-item">[ reel · 4 ]</div>
-                    <div class="portfolio-item">[ reel · 5 ]</div>
-                    <div class="portfolio-item">[ reel · 6 ]</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <div class="roster-item" data-id="ph-01">
           <div class="roster-row">
             <span class="role">PHOTO</span>
-            <span class="name">Photographer 01</span>
+            <span class="name">Martin Sigal</span>
             <span class="expand-cue"><span class="lbl">View</span> <span class="arrow">↓</span></span>
           </div>
           <div class="roster-detail">
             <div class="roster-detail-inner">
-              <div class="director-photo">PN</div>
+              <div class="director-photo">MS</div>
               <div class="director-info">
                 <div class="director-bio">
-                  <h4>Photographer 01</h4>
-                  <p>Editorial portrait and fashion work. Long-form collaborations with Vogue, Harper's, and luxury brands. Documentary instinct, controlled lighting.</p>
+                  <h4>Martin Sigal</h4>
+                  <p><em>[ bio placeholder — replace with real ]</em> Editorial portrait and fashion photography. Documentary instinct paired with controlled studio lighting.</p>
                   <div class="specs"><span>Editorial</span><span>Portrait</span><span>Fashion</span></div>
                   <a href="#" class="reel-link-cta">View portfolio →</a>
                 </div>
@@ -1714,16 +1707,16 @@ footer{
         <div class="roster-item" data-id="ph-02">
           <div class="roster-row">
             <span class="role">PHOTO</span>
-            <span class="name">Photographer 02</span>
+            <span class="name">Ivan Resnik</span>
             <span class="expand-cue"><span class="lbl">View</span> <span class="arrow">↓</span></span>
           </div>
           <div class="roster-detail">
             <div class="roster-detail-inner">
-              <div class="director-photo">PN</div>
+              <div class="director-photo">IR</div>
               <div class="director-info">
                 <div class="director-bio">
-                  <h4>Photographer 02</h4>
-                  <p>Product, beverage, and tabletop specialist. Studio-based work, exquisite light control. Director of photography hybrid for hero stills + film simultaneously.</p>
+                  <h4>Ivan Resnik</h4>
+                  <p><em>[ bio placeholder — replace with real ]</em> Product, beverage, and tabletop specialist. Studio-based work with exquisite light control.</p>
                   <div class="specs"><span>Product</span><span>Tabletop</span><span>Beverage</span></div>
                   <a href="#" class="reel-link-cta">View portfolio →</a>
                 </div>
@@ -1746,16 +1739,16 @@ footer{
         <div class="roster-item" data-id="ph-03">
           <div class="roster-row">
             <span class="role">PHOTO</span>
-            <span class="name">Photographer 03</span>
+            <span class="name">Matias Posti</span>
             <span class="expand-cue"><span class="lbl">View</span> <span class="arrow">↓</span></span>
           </div>
           <div class="roster-detail">
             <div class="roster-detail-inner">
-              <div class="director-photo">PN</div>
+              <div class="director-photo">MP</div>
               <div class="director-info">
                 <div class="director-bio">
-                  <h4>Photographer 03</h4>
-                  <p>Documentary lifestyle. Available-light, on-location, real people. Frequent collaborator on always-on content for sports and outdoor brands.</p>
+                  <h4>Matias Posti</h4>
+                  <p><em>[ bio placeholder — replace with real ]</em> Documentary lifestyle photography. Available-light, on-location, real people.</p>
                   <div class="specs"><span>Lifestyle</span><span>Sports</span><span>Outdoor</span></div>
                   <a href="#" class="reel-link-cta">View portfolio →</a>
                 </div>
@@ -1778,18 +1771,6 @@ footer{
 
       </div>
 
-      <aside class="craft-aside reveal">
-        <h4>Capacidades</h4>
-        <p class="blurb">Six things we do with our hands, not with prompts. The center of gravity of the studio.</p>
-        <div class="tags">
-          <span class="tag">Direction</span>
-          <span class="tag">Photography</span>
-          <span class="tag">Cinematography</span>
-          <span class="tag">Post · Color</span>
-          <span class="tag">Sound · Music</span>
-          <span class="tag">AI Pipeline</span>
-        </div>
-      </aside>
     </div>
   </div>
 </section>
@@ -1899,15 +1880,16 @@ footer{
     </div>
 
     <div class="contact-loc">
-      <div class="city"><span class="lbl">Buenos Aires</span><span class="ct">Address line · BA · ARG</span></div>
-      <div class="city"><span class="lbl">Los Angeles</span><span class="ct">Address line · LA · USA</span></div>
-      <div class="city"><span class="lbl">Time</span><span class="ct" id="clock">BUE 13:30 · LAX 09:30</span></div>
+      <div class="city"><span class="lbl">Studio</span><span class="ct">Buenos Aires · ARG · Address line</span></div>
+      <div class="city"><span class="lbl">Hours</span><span class="ct">Mon–Fri · 10:00 — 19:00</span></div>
+      <div class="city"><span class="lbl">Time</span><span class="ct" id="clock">BUE · 13:30</span></div>
     </div>
   </div>
 </section>
 
 <!-- ============= FOOTER ============= -->
 <footer>
+  <h2 class="foot-tagline">Work to <em>watch</em></h2>
   <div class="foot-grid">
     <div class="foot-brand">
       <div class="brand" style="font-size:24px;margin-bottom:12px">Paradise<sup>®LA</sup></div>
@@ -2393,15 +2375,14 @@ reveals.forEach(r=>io.observe(r));
   go(0);
 })();
 
-// Live clock for BUE / LAX
+// Live clock — Buenos Aires only
 function updateClock(){
   const opts = {hour:'2-digit',minute:'2-digit',hour12:false};
   const bue = new Date().toLocaleTimeString('en-GB',{...opts,timeZone:'America/Argentina/Buenos_Aires'});
-  const lax = new Date().toLocaleTimeString('en-GB',{...opts,timeZone:'America/Los_Angeles'});
-  const navTime = document.querySelector('.hero-tag span:last-child');
-  if(navTime) navTime.textContent = `BUE ${bue} · LAX ${lax}`;
+  const navText = document.querySelector('#navClock .text');
+  if(navText) navText.textContent = `BUE · ${bue}`;
   const clk = document.getElementById('clock');
-  if(clk) clk.textContent = `BUE ${bue} · LAX ${lax}`;
+  if(clk) clk.textContent = `BUE · ${bue}`;
 }
 updateClock();
 setInterval(updateClock,30000);
