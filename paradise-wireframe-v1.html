@@ -58,6 +58,14 @@
 }
 html{transition:background .35s ease}
 body{transition:background .35s ease, color .35s ease}
+
+/* ============= LENIS smooth scroll — required CSS ============= */
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto !important}
+.lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}
+.lenis.lenis-stopped{overflow:hidden}
+.lenis.lenis-smooth iframe{pointer-events:none}
+
 /* Lock scroll while intro plays */
 body.intro-active{overflow:hidden;height:100vh}
 
@@ -2284,16 +2292,18 @@ footer{
 </div>
 
 <!-- Lenis (smooth scroll, Vucko-style buttery feel) -->
-<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="https://unpkg.com/lenis@1.3.5/dist/lenis.min.js"></script>
 <script>
-// ===== Smooth scroll (Lenis) =====
+// ===== Smooth scroll (Lenis) — Chrome-friendly config =====
 let lenis = null;
 if (typeof Lenis !== 'undefined') {
   lenis = new Lenis({
-    duration: 1.1,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    lerp: 0.10,           // smoothing factor (0 = no smoothing, 1 = none) — more reliable than `duration` on Chrome
     smoothWheel: true,
-    smoothTouch: false
+    syncTouch: false,     // native touch on mobile
+    wheelMultiplier: 1,
+    touchMultiplier: 1.5,
+    autoResize: true,     // auto re-measure on resize/content change
   });
   function raf(time){
     lenis.raf(time);
@@ -2330,7 +2340,12 @@ if (typeof Lenis !== 'undefined') {
     overlay.classList.add('dismissed');
     document.body.classList.remove('intro-active');
     document.body.classList.add('intro-done');
-    if (lenis) lenis.start();
+    if (lenis) {
+      lenis.start();
+      // Force resize after body unlock so Lenis recalculates scrollable area (Chrome fix)
+      setTimeout(() => lenis.resize && lenis.resize(), 100);
+      setTimeout(() => lenis.resize && lenis.resize(), 600);
+    }
   }
   if (lenis) lenis.stop(); // hold scroll during intro
   requestAnimationFrame(tick);
