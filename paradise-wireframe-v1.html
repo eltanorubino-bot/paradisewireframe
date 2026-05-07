@@ -91,17 +91,50 @@ body.intro-active{overflow:hidden;height:100vh}
   width:100%;
   padding:0 24px;
 }
-.intro-logo-img{
-  width:min(92vw, 1500px);
-  max-height:78vh;
-  height:auto;
-  display:block;
+.intro-wordmark-only{
+  font-family:'Work Sans',sans-serif;
+  font-weight:300;
+  font-size:clamp(72px,16vw,260px);
+  line-height:1;
+  letter-spacing:-0.04em;
+  display:flex;
+  align-items:flex-start;
+  gap:0.05em;
+  color:#fff;
   opacity:0;
-  transform:scale(0.94);
-  animation:introLogoIn 1.4s cubic-bezier(.25,.46,.45,.94) 0.25s forwards;
+  transform:translateY(12px) scale(0.98);
+  animation:introWmIn 1.5s cubic-bezier(.25,.46,.45,.94) 0.25s forwards;
 }
-@keyframes introLogoIn{
+@keyframes introWmIn{
   to{opacity:1;transform:none}
+}
+.intro-wordmark-only .wm-text{display:inline-block}
+.intro-wordmark-only .wm-mark{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:0.04em;
+  margin-top:0.18em;
+  margin-left:0.06em;
+  font-size:0.13em;
+  font-weight:400;
+  line-height:1;
+}
+.intro-wordmark-only .wm-r{
+  width:1.6em;
+  height:1.6em;
+  border:1.4px solid currentColor;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:0.85em;
+  font-weight:400;
+  letter-spacing:0;
+}
+.intro-wordmark-only .wm-la{
+  font-weight:500;
+  letter-spacing:0.04em;
 }
 @keyframes wmFadeIn{to{opacity:1}}
 
@@ -123,8 +156,11 @@ body.intro-active{overflow:hidden;height:100vh}
 }
 .intro-bar{
   position:absolute;
-  bottom:0;left:0;height:2px;
-  width:0%;background:#fff;
+  bottom:0;left:0;height:3px;
+  width:0%;
+  background:var(--movie-barcode);
+  background-size:100vw 100%;
+  background-position:0 50%;
   transition:width .1s linear;
 }
 .intro-skip{
@@ -176,15 +212,21 @@ body.intro-active{overflow:hidden;height:100vh}
   pointer-events:none;
 }
 
-/* Hold hero stagger words invisible until intro is done */
+/* Hero stagger — words fade in AND brighten from light gray to pure white */
 .hero-stagger .word{
   display:inline-block;
   opacity:0;
-  transform:translateY(8px);
+  color:rgba(255,255,255,0.20);
+  transform:translateY(6px);
 }
 body.intro-done .hero-stagger .word{
-  animation:heroWordIn 0.7s cubic-bezier(.25,.46,.45,.94) forwards;
-  animation-delay:calc(var(--i,0) * 55ms + 150ms);
+  animation:heroWordReveal 1.6s cubic-bezier(.25,.46,.45,.94) forwards;
+  animation-delay:calc(var(--i,0) * 110ms + 350ms);
+}
+@keyframes heroWordReveal{
+  0%   {opacity:0; color:rgba(255,255,255,0.20); transform:translateY(6px)}
+  28%  {opacity:1; color:rgba(255,255,255,0.32); transform:translateY(0)}
+  100% {opacity:1; color:rgba(255,255,255,1); transform:none}
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -512,16 +554,17 @@ section.section{
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 
 /* ============= MARQUEE ============= */
+/* Brand marquee — independent strip BELOW the hero video, not over it */
 .marquee{
   position:relative;
-  z-index:3;
-  margin-top:48px;
-  padding:18px 0;
-  background:rgba(0,0,0,0.35);
-  backdrop-filter:blur(10px);
-  border-top:1px solid #ffffff22;
-  border-bottom:1px solid #ffffff22;
+  z-index:auto;
+  margin:0;
+  padding:26px 0;
+  background:var(--bg);
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
   overflow:hidden;
+  transition:background .35s, border-color .35s;
 }
 .marquee-track{
   display:flex;
@@ -531,16 +574,17 @@ section.section{
   width:fit-content;
 }
 .marquee-item{
-  font-family:'Mona Sans',sans-serif;
-  font-weight:600;
-  font-size:18px;
-  color:#fff;
-  letter-spacing:0.02em;
+  font-family:var(--font-display);
+  font-weight:500;
+  font-size:16px;
+  color:var(--ink);
+  letter-spacing:0.06em;
+  text-transform:uppercase;
   display:flex;
   align-items:center;
   gap:14px;
 }
-.marquee-item .star{color:#ffffff66;font-weight:300}
+.marquee-item .star{color:var(--muted);font-weight:300}
 @keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* ============= SECTIONS — common ============= */
@@ -771,6 +815,217 @@ section.section{
 #always-on .sec-sub{color:var(--muted)}
 #always-on .section-marker{color:var(--muted)}
 #always-on .section-marker .num{background:var(--ink);color:var(--bg)}
+/* Always On — 2-column hero block (title left, phone mockup right) */
+.always-on-hero{
+  display:grid;
+  grid-template-columns:1.55fr 1fr;
+  gap:64px;
+  align-items:center;
+  margin-bottom:88px;
+}
+.always-on-text{display:flex;flex-direction:column;gap:32px}
+.always-on-text .sec-sub{
+  text-align:left;
+  max-width:520px;
+  font-size:15px;
+  line-height:1.6;
+}
+
+/* Phone mockup (vertical Instagram-style reel) */
+.always-on-phone{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+.phone-stack{
+  position:relative;
+  display:flex;
+  align-items:stretch;
+  gap:18px;
+}
+.phone-side-controls{
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  align-items:center;
+  padding:48px 0;
+  pointer-events:auto;
+}
+.phone-side-btn{
+  width:36px;height:36px;
+  border:1px solid var(--line-strong);
+  border-radius:50%;
+  background:transparent;
+  color:var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  transition:all .25s cubic-bezier(.25,.46,.45,.94);
+  padding:0;
+}
+.phone-side-btn svg{display:block;stroke:currentColor;fill:none;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.phone-side-btn:hover{
+  background:var(--ink);
+  color:var(--bg);
+  border-color:var(--ink);
+  transform:scale(1.08);
+}
+.phone-side-btn.up{animation:arrowFloatUp 2.6s ease-in-out infinite}
+.phone-side-btn.down{animation:arrowFloatDown 2.6s ease-in-out infinite;animation-delay:1.3s}
+@keyframes arrowFloatUp{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes arrowFloatDown{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+.phone-side-label{
+  font-family:var(--font-display);
+  font-size:9px;letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--muted);
+  margin-top:6px;
+  font-weight:500;
+}
+.phone-frame{
+  width:300px;
+  max-width:100%;
+  aspect-ratio:9/19;
+  background:#0a0a0a;
+  border:10px solid #1a1a1a;
+  border-radius:46px;
+  overflow:hidden;
+  position:relative;
+  box-shadow:0 30px 80px rgba(0,0,0,0.30), 0 8px 16px rgba(0,0,0,0.10);
+  transform:translateY(40px) scale(0.96);
+  opacity:0;
+  transition:transform 1s cubic-bezier(.25,.46,.45,.94), opacity 1s ease;
+}
+.always-on-hero.in .phone-frame{
+  opacity:1;
+  transform:none;
+}
+.phone-side-controls{
+  opacity:0;
+  transform:translateX(-12px);
+  transition:opacity .8s ease .25s, transform .8s cubic-bezier(.25,.46,.45,.94) .25s;
+}
+.always-on-hero.in .phone-side-controls{
+  opacity:1;
+  transform:none;
+}
+.phone-notch{
+  position:absolute;
+  top:8px;left:50%;
+  transform:translateX(-50%);
+  width:88px;height:24px;
+  background:#0a0a0a;
+  border-radius:0 0 16px 16px;
+  z-index:5;
+}
+.phone-screen{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  background:#0a0a0a;
+  border-radius:36px;
+}
+.phone-reel-track{
+  position:relative;
+  width:100%;
+  height:400%; /* 4 reels stacked */
+  transition:transform .7s cubic-bezier(.65,.05,.25,1);
+  will-change:transform;
+}
+.phone-reel{
+  width:100%;
+  height:25%; /* each = 100% of screen */
+  position:relative;
+  overflow:hidden;
+}
+.phone-reel video,
+.phone-reel-video{
+  position:absolute;inset:0;
+  width:100%;height:100%;object-fit:cover;
+  display:block;
+  z-index:1;
+}
+.phone-reel-bg{
+  position:absolute;inset:0;
+  z-index:0;
+}
+.phone-reel:nth-child(1) .phone-reel-bg{background:radial-gradient(ellipse at 50% 30%,#7a1f1f 0%,#1a0a0a 70%,#0a0a0a 100%)}
+.phone-reel:nth-child(2) .phone-reel-bg{background:radial-gradient(ellipse at 30% 70%,#7a4a1f 0%,#1a1208 70%,#0a0a0a 100%)}
+.phone-reel:nth-child(3) .phone-reel-bg{background:radial-gradient(ellipse at 60% 40%,#1f4a7a 0%,#0a1320 70%,#0a0a0a 100%)}
+.phone-reel:nth-child(4) .phone-reel-bg{background:radial-gradient(ellipse at 50% 60%,#7a1f5a 0%,#1a0a14 70%,#0a0a0a 100%)}
+.phone-reel-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,0.4) 0%,transparent 25%,transparent 60%,rgba(0,0,0,0.7) 100%);
+  pointer-events:none;
+}
+.phone-reel-handle{
+  position:absolute;
+  top:48px;left:18px;
+  z-index:3;
+  font-family:var(--font-display);
+  font-size:13px;font-weight:600;
+  color:#fff;
+  letter-spacing:0.02em;
+  display:flex;align-items:center;gap:8px;
+}
+.phone-reel-handle .dot-on{
+  width:10px;height:10px;border-radius:50%;
+  background:linear-gradient(135deg,#FF3D00,#C13E89);
+  box-shadow:0 0 0 1.5px #fff;
+}
+.phone-reel-caption{
+  position:absolute;
+  bottom:60px;left:18px;right:18px;
+  z-index:3;
+  color:#fff;
+  font-family:var(--font-display);
+}
+.phone-reel-caption .brand{
+  font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
+  margin-bottom:6px;color:#ffffffcc;
+}
+.phone-reel-caption .copy{
+  font-size:14px;font-weight:500;line-height:1.3;
+  color:#fff;
+}
+.phone-reel-icons{
+  position:absolute;
+  right:14px;bottom:90px;
+  z-index:3;
+  display:flex;flex-direction:column;gap:18px;
+  align-items:center;
+}
+.phone-reel-icon{
+  width:32px;height:32px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;
+  color:#fff;
+  background:rgba(255,255,255,0.06);
+  border-radius:50%;
+}
+.phone-reel-icon-num{
+  font-size:9px;color:#fff;font-weight:600;
+  margin-top:-4px;
+}
+
+/* Phone progress bar (which reel) */
+.phone-progress{
+  position:absolute;
+  top:18px;left:14px;right:14px;
+  z-index:6;
+  display:flex;gap:3px;
+}
+.phone-progress-bar{
+  flex:1;height:2px;
+  background:rgba(255,255,255,0.25);
+  border-radius:2px;
+  overflow:hidden;
+}
+.phone-progress-bar .fill{
+  display:block;height:100%;width:0%;
+  background:#fff;
+  transition:width 0.05s linear;
+}
+.phone-progress-bar.done .fill{width:100%}
+
 .movements{
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -1188,10 +1443,7 @@ footer{
   will-change:opacity;
 }
 
-/* Hero one-shot stagger animation — actually triggered by body.intro-done (defined above) */
-@keyframes heroWordIn{
-  to{opacity:1;transform:none}
-}
+/* Hero one-shot stagger animation — definition lives in body.intro-done above */
 
 /* (slide click CTA now lives inside .slide-video-frame as .slide-cta) */
 
@@ -1233,8 +1485,11 @@ footer{
   .slide-meta .left{max-width:100%}
   .slider-bar{left:20px;right:20px;bottom:24px;flex-direction:column;align-items:flex-start;gap:18px}
   .work-cats-overlay{display:none}
+  .always-on-hero{grid-template-columns:1fr;gap:48px}
+  .always-on-phone{order:-1}
+  .phone-frame{width:260px}
   .movements{grid-template-columns:1fr}
-  .move{border-right:none;border-bottom:1px solid #ffffff1f;min-height:auto}
+  .move{border-right:none;border-bottom:1px solid var(--line);min-height:auto}
   .move:last-child{border-bottom:none}
   .always-stat{grid-template-columns:1fr;gap:32px}
   .craft-layout{grid-template-columns:1fr}
@@ -1263,10 +1518,13 @@ footer{
 <div class="intro-overlay" id="introOverlay" role="status" aria-label="Loading">
   <div class="intro-grain"></div>
   <div class="intro-stack">
-    <img class="intro-logo-img"
-         src="assets/paradise_logo_intro.png"
-         alt="Paradise"
-         width="2500" height="1397">
+    <div class="intro-wordmark-only" aria-label="Paradise">
+      <span class="wm-text">Paradise</span>
+      <span class="wm-mark" aria-hidden="true">
+        <span class="wm-r">R</span>
+        <span class="wm-la">.LA</span>
+      </span>
+    </div>
   </div>
 
   <div class="intro-meta">
@@ -1349,32 +1607,34 @@ footer{
       <span class="arrow">↓</span>
     </div>
   </div>
-  <div class="marquee">
-    <div class="marquee-track">
-      <span class="marquee-item">Coca-Cola <span class="star">✦</span></span>
-      <span class="marquee-item">Anheuser-Busch <span class="star">✦</span></span>
-      <span class="marquee-item">Adidas <span class="star">✦</span></span>
-      <span class="marquee-item">Mastercard <span class="star">✦</span></span>
-      <span class="marquee-item">Nivea <span class="star">✦</span></span>
-      <span class="marquee-item">Red Bull <span class="star">✦</span></span>
-      <span class="marquee-item">Audi <span class="star">✦</span></span>
-      <span class="marquee-item">Axion Energy <span class="star">✦</span></span>
-      <span class="marquee-item">Campari <span class="star">✦</span></span>
-      <span class="marquee-item">Converse <span class="star">✦</span></span>
-      <!-- duplicate for seamless loop -->
-      <span class="marquee-item">Coca-Cola <span class="star">✦</span></span>
-      <span class="marquee-item">Anheuser-Busch <span class="star">✦</span></span>
-      <span class="marquee-item">Adidas <span class="star">✦</span></span>
-      <span class="marquee-item">Mastercard <span class="star">✦</span></span>
-      <span class="marquee-item">Nivea <span class="star">✦</span></span>
-      <span class="marquee-item">Red Bull <span class="star">✦</span></span>
-      <span class="marquee-item">Audi <span class="star">✦</span></span>
-      <span class="marquee-item">Axion Energy <span class="star">✦</span></span>
-      <span class="marquee-item">Campari <span class="star">✦</span></span>
-      <span class="marquee-item">Converse <span class="star">✦</span></span>
-    </div>
-  </div>
 </section>
+
+<!-- ============= BRAND MARQUEE (own strip, below hero) ============= -->
+<div class="marquee" aria-label="Brands that trust us">
+  <div class="marquee-track">
+    <span class="marquee-item">Coca-Cola <span class="star">✦</span></span>
+    <span class="marquee-item">Anheuser-Busch <span class="star">✦</span></span>
+    <span class="marquee-item">Adidas <span class="star">✦</span></span>
+    <span class="marquee-item">Mastercard <span class="star">✦</span></span>
+    <span class="marquee-item">Nivea <span class="star">✦</span></span>
+    <span class="marquee-item">Red Bull <span class="star">✦</span></span>
+    <span class="marquee-item">Audi <span class="star">✦</span></span>
+    <span class="marquee-item">Axion Energy <span class="star">✦</span></span>
+    <span class="marquee-item">Campari <span class="star">✦</span></span>
+    <span class="marquee-item">Converse <span class="star">✦</span></span>
+    <!-- duplicate for seamless loop -->
+    <span class="marquee-item">Coca-Cola <span class="star">✦</span></span>
+    <span class="marquee-item">Anheuser-Busch <span class="star">✦</span></span>
+    <span class="marquee-item">Adidas <span class="star">✦</span></span>
+    <span class="marquee-item">Mastercard <span class="star">✦</span></span>
+    <span class="marquee-item">Nivea <span class="star">✦</span></span>
+    <span class="marquee-item">Red Bull <span class="star">✦</span></span>
+    <span class="marquee-item">Audi <span class="star">✦</span></span>
+    <span class="marquee-item">Axion Energy <span class="star">✦</span></span>
+    <span class="marquee-item">Campari <span class="star">✦</span></span>
+    <span class="marquee-item">Converse <span class="star">✦</span></span>
+  </div>
+</div>
 
 <!-- ============= 02 SELECTED WORK · HORIZONTAL SCROLL CARDS ============= -->
 <section id="work">
@@ -1523,9 +1783,98 @@ footer{
 <section id="always-on" class="section">
   <div class="section-marker"><span class="num">03</span> Always On Mode</div>
   <div class="container">
-    <div class="sec-head reveal">
-      <h2 class="sec-title text-reveal">Continuous content, not just <em>campaigns</em>.</h2>
-      <p class="sec-sub">Our operating model for brands that need to publish every week — without burning out the system.</p>
+    <div class="always-on-hero reveal">
+      <div class="always-on-text">
+        <h2 class="sec-title text-reveal">Continuous content, not just <em>campaigns</em>.</h2>
+        <p class="sec-sub">Our operating model for brands that need to publish every week — without burning out the system. We build the editorial line, recurring formats, and production cadence so the brand compounds presence over time.</p>
+      </div>
+
+      <div class="always-on-phone">
+        <div class="phone-stack">
+        <div class="phone-frame">
+          <div class="phone-progress" id="phoneProgress">
+            <div class="phone-progress-bar"><span class="fill"></span></div>
+            <div class="phone-progress-bar"><span class="fill"></span></div>
+            <div class="phone-progress-bar"><span class="fill"></span></div>
+            <div class="phone-progress-bar"><span class="fill"></span></div>
+          </div>
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="phone-reel-track" id="phoneReelTrack">
+              <div class="phone-reel">
+                <div class="phone-reel-bg"></div>
+                <div class="phone-reel-overlay"></div>
+                <div class="phone-reel-handle"><span class="dot-on"></span> @axion.energy</div>
+                <div class="phone-reel-icons">
+                  <div><div class="phone-reel-icon">♥</div><div class="phone-reel-icon-num">12K</div></div>
+                  <div><div class="phone-reel-icon">💬</div><div class="phone-reel-icon-num">340</div></div>
+                  <div><div class="phone-reel-icon">↗</div><div class="phone-reel-icon-num">Share</div></div>
+                </div>
+                <div class="phone-reel-caption">
+                  <div class="brand">Axion Energy · 9:16 reel</div>
+                  <div class="copy">Race day BTS — back to the pits in 60 seconds</div>
+                </div>
+              </div>
+              <div class="phone-reel">
+                <div class="phone-reel-bg"></div>
+                <div class="phone-reel-overlay"></div>
+                <div class="phone-reel-handle"><span class="dot-on"></span> @campari.global</div>
+                <div class="phone-reel-icons">
+                  <div><div class="phone-reel-icon">♥</div><div class="phone-reel-icon-num">8.4K</div></div>
+                  <div><div class="phone-reel-icon">💬</div><div class="phone-reel-icon-num">156</div></div>
+                  <div><div class="phone-reel-icon">↗</div><div class="phone-reel-icon-num">Share</div></div>
+                </div>
+                <div class="phone-reel-caption">
+                  <div class="brand">Campari · 9:16 reel</div>
+                  <div class="copy">Red passion, vertical cut for stories</div>
+                </div>
+              </div>
+              <div class="phone-reel">
+                <div class="phone-reel-bg"></div>
+                <video class="phone-reel-video" autoplay muted loop playsinline preload="metadata"
+                       poster="data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 9 16'&gt;&lt;rect width='9' height='16' fill='%230a0a0a'/&gt;&lt;/svg&gt;">
+                  <source src="assets/reels/converse-love-festivals-9x16.mp4" type="video/mp4">
+                </video>
+                <div class="phone-reel-overlay"></div>
+                <div class="phone-reel-handle"><span class="dot-on"></span> @converse</div>
+                <div class="phone-reel-icons">
+                  <div><div class="phone-reel-icon">♥</div><div class="phone-reel-icon-num">22K</div></div>
+                  <div><div class="phone-reel-icon">💬</div><div class="phone-reel-icon-num">512</div></div>
+                  <div><div class="phone-reel-icon">↗</div><div class="phone-reel-icon-num">Share</div></div>
+                </div>
+                <div class="phone-reel-caption">
+                  <div class="brand">Converse · Love Festivals</div>
+                  <div class="copy">Vertical cut for IG Reels / TikTok / YouTube Shorts</div>
+                </div>
+              </div>
+              <div class="phone-reel">
+                <div class="phone-reel-bg"></div>
+                <div class="phone-reel-overlay"></div>
+                <div class="phone-reel-handle"><span class="dot-on"></span> @redbull</div>
+                <div class="phone-reel-icons">
+                  <div><div class="phone-reel-icon">♥</div><div class="phone-reel-icon-num">45K</div></div>
+                  <div><div class="phone-reel-icon">💬</div><div class="phone-reel-icon-num">980</div></div>
+                  <div><div class="phone-reel-icon">↗</div><div class="phone-reel-icon-num">Share</div></div>
+                </div>
+                <div class="phone-reel-caption">
+                  <div class="brand">Red Bull · 9:16 reel</div>
+                  <div class="copy">Motion graphics — animated insert for the feed</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="phone-side-controls" aria-label="Reel navigation">
+          <button class="phone-side-btn up" id="phoneUpBtn" aria-label="Previous reel">
+            <svg width="14" height="9" viewBox="0 0 14 9"><path d="M1 8L7 1.5L13 8"/></svg>
+          </button>
+          <button class="phone-side-btn down" id="phoneDownBtn" aria-label="Next reel">
+            <svg width="14" height="9" viewBox="0 0 14 9"><path d="M1 1L7 7.5L13 1"/></svg>
+          </button>
+        </div>
+        </div>
+      </div>
     </div>
 
     <div class="movements reveal">
@@ -2207,6 +2556,89 @@ reveals.forEach(r=>io.observe(r));
     if(v.muted){ ico.textContent='🔇'; lbl.textContent='Sound off'; }
     else      { ico.textContent='🔊'; lbl.textContent='Sound on'; v.play().catch(()=>{}); }
   });
+})();
+
+// ===== Phone reel mockup (Always On Mode) =====
+(function(){
+  const track = document.getElementById('phoneReelTrack');
+  const progressBars = document.querySelectorAll('#phoneProgress .phone-progress-bar');
+  if (!track || !progressBars.length) return;
+
+  const total = track.querySelectorAll('.phone-reel').length;
+  const REEL_DURATION = 5000;
+  let cur = 0;
+  let timer = null;
+  let progStart = 0;
+  let rafId = null;
+  let inView = false;
+  let isHover = false;
+
+  function show(i){
+    cur = (i + total) % total;
+    track.style.transform = `translateY(-${cur * 25}%)`;
+    progressBars.forEach((bar, idx) => {
+      const fill = bar.querySelector('.fill');
+      if (idx < cur)      { fill.style.transition = 'none'; fill.style.width = '100%'; }
+      else if (idx > cur) { fill.style.transition = 'none'; fill.style.width = '0%'; }
+      else                { fill.style.transition = 'none'; fill.style.width = '0%'; }
+    });
+    // Play only the active reel's video, pause others
+    const reels = track.querySelectorAll('.phone-reel');
+    reels.forEach((r, idx) => {
+      const v = r.querySelector('video');
+      if (!v) return;
+      if (idx === cur) { v.currentTime = 0; v.play().catch(()=>{}); }
+      else             { v.pause(); }
+    });
+    progStart = performance.now();
+    if (rafId) cancelAnimationFrame(rafId);
+    tickProg();
+  }
+  function next(){ show(cur + 1); }
+  function prev(){ show(cur - 1); }
+
+  function tickProg(){
+    if (!inView || isHover) {
+      // freeze
+      progStart = performance.now() - (parseFloat(progressBars[cur].querySelector('.fill').style.width) / 100) * REEL_DURATION;
+      rafId = requestAnimationFrame(tickProg);
+      return;
+    }
+    const elapsed = performance.now() - progStart;
+    const pct = Math.min(100, (elapsed / REEL_DURATION) * 100);
+    const fill = progressBars[cur].querySelector('.fill');
+    if (fill) fill.style.width = pct + '%';
+    if (pct >= 100) { next(); return; }
+    rafId = requestAnimationFrame(tickProg);
+  }
+
+  // Pause when out of viewport
+  const obs = new IntersectionObserver(es => {
+    es.forEach(e => { inView = e.isIntersecting; });
+  }, { threshold: 0.3 });
+  const phoneEl = track.closest('.phone-frame');
+  if (phoneEl) obs.observe(phoneEl);
+
+  // Pause on hover
+  phoneEl?.addEventListener('mouseenter', () => isHover = true);
+  phoneEl?.addEventListener('mouseleave', () => isHover = false);
+
+  // Side arrow buttons → manual navigation (no more wheel hijack so page scroll works normally)
+  document.getElementById('phoneUpBtn')?.addEventListener('click', () => prev());
+  document.getElementById('phoneDownBtn')?.addEventListener('click', () => next());
+
+  // Touch swipe inside the phone (mobile only — no page-scroll conflict)
+  let touchStartY = 0;
+  phoneEl?.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  phoneEl?.addEventListener('touchend', (e) => {
+    const dy = (e.changedTouches[0].clientY - touchStartY);
+    if (Math.abs(dy) < 30) return;
+    if (dy < 0) next(); else prev();
+  });
+
+  show(0);
 })();
 
 // ===== Roster expand/collapse (Craft Mode) =====
