@@ -536,6 +536,30 @@ section.section{
   letter-spacing:0;
 }
 .hero-headline strong{font-weight:700}
+.hero-sublabel{
+  margin-top:24px;
+  font-family:var(--font-display);
+  font-size:14px;letter-spacing:0.16em;text-transform:uppercase;
+  color:#ffffffcc;font-weight:500;
+  display:flex;align-items:center;gap:14px;
+  flex-wrap:wrap;
+  opacity:0;
+  animation:sublabelIn 0.9s ease forwards;
+  animation-delay:3.2s;
+}
+.hero-sublabel em{
+  font-family:var(--font-script);
+  font-style:italic;
+  font-size:1.5em;
+  font-weight:500;
+  color:#fff;
+  letter-spacing:0;
+  text-transform:none;
+  line-height:1;
+}
+.hero-sublabel .divider{width:24px;height:1px;background:#ffffff44;display:inline-block}
+.hero-sublabel .badge{color:#ffffff99}
+@keyframes sublabelIn{to{opacity:1}}
 .hero-foot{
   position:relative;
   z-index:3;
@@ -1458,6 +1482,62 @@ footer{
 /* Smooth video transform for parallax */
 .hero-video{transition:transform 0.05s linear}
 
+/* ============= KINETIC CURSOR + INTERACTIONS ============= */
+.cursor{
+  position:fixed;
+  top:0;left:0;
+  width:14px;height:14px;
+  background:#fff;
+  border-radius:50%;
+  pointer-events:none;
+  mix-blend-mode:difference;
+  z-index:99999;
+  transform:translate(-50%,-50%);
+  transition:width .35s cubic-bezier(.25,.46,.45,.94), height .35s cubic-bezier(.25,.46,.45,.94), opacity .25s;
+  will-change:transform;
+  display:none;
+}
+.cursor.cursor--hover{
+  width:64px;height:64px;
+}
+.cursor.cursor--media{
+  width:96px;height:96px;
+  mix-blend-mode:normal;
+  background:transparent;
+  border:1.5px solid #fff;
+}
+.cursor.cursor--hidden{opacity:0}
+
+/* Activate cursor only on devices with fine pointer + hover support */
+@media (hover:hover) and (pointer:fine){
+  body.has-cursor{cursor:none}
+  body.has-cursor .cursor{display:block}
+  body.has-cursor a,body.has-cursor button,body.has-cursor [data-cursor]{cursor:none}
+}
+
+/* Magnetic targets — let JS animate the transform */
+[data-magnetic]{
+  transition:transform .35s cubic-bezier(.25,.46,.45,.94);
+  will-change:transform;
+}
+
+/* Tilt-ready cards */
+[data-tilt]{
+  transition:transform .5s cubic-bezier(.25,.46,.45,.94);
+  transform-style:preserve-3d;
+  will-change:transform;
+}
+
+/* Marquee speed-up on hover */
+.marquee:hover .marquee-track{animation-duration:18s}
+.marquee .marquee-track{transition:animation-duration .4s}
+
+/* Velocity-squash on titulars (set by JS) */
+.sec-title,.studio-tagline,.foot-tagline,.hero-headline{
+  transform-origin:left center;
+  transition:transform .12s cubic-bezier(.25,.46,.45,.94);
+}
+
 /* ============= NOTE BANNER ============= */
 .note-banner{
   position:fixed;
@@ -1543,6 +1623,9 @@ footer{
   <div class="intro-bar" id="introBar"></div>
 </div>
 
+<!-- Custom kinetic cursor -->
+<div class="cursor" id="cursor" aria-hidden="true"></div>
+
 <!-- Top scroll progress bar -->
 <div class="scroll-progress" id="scrollProgress"></div>
 
@@ -1608,6 +1691,12 @@ footer{
       Hybrid creative production company.<br>
       <strong>Production, judgment & technology</strong> at the pace of brands that need <em>continuous presence</em>.
     </h1>
+    <div class="hero-sublabel">
+      <em>Small by choice.</em>
+      <span>Demanding by nature.</span>
+      <span class="divider"></span>
+      <span class="badge">20 years · Buenos Aires</span>
+    </div>
   </div>
   <div class="container hero-foot">
     <div class="scroll-cue">
@@ -1794,7 +1883,7 @@ footer{
     <div class="always-on-hero reveal">
       <div class="always-on-text">
         <h2 class="sec-title text-reveal">Continuous content, not just <em>campaigns</em>.</h2>
-        <p class="sec-sub">Our operating model for brands that need to publish every week — without burning out the system. We build the editorial line, recurring formats, and production cadence so the brand compounds presence over time.</p>
+        <p class="sec-sub">We don't create the mother concept. <strong>We amplify it.</strong> We translate the agency or client's idea into Always-On systems — volume with criterion, AI as a tool, a monthly retainer instead of one-off campaigns. So the brand compounds presence instead of flickering.</p>
       </div>
 
       <div class="always-on-phone">
@@ -1888,33 +1977,33 @@ footer{
     <div class="movements reveal">
       <div class="move">
         <div>
-          <div class="step"><span class="n">01</span> Diagnóstico</div>
-          <h3>What does the brand actually need to be saying?</h3>
+          <div class="step"><span class="n">01</span> El problema</div>
+          <h3>The market shifted. Old models don't keep up.</h3>
         </div>
-        <p>We audit your channels, calendar, and content velocity. Map the gaps between what the brand promises and what it ships every week.</p>
+        <p>More volume, more speed, smaller budgets. Marketing teams saturated. AI democratized production — but the result is generic. Brands need a partner who can scale AND keep criterion.</p>
         <div class="arrow-next">→</div>
       </div>
       <div class="move">
         <div>
-          <div class="step"><span class="n">02</span> Respuesta</div>
-          <h3>A content engine, not a one-off campaign.</h3>
+          <div class="step"><span class="n">02</span> La respuesta</div>
+          <h3>We amplify the mother concept. We don't replace it.</h3>
         </div>
-        <p>We build the system: editorial line, recurring formats, asset library, production cadence — designed to compound week over week.</p>
+        <p>Paradise receives the campaign idea from the agency or client and translates it into a content system. Volume with creative criterion plus AI. Predictable monthly fee. Long-term relationship — not a campaign per quarter.</p>
         <div class="arrow-next">→</div>
       </div>
       <div class="move">
         <div>
-          <div class="step"><span class="n">03</span> Modalidades</div>
-          <h3>Three ways to plug us in.</h3>
+          <div class="step"><span class="n">03</span> Las modalidades</div>
+          <h3>Two ways to plug us in.</h3>
         </div>
-        <p>Retainer (continuous output), Sprint (12-week burst), or Embedded (we sit inside your team). Pick the shape — same craft.</p>
+        <p><strong>A · Craft by Paradise</strong> — max human intervention, AI as accelerator, 60–300 pieces/month. <strong>B · AI-Powered Platform</strong> — Paradise provides source material, the platform automates output. Speed and cost optimized.</p>
       </div>
     </div>
 
     <div class="always-stat reveal">
-      <div class="stat"><div class="big" data-count="+340">+0</div><div class="lbl">pieces / year for active retainers</div></div>
-      <div class="stat"><div class="big" data-count="72h">0h</div><div class="lbl">average turnaround, idea → live</div></div>
-      <div class="stat"><div class="big" data-count="14">0</div><div class="lbl">brands currently on always-on</div></div>
+      <div class="stat"><div class="big" data-count="20">0</div><div class="lbl">years of craft & criterion</div></div>
+      <div class="stat"><div class="big" data-count="300">0</div><div class="lbl">max pieces / month per always-on pack</div></div>
+      <div class="stat"><div class="big" data-count="2">0</div><div class="lbl">modalities · one studio behind both</div></div>
     </div>
   </div>
 </section>
@@ -1925,7 +2014,7 @@ footer{
   <div class="container">
     <div class="sec-head reveal">
       <h2 class="sec-title text-reveal">Roster of <em>directors</em> and photographers.</h2>
-      <p class="sec-sub">When the project demands a singular eye. Curated, signed, available.</p>
+      <p class="sec-sub">A roster, not a list. Signed talent for the projects that need a singular eye — not stock, not sourced. The difference between a good job and an epic one.</p>
     </div>
 
     <div class="craft-layout">
@@ -2138,35 +2227,35 @@ footer{
   <div class="container">
     <div class="sec-head reveal">
       <h2 class="sec-title text-reveal">Four reasons we <em>exist</em>.</h2>
-      <p class="sec-sub">If any of these doesn't sound like what you need, we're probably the wrong studio for you.</p>
+      <p class="sec-sub">One studio. One conversation. We integrate in a single model what was contracted separately before: creative thinking, audiovisual production, and applied technology.</p>
     </div>
     <div class="pillars reveal">
       <div class="pillar">
         <div>
           <div class="pnum">[ 01 ]</div>
           <h3>Craft <em>+</em> AI.</h3>
-          <p>We don't choose between human craft and AI tooling. We use AI to remove friction in the boring 80% so the team can spend the 20% that matters on judgment, taste, and execution.</p>
+          <p>It's not generic AI. It's human criterion amplified by technology. We use AI when it corresponds — never as a replacement for taste, direction, or judgment.</p>
         </div>
       </div>
       <div class="pillar">
         <div>
           <div class="pnum">[ 02 ]</div>
           <h3>Partner, not vendor.</h3>
-          <p>We sit inside the brand's marketing problem, not on the other side of a brief. Long-term relationships, shared P&L logic, opinions on your roadmap.</p>
+          <p>We get inside the ideas. Direct relationship with the owners of the studio. No layers, no account-management theater — just the people who'll actually do the work.</p>
         </div>
       </div>
       <div class="pillar">
         <div>
           <div class="pnum">[ 03 ]</div>
-          <h3>Scale without bloat.</h3>
-          <p>Small senior team + flexible roster + AI pipeline = output of a 50-person agency without the meeting layer. You pay for the work, not the chairs.</p>
+          <h3>Controlled scale.</h3>
+          <p>Boutique by choice. Agility, fast decisions, zero bureaucracy. Output of a 50-person agency without the meeting layer — because we built the studio that way on purpose.</p>
         </div>
       </div>
       <div class="pillar">
         <div>
           <div class="pnum">[ 04 ]</div>
           <h3>Two modes, one studio.</h3>
-          <p>Always-On for content velocity, Craft Mode for the films that need to win awards. Same team, same standards, two operating speeds.</p>
+          <p>Premium production for the films that need to win awards. Always-On for the brands that need to publish every week. One partner, one conversation, both speeds.</p>
         </div>
       </div>
     </div>
@@ -2177,7 +2266,7 @@ footer{
 <section id="studio" class="section">
   <div class="section-marker"><span class="num">06</span> Team</div>
   <div class="container">
-    <h2 class="studio-tagline text-reveal">The studio is built <em>small by choice</em> and big by nature.</h2>
+    <h2 class="studio-tagline text-reveal">Small by choice. <em>Demanding</em> by nature.</h2>
 
     <div class="team-grid reveal">
       <div class="team-card">
@@ -2214,25 +2303,25 @@ footer{
   <div class="container">
     <div class="sec-head reveal">
       <h2 class="sec-title text-reveal">Two doors <em>in</em>.</h2>
-      <p class="sec-sub">We answer fast. Pick the channel that matches the urgency.</p>
+      <p class="sec-sub">Same studio behind both. Direct relationship with the owners — no account-management layer between you and the people doing the work.</p>
     </div>
 
     <div class="contact-cards reveal">
       <div class="contact-card">
         <div>
-          <div class="ckind">[ for new projects ]</div>
-          <h3>hola@paradise.la</h3>
-          <p>Briefs, RFPs, "do you do this?" questions. We reply within 24h on weekdays.</p>
+          <div class="ckind">[ Founder · CEO ]</div>
+          <h3>fer@paradise.la</h3>
+          <p>For new business, partnerships, and "is this even possible?" conversations. Reply within 24h on weekdays.</p>
         </div>
-        <a href="mailto:hola@paradise.la" class="contact-cta">Email us →</a>
+        <a href="mailto:fer@paradise.la" class="contact-cta">Email Fer →</a>
       </div>
       <div class="contact-card">
         <div>
-          <div class="ckind">[ for fast-moving stuff ]</div>
-          <h3>WhatsApp direct</h3>
-          <p>For brands already in always-on mode, or anything that can't wait a day.</p>
+          <div class="ckind">[ Partner · Executive Producer ]</div>
+          <h3>luciano@paradise.la</h3>
+          <p>For active projects, production briefs, and Always-On retainers. Day-to-day operations and execution.</p>
         </div>
-        <a href="https://wa.me/5491100000000" class="contact-cta">Open WhatsApp →</a>
+        <a href="mailto:luciano@paradise.la" class="contact-cta">Email Luciano →</a>
       </div>
     </div>
 
@@ -2250,7 +2339,7 @@ footer{
   <div class="foot-grid">
     <div class="foot-brand">
       <div class="brand" style="font-size:24px;margin-bottom:12px">Paradise<sup>®LA</sup></div>
-      Hybrid creative production company. Buenos Aires · Los Angeles.
+      Hybrid creative production company. 20 years of craft, criterion and technology — production at the pace of brands that need continuous presence. Buenos Aires.
     </div>
     <div class="foot-col">
       <h5>Sections</h5>
@@ -2294,6 +2383,124 @@ footer{
 <!-- Lenis (smooth scroll, Vucko-style buttery feel) -->
 <script src="https://unpkg.com/lenis@1.3.5/dist/lenis.min.js"></script>
 <script>
+// ===== Kinetic interactions (cursor + magnetic + tilt + velocity) =====
+(function(){
+  // Skip on touch / coarse-pointer devices
+  const isFine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (!isFine) return;
+  document.body.classList.add('has-cursor');
+
+  // ---- Custom cursor with lag ----
+  const cursor = document.getElementById('cursor');
+  let mx = window.innerWidth/2, my = window.innerHeight/2;
+  let cx = mx, cy = my;
+  let active = false;
+
+  document.addEventListener('mousemove', (e) => {
+    mx = e.clientX; my = e.clientY;
+    if (!active) { active = true; cursor && (cursor.style.opacity = '1'); }
+  });
+  document.addEventListener('mouseleave', () => { cursor && (cursor.style.opacity = '0'); });
+  document.addEventListener('mouseenter', () => { cursor && (cursor.style.opacity = '1'); });
+
+  function rafCursor(){
+    cx += (mx - cx) * 0.18;
+    cy += (my - cy) * 0.18;
+    if (cursor) cursor.style.transform = `translate3d(${cx}px, ${cy}px, 0) translate(-50%, -50%)`;
+    requestAnimationFrame(rafCursor);
+  }
+  rafCursor();
+
+  // Hover state on interactive elements
+  const hoverSel = 'a, button, [data-cursor="hover"], .nav-links a, .btn-pill, .contact-cta, .roster-row, .slide-cta, .slider-controls button, .thumb-pill, .phone-side-btn, .theme-toggle, .back-btn, .back-top';
+  const mediaSel = '.slide-video-frame, .phone-frame, .work-card, .media';
+  document.querySelectorAll(hoverSel).forEach(el => {
+    el.addEventListener('mouseenter', () => cursor?.classList.add('cursor--hover'));
+    el.addEventListener('mouseleave', () => cursor?.classList.remove('cursor--hover'));
+  });
+  document.querySelectorAll(mediaSel).forEach(el => {
+    el.addEventListener('mouseenter', () => cursor?.classList.add('cursor--media'));
+    el.addEventListener('mouseleave', () => cursor?.classList.remove('cursor--media'));
+  });
+
+  // ---- Magnetic hover on small interactive targets ----
+  document.querySelectorAll('[data-magnetic], .btn-pill, .contact-cta, .slider-controls button, .phone-side-btn, .back-btn').forEach(el => {
+    let raf;
+    el.addEventListener('mousemove', (e) => {
+      const rect = el.getBoundingClientRect();
+      const dx = (e.clientX - (rect.left + rect.width/2)) * 0.28;
+      const dy = (e.clientY - (rect.top + rect.height/2)) * 0.28;
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        el.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
+      });
+    });
+    el.addEventListener('mouseleave', () => {
+      el.style.transform = '';
+    });
+  });
+
+  // ---- Tilt on slide video frames (subtle 3D) ----
+  document.querySelectorAll('.slide-video-frame').forEach(card => {
+    card.style.transformStyle = 'preserve-3d';
+    let raf;
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        card.style.transform = `perspective(1200px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg) scale3d(1.01, 1.01, 1.01)`;
+      });
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+    });
+  });
+
+  // ---- Hero video mouse parallax (subtle depth) ----
+  const heroVid = document.querySelector('.hero-video');
+  if (heroVid) {
+    let raf;
+    document.addEventListener('mousemove', (e) => {
+      // Only apply when mouse is in upper viewport area (near hero)
+      if (e.clientY > window.innerHeight * 1.2) return;
+      const x = (e.clientX / window.innerWidth - 0.5) * 24;
+      const y = (e.clientY / window.innerHeight - 0.5) * 24;
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        // Combine with the existing scroll parallax (transformed via CSS calc)
+        heroVid.style.setProperty('--mouse-x', x + 'px');
+        heroVid.style.setProperty('--mouse-y', y + 'px');
+      });
+    });
+  }
+
+  // ---- Scroll-velocity squash on titles ----
+  let lastY = window.scrollY, velocity = 0, vRaf;
+  function onScrollVel(){
+    const y = window.scrollY;
+    velocity = y - lastY;
+    lastY = y;
+    if (vRaf) cancelAnimationFrame(vRaf);
+    vRaf = requestAnimationFrame(applySquash);
+  }
+  function applySquash(){
+    const skew = Math.max(-2.5, Math.min(2.5, velocity * 0.04));
+    const scaleY = 1 - Math.min(0.04, Math.abs(velocity) * 0.0008);
+    const titles = document.querySelectorAll('.sec-title, .studio-tagline, .foot-tagline');
+    titles.forEach(t => {
+      t.style.transform = `skewY(${skew}deg) scaleY(${scaleY})`;
+    });
+    velocity *= 0.85;
+    if (Math.abs(velocity) > 0.2) requestAnimationFrame(applySquash);
+    else {
+      titles.forEach(t => t.style.transform = '');
+    }
+  }
+  window.addEventListener('scroll', onScrollVel, { passive: true });
+})();
+
 // ===== Smooth scroll (Lenis) — Chrome-friendly config =====
 let lenis = null;
 if (typeof Lenis !== 'undefined') {
