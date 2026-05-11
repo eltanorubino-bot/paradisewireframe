@@ -1627,15 +1627,29 @@ section.section{
   grid-template-columns:repeat(6,1fr);
   gap:16px;
 }
-.team-card{position:relative;aspect-ratio:3/4;overflow:hidden;background:#1a1a1a}
+.team-card{position:relative;aspect-ratio:3/4;overflow:hidden;background:#0a0a0a}
+.team-card::after{
+  content:'';
+  position:absolute;inset:auto 0 0 0;
+  height:60%;
+  background:linear-gradient(180deg,transparent 0%,rgba(0,0,0,0.85) 95%);
+  pointer-events:none;z-index:1;
+}
 .team-photo{
   position:absolute;inset:0;
-  background:linear-gradient(180deg,#3a3a3a 0%,#0a0a0a 100%);
+  background:linear-gradient(180deg,#2a2a2a 0%,#0a0a0a 100%);
+  background-size:cover;
+  background-position:center 22%;
   display:flex;align-items:center;justify-content:center;
   color:#ffffff33;
+  font-family:var(--font-display);
   font-size:48px;
-  font-weight:200;
+  font-weight:300;
+  letter-spacing:0.04em;
+  transition:transform .8s cubic-bezier(0.16, 1, 0.3, 1);
 }
+.team-card:hover .team-photo{transform:scale(1.04)}
+.team-photo.has-image{color:transparent}
 .team-meta{
   position:absolute;
   bottom:14px;left:14px;right:14px;
@@ -2697,11 +2711,11 @@ footer{
 
     <div class="team-grid reveal">
       <div class="team-card">
-        <div class="team-photo">FR</div>
+        <div class="team-photo has-image" style="background-image:url('assets/team/fer-rubino.jpg')">FR</div>
         <div class="team-meta"><span class="nm">Fer Rubino</span><span class="rl">Executive Producer</span></div>
       </div>
       <div class="team-card">
-        <div class="team-photo">LP</div>
+        <div class="team-photo has-image" style="background-image:url('assets/team/luciano-porri.jpg')">LP</div>
         <div class="team-meta"><span class="nm">Luciano Porri</span><span class="rl">Executive Producer</span></div>
       </div>
       <div class="team-card">
@@ -2709,15 +2723,15 @@ footer{
         <div class="team-meta"><span class="nm">Guille Cairo</span><span class="rl">Art Director · AI</span></div>
       </div>
       <div class="team-card">
-        <div class="team-photo">FM</div>
+        <div class="team-photo has-image" style="background-image:url('assets/team/fer-molas.jpg')">FM</div>
         <div class="team-meta"><span class="nm">Fer Molas</span><span class="rl">Producer</span></div>
       </div>
       <div class="team-card">
-        <div class="team-photo">FC</div>
+        <div class="team-photo has-image" style="background-image:url('assets/team/fede-castro.jpg')">FC</div>
         <div class="team-meta"><span class="nm">Fede Castro</span><span class="rl">Post Production</span></div>
       </div>
       <div class="team-card">
-        <div class="team-photo">CR</div>
+        <div class="team-photo has-image" style="background-image:url('assets/team/carlos-romero.jpg')">CR</div>
         <div class="team-meta"><span class="nm">Carlos Romero</span><span class="rl">Administration</span></div>
       </div>
     </div>
