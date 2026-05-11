@@ -1936,52 +1936,6 @@ footer{
 }
 .note-banner.hide{display:none}
 
-/* ============= PAGE CURTAIN — Salient-style top→bottom transition ============= */
-.page-curtain{
-  position:fixed;
-  left:0;right:0;top:0;
-  height:100vh;
-  background:#0a0a0a;
-  z-index:999;
-  pointer-events:none;
-  transform:translateY(-100%);
-  will-change:transform;
-  display:flex;
-  align-items:center;justify-content:center;
-}
-.page-curtain.show{
-  transform:translateY(0);
-  transition:transform 0.55s cubic-bezier(0.76, 0, 0.24, 1);
-}
-.page-curtain.exit{
-  transform:translateY(100%);
-  transition:transform 0.55s cubic-bezier(0.76, 0, 0.24, 1);
-}
-.curtain-wordmark{
-  font-family:var(--font-display);
-  color:#E5E5E5;
-  font-size:clamp(40px, 6vw, 84px);
-  font-weight:500;
-  letter-spacing:-0.012em;
-  opacity:0;
-  transform:translateY(8px);
-  display:flex;align-items:baseline;gap:5px;
-}
-.curtain-wordmark sup{font-size:0.30em;color:rgba(229,229,229,0.55);font-weight:400;letter-spacing:0.04em}
-.page-curtain.show .curtain-wordmark{
-  opacity:1;
-  transform:none;
-  transition:opacity 0.35s ease 0.18s, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.18s;
-}
-.page-curtain.exit .curtain-wordmark{
-  opacity:0;
-  transform:translateY(-6px);
-  transition:opacity 0.2s ease, transform 0.3s ease;
-}
-@media (prefers-reduced-motion: reduce){
-  .page-curtain{display:none}
-}
-
 /* ============= MOBILE ============= */
 @media (max-width:900px){
   :root{--section-pad:80px;--pad:20px}
@@ -2025,11 +1979,6 @@ footer{
 </style>
 </head>
 <body class="intro-active">
-
-<!-- ============= PAGE CURTAIN — top→bottom transition between sections ============= -->
-<div class="page-curtain" id="pageCurtain" aria-hidden="true">
-  <span class="curtain-wordmark">Paradise<sup>®LA</sup></span>
-</div>
 
 <!-- ============= INTRO LOADER ============= -->
 <div class="intro-overlay" id="introOverlay" role="status" aria-label="Loading">
@@ -3523,65 +3472,6 @@ reveals.forEach(r=>io.observe(r));
 
   // Init
   go(0);
-})();
-
-// ===== Page-curtain transition (Salient-style top→bottom wipe between sections) =====
-(function(){
-  const curtain = document.getElementById('pageCurtain');
-  if (!curtain) return;
-
-  const DROP_MS = 560;   // matches the CSS transition duration (0.55s + buffer)
-  let busy = false;
-
-  function jumpTo(target){
-    // Pause Lenis (if active) for an instant teleport, then resume on next frame
-    if (typeof lenis !== 'undefined' && lenis && lenis.scrollTo){
-      lenis.scrollTo(target, { immediate: true, lock: true, force: true });
-    } else {
-      const y = target.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo(0, y);
-    }
-  }
-
-  function transition(target){
-    if (busy) return;
-    busy = true;
-
-    // Phase 1: drop curtain from top
-    curtain.classList.remove('exit');
-    curtain.classList.add('show');
-
-    // Phase 2: when fully covered, teleport scroll
-    setTimeout(() => {
-      jumpTo(target);
-
-      // Phase 3: slide curtain off the bottom
-      requestAnimationFrame(() => {
-        curtain.classList.remove('show');
-        curtain.classList.add('exit');
-      });
-
-      // Phase 4: clean up
-      setTimeout(() => {
-        curtain.classList.remove('exit');
-        busy = false;
-      }, DROP_MS + 40);
-    }, DROP_MS);
-  }
-
-  // Intercept all in-page anchor clicks
-  document.addEventListener('click', e => {
-    const a = e.target.closest('a[href^="#"]');
-    if (!a) return;
-    if (a.classList.contains('no-curtain')) return;
-    const href = a.getAttribute('href');
-    if (!href || href === '#' || href.length < 2) return;
-    let target;
-    try { target = document.querySelector(href); } catch(_) { return; }
-    if (!target) return;
-    e.preventDefault();
-    transition(target);
-  }, true);
 })();
 
 // Live clock — Buenos Aires, real time (with seconds for the Contact section timer)
