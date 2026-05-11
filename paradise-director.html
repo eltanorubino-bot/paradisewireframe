@@ -1,0 +1,712 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Paradise · Director Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600&family=Mona+Sans:wght@200;300;400&family=Space+Mono:wght@400&family=Kapakana:wght@400&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --ink:#0A0A0A;
+  --paper:#E5E5E5;
+  --muted:rgba(10,10,10,0.55);
+  --line:rgba(10,10,10,0.14);
+  --thumb-bg:#0a0a0a;
+}
+html.dark{
+  --ink:#E5E5E5;
+  --paper:#0A0A0A;
+  --muted:rgba(229,229,229,0.55);
+  --line:rgba(229,229,229,0.16);
+  --thumb-bg:#1a1a1a;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--paper);color:var(--ink);font-family:'Work Sans',-apple-system,BlinkMacSystemFont,sans-serif;font-weight:500;-webkit-font-smoothing:antialiased;transition:background .25s ease,color .25s ease}
+a{color:inherit;text-decoration:none}
+
+/* ===== Top nav (matches paradise-wireframe-v1.html) ===== */
+:root{
+  --nav-h:72px;
+  --pad:32px;
+  --max:1600px;
+}
+nav.topnav{
+  position:fixed;top:0;left:0;right:0;
+  height:var(--nav-h);
+  z-index:100;
+  background:color-mix(in srgb, var(--paper) 80%, transparent);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--line);
+  display:flex;align-items:center;
+  padding:0 var(--pad);
+  transition:background .35s ease, border-color .35s ease;
+}
+nav.topnav .nav-inner{
+  width:100%;
+  max-width:var(--max);
+  margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:24px;
+}
+.brand{
+  font-family:'Work Sans',sans-serif;
+  font-weight:500;
+  font-size:22px;
+  letter-spacing:-0.01em;
+  display:flex;align-items:baseline;gap:4px;
+  text-transform:none;
+}
+.brand sup{font-size:9px;color:var(--muted);font-weight:400;letter-spacing:0.04em}
+.nav-links{
+  display:flex;gap:28px;align-items:center;
+}
+.nav-links a{
+  font-family:'Work Sans',sans-serif;
+  font-size:11px;font-weight:500;
+  letter-spacing:0.14em;text-transform:uppercase;
+  position:relative;padding:6px 0;
+  transition:opacity .2s;
+  opacity:1;
+}
+.nav-links a:hover{opacity:0.55}
+.nav-links a.active{opacity:1}
+.nav-cta{display:flex;align-items:center;gap:16px}
+.nav-clock{
+  display:flex;align-items:center;gap:8px;
+  font-size:11px;letter-spacing:0.12em;color:var(--muted);
+  font-feature-settings:'tnum';
+  text-transform:uppercase;font-weight:500;
+}
+.nav-clock .dot{
+  width:6px;height:6px;border-radius:50%;
+  background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,0.7);
+  animation:livePulse 2s ease-in-out infinite;
+  flex-shrink:0;
+}
+@keyframes livePulse{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:0.45;transform:scale(0.85)}
+}
+.lang{font-size:11px;color:var(--muted);letter-spacing:0.08em}
+.lang span.active{color:var(--ink);font-weight:600}
+.theme-toggle{
+  width:42px;height:22px;
+  background:none;border:none;padding:0;cursor:pointer;
+  display:flex;align-items:center;
+}
+.toggle-track{
+  position:relative;display:block;
+  width:42px;height:22px;
+  background:transparent;
+  border:1px solid var(--ink);
+  border-radius:999px;
+  transition:all .25s ease;
+}
+.toggle-thumb{
+  position:absolute;top:2px;left:2px;
+  width:16px;height:16px;
+  background:var(--ink);
+  border-radius:50%;
+  transition:transform .3s cubic-bezier(.5,.05,.2,1.2), background .25s;
+}
+html.dark .toggle-thumb{transform:translateX(20px)}
+.theme-toggle:hover .toggle-track{opacity:0.7}
+.btn-pill{
+  font-family:'Work Sans',sans-serif;
+  background:var(--ink);
+  color:var(--paper);
+  padding:11px 20px;
+  border-radius:999px;
+  font-size:11px;font-weight:600;
+  letter-spacing:0.14em;text-transform:uppercase;
+  transition:transform .2s, opacity .2s;
+}
+.btn-pill:hover{transform:translateY(-1px);opacity:0.9}
+
+/* ===== Layout ===== */
+.page{
+  padding-top:calc(var(--nav-h) + 56px);
+  padding-bottom:120px;
+  padding-left:var(--pad);padding-right:var(--pad);
+  max-width:var(--max);margin:0 auto;
+}
+
+.back-link{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
+  opacity:0.6;transition:opacity .2s ease;
+  margin-bottom:48px;
+}
+.back-link:hover{opacity:1}
+.back-link .arr{display:inline-block;transition:transform .2s ease}
+.back-link:hover .arr{transform:translateX(-4px)}
+
+.dir-grid{
+  display:grid;
+  grid-template-columns:minmax(280px, 380px) 1fr;
+  gap:64px;
+  align-items:start;
+}
+
+/* ===== Left column: sticky bio ===== */
+.dir-bio-col{
+  position:sticky;top:120px;
+}
+.dir-portrait{
+  width:100%;
+  max-width:300px;
+  aspect-ratio:3/4;          /* vertical portrait format */
+  background:var(--thumb-bg);
+  background-size:cover;
+  background-position:center top;
+  margin-bottom:28px;
+  position:relative;
+  overflow:hidden;
+}
+.dir-portrait::after{
+  /* placeholder texture until a real photo is added */
+  content:'';
+  position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 35%, rgba(229,229,229,0.10), transparent 65%),
+             linear-gradient(135deg, #2a2a2a 0%, #0a0a0a 100%);
+  z-index:0;
+}
+.dir-portrait .dir-portrait-initials{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Work Sans',sans-serif;
+  font-weight:500;
+  font-size:64px;
+  letter-spacing:0.04em;
+  color:rgba(229,229,229,0.55);
+  z-index:1;
+  text-transform:uppercase;
+}
+/* if a real image is set as background, hide initials & gradient */
+.dir-portrait.has-image::after{display:none}
+.dir-portrait.has-image .dir-portrait-initials{display:none}
+
+.dir-name{
+  font-family:'Work Sans',sans-serif;
+  font-weight:500;
+  font-size:clamp(40px, 5vw, 72px);
+  line-height:0.95;
+  letter-spacing:-0.01em;
+  text-transform:uppercase;
+  margin-bottom:36px;
+  word-break:break-word;
+}
+.dir-role-label{
+  font-family:'Space Mono',monospace;
+  font-size:11px;letter-spacing:0.14em;text-transform:uppercase;
+  opacity:0.5;
+  margin-bottom:14px;
+  display:block;
+}
+.dir-bio{
+  font-family:'Mona Sans','Work Sans',sans-serif;
+  font-weight:300;
+  font-size:15px;line-height:1.55;
+  opacity:0.85;
+  max-width:380px;
+}
+.dir-bio p+p{margin-top:14px}
+.dir-specs{
+  margin-top:28px;
+  display:flex;flex-wrap:wrap;gap:8px;
+}
+.dir-specs span{
+  font-family:'Space Mono',monospace;
+  font-size:10px;letter-spacing:0.10em;text-transform:uppercase;
+  padding:6px 10px;
+  border:1px solid var(--line);
+  opacity:0.7;
+}
+.dir-contact{
+  margin-top:36px;
+  padding-top:24px;
+  border-top:1px solid var(--line);
+  font-family:'Space Mono',monospace;
+  font-size:11px;letter-spacing:0.10em;text-transform:uppercase;
+  display:flex;flex-direction:column;gap:8px;
+}
+.dir-contact a{opacity:0.7;transition:opacity .2s ease}
+.dir-contact a:hover{opacity:1;text-decoration:underline}
+
+/* ===== Right column: project grid ===== */
+.dir-work-col{
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:18px;
+}
+.work-tile{
+  position:relative;
+  overflow:hidden;
+  cursor:pointer;
+  background:var(--thumb-bg);
+}
+.work-tile.span-2{grid-column:span 2}
+.work-tile.aspect-16-9{aspect-ratio:16/9}
+.work-tile.aspect-4-5{aspect-ratio:4/5}
+.work-tile.aspect-3-4{aspect-ratio:3/4}
+.work-tile.aspect-1-1{aspect-ratio:1/1}
+
+.work-tile-media{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  transition:transform .8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.work-tile:hover .work-tile-media{transform:scale(1.04)}
+
+.work-tile-video{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  background:#0a0a0a;
+  display:none;
+  z-index:1;
+}
+.work-tile.is-playing .work-tile-video{display:block}
+.work-tile.is-playing .work-tile-media{display:none}
+.work-tile.is-playing .work-tile-play{display:none}
+
+.work-tile-play{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:64px;height:64px;
+  border-radius:50%;
+  background:rgba(0,0,0,0.55);
+  border:1px solid rgba(229,229,229,0.6);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  z-index:3;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .25s ease, transform .25s ease, border-color .25s ease;
+  pointer-events:none;
+}
+.work-tile-play::after{
+  content:'';
+  display:block;
+  width:0;height:0;
+  border-style:solid;
+  border-width:9px 0 9px 14px;
+  border-color:transparent transparent transparent #E5E5E5;
+  margin-left:3px;
+}
+.work-tile:hover .work-tile-play{
+  background:rgba(0,0,0,0.75);
+  transform:translate(-50%,-50%) scale(1.08);
+  border-color:#E5E5E5;
+}
+
+.work-tile-label{
+  position:absolute;
+  left:18px;bottom:16px;
+  font-family:'Work Sans',sans-serif;
+  font-weight:500;font-size:13px;letter-spacing:0.06em;text-transform:uppercase;
+  color:#E5E5E5;
+  z-index:2;
+  text-shadow:0 1px 4px rgba(0,0,0,0.4);
+  opacity:0.95;
+}
+.work-tile-meta{
+  position:absolute;
+  right:18px;bottom:16px;
+  font-family:'Space Mono',monospace;
+  font-size:10px;letter-spacing:0.10em;text-transform:uppercase;
+  color:#E5E5E5;
+  opacity:0.65;
+  z-index:2;
+}
+.work-tile.is-playing .work-tile-label,
+.work-tile.is-playing .work-tile-meta{
+  opacity:0;transition:opacity .3s ease;
+}
+.work-tile.is-playing:hover .work-tile-label,
+.work-tile.is-playing:hover .work-tile-meta{opacity:0.85}
+
+/* gradient placeholders for tiles (1..12) */
+.work-tile:nth-child(8n+1) .work-tile-media{background:radial-gradient(circle at 30% 40%, #7a1f1f, #0a0a0a 70%)}
+.work-tile:nth-child(8n+2) .work-tile-media{background:radial-gradient(circle at 60% 50%, #1f4a7a, #0a0a0a 70%)}
+.work-tile:nth-child(8n+3) .work-tile-media{background:radial-gradient(circle at 50% 60%, #7a4a1f, #0a0a0a 70%)}
+.work-tile:nth-child(8n+4) .work-tile-media{background:radial-gradient(circle at 40% 50%, #1f7a4a, #0a0a0a 70%)}
+.work-tile:nth-child(8n+5) .work-tile-media{background:radial-gradient(circle at 50% 40%, #7a1f5a, #0a0a0a 70%)}
+.work-tile:nth-child(8n+6) .work-tile-media{background:radial-gradient(circle at 30% 60%, #3a3a3a, #0a0a0a 70%)}
+.work-tile:nth-child(8n+7) .work-tile-media{background:radial-gradient(circle at 60% 40%, #4a1f7a, #0a0a0a 70%)}
+.work-tile:nth-child(8n+8) .work-tile-media{background:radial-gradient(circle at 50% 50%, #1f7a7a, #0a0a0a 70%)}
+
+/* ===== Footer-ish gradient strip ===== */
+.gradient-strip{
+  height:6px;width:100%;
+  margin-top:80px;
+  background:linear-gradient(90deg, #6FB6E0 0%, #2C72A8 12%, #0A0A0A 28%, #C72A1F 42%, #E84E1F 52%, #B92E5A 70%, #C13E89 80%, #6FB6E0 100%);
+  background-size:200% 100%;
+  animation:strip 18s linear infinite;
+}
+@keyframes strip{
+  0%{background-position:0% 0}
+  100%{background-position:200% 0}
+}
+
+/* ===== Reveal animation ===== */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .8s ease,transform .8s cubic-bezier(0.16, 1, 0.3, 1)}
+.reveal.in{opacity:1;transform:none}
+.reveal-stagger > *{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s cubic-bezier(0.16, 1, 0.3, 1)}
+.reveal-stagger.in > *{opacity:1;transform:none}
+.reveal-stagger.in > *:nth-child(1){transition-delay:0.05s}
+.reveal-stagger.in > *:nth-child(2){transition-delay:0.10s}
+.reveal-stagger.in > *:nth-child(3){transition-delay:0.15s}
+.reveal-stagger.in > *:nth-child(4){transition-delay:0.20s}
+.reveal-stagger.in > *:nth-child(5){transition-delay:0.25s}
+.reveal-stagger.in > *:nth-child(6){transition-delay:0.30s}
+.reveal-stagger.in > *:nth-child(7){transition-delay:0.35s}
+.reveal-stagger.in > *:nth-child(8){transition-delay:0.40s}
+.reveal-stagger.in > *:nth-child(9){transition-delay:0.45s}
+.reveal-stagger.in > *:nth-child(10){transition-delay:0.50s}
+
+/* ===== Responsive ===== */
+@media (max-width: 1100px){
+  .nav-clock,.lang{display:none}
+}
+@media (max-width: 900px){
+  nav.topnav{padding:0 20px}
+  .nav-links{display:none}
+  .brand{font-size:18px}
+  .page{padding:calc(var(--nav-h) + 32px) 20px 80px}
+  .dir-grid{grid-template-columns:1fr;gap:40px}
+  .dir-bio-col{position:relative;top:auto}
+  .dir-work-col{grid-template-columns:1fr;gap:14px}
+  .work-tile.span-2{grid-column:span 1}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Nav (matches main wireframe) ===== -->
+<nav class="topnav">
+  <div class="nav-inner">
+    <a href="paradise-wireframe-v1.html#hero" class="brand">Paradise<sup>®LA</sup></a>
+    <div class="nav-links">
+      <a href="paradise-wireframe-v1.html#hero">Home</a>
+      <a href="paradise-wireframe-v1.html#work">Selected Work</a>
+      <a href="paradise-wireframe-v1.html#always-on">Always On Mode</a>
+      <a href="paradise-wireframe-v1.html#craft" class="active">Craft Mode</a>
+      <a href="paradise-wireframe-v1.html#studio">Team</a>
+      <a href="paradise-wireframe-v1.html#contact">Contact</a>
+    </div>
+    <div class="nav-cta">
+      <span class="nav-clock" id="navClock" aria-label="Studio time">
+        <span class="dot" aria-hidden="true"></span>
+        <span class="text">BUE · 13:30</span>
+      </span>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark / light">
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+      </button>
+      <span class="lang"><span class="active">EN</span> · ES</span>
+      <a href="paradise-wireframe-v1.html#contact" class="btn-pill">Let's talk →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== Page ===== -->
+<main class="page">
+  <a href="paradise-wireframe-v1.html#craft" class="back-link reveal">
+    <span class="arr">←</span> <span>Back to roster</span>
+  </a>
+
+  <div class="dir-grid">
+    <!-- LEFT: bio (sticky) -->
+    <aside class="dir-bio-col reveal">
+      <div class="dir-portrait" id="dirPortrait">
+        <span class="dir-portrait-initials" id="dirPortraitInitials">LV</span>
+      </div>
+      <span class="dir-role-label" id="dirRoleLabel">DIRECTOR</span>
+      <h1 class="dir-name" id="dirName">LUCIA VALDEMOROS</h1>
+      <div class="dir-bio" id="dirBio">
+        <p>Bio placeholder.</p>
+      </div>
+      <div class="dir-specs" id="dirSpecs"></div>
+      <div class="dir-contact">
+        <a href="paradise-wireframe-v1.html#contact">Book this talent →</a>
+        <a href="paradise-wireframe-v1.html#craft">View full roster →</a>
+      </div>
+    </aside>
+
+    <!-- RIGHT: project grid -->
+    <section class="dir-work-col reveal-stagger" id="dirWork">
+      <!-- tiles injected by JS based on director data -->
+    </section>
+  </div>
+
+  <div class="gradient-strip" aria-hidden="true"></div>
+</main>
+
+<script>
+// ===== Director data (placeholder content — replace with real) =====
+//
+// Each work item can be:
+//   type:'photo'          → static thumbnail (no play button)
+//   type:'video', video:'https://…mp4' → click thumbnail to play in-place
+//
+// Optional: poster:'https://…jpg' to set a custom thumbnail image.
+//
+const DIRECTORS = {
+  'dir-01': {
+    name: 'LUCIA VALDEMOROS',
+    role: 'Director',
+    portrait: '', // 'assets/talent/lucia.jpg'
+    bio: [
+      'Cinematic narrative direction with a strong instinct for performance and image-craft. Her work sits between film and editorial — never overlit, always specific.',
+      'Originally from Buenos Aires, with credits across fashion, beverages, and brand films for clients in Latin America, Europe, and the US.'
+    ],
+    specs: ['Cinematic narrative','Fashion','Beverages','Performance'],
+    work: [
+      {type:'video', title:'Project Axion',     client:'Axion Energy',     aspect:'16-9', span:2, video:'https://sujan-experience.b-cdn.net/campari.mp4'},
+      {type:'video', title:'Campari Aperitivo', client:'Campari',          aspect:'4-5',  video:'https://sujan-experience.b-cdn.net/campari.mp4'},
+      {type:'photo', title:'Wave',              client:'Personal',         aspect:'4-5'},
+      {type:'video', title:'The Last Light',    client:'Editorial',        aspect:'16-9', span:2, video:'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'},
+      {type:'photo', title:'Casa de Verano',    client:'Resort brand',     aspect:'3-4'},
+      {type:'photo', title:'Salt + Pine',       client:'Fashion editorial',aspect:'3-4'},
+      {type:'video', title:'Quiet Riot',        client:'Music video',      aspect:'1-1',  video:'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4'},
+      {type:'photo', title:'Cortez',            client:'Spirits brand',    aspect:'1-1'}
+    ]
+  },
+  'dir-02': {
+    name: 'JUANJO COBO',
+    role: 'Director',
+    portrait: '',
+    bio: [
+      'Documentary-driven approach paired with a sharp commercial instinct. Action, movement, and real-time storytelling — he shoots the moment, not the storyboard.',
+      'Specialist in sports and lifestyle, with a roster of long-form and short-form clients across Latin America.'
+    ],
+    specs: ['Documentary','Sports','Action','Real-time'],
+    work: [
+      {type:'video', title:"Run / Don't Run",  client:'Red Bull',         aspect:'16-9', span:2, video:'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'},
+      {type:'video', title:'Asfalto',          client:'Auto brand',       aspect:'4-5',  video:'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4'},
+      {type:'photo', title:'On / Off',         client:'Sportswear',       aspect:'4-5'},
+      {type:'video', title:'Mar Adentro',      client:'Documentary',      aspect:'3-4',  video:'https://sujan-experience.b-cdn.net/campari.mp4'},
+      {type:'photo', title:'Bajo Cero',        client:'Outdoor brand',    aspect:'3-4'},
+      {type:'video', title:'Vértigo',          client:'Action sports',    aspect:'16-9', span:2, video:'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4'},
+      {type:'photo', title:'Light Years',      client:'Personal',         aspect:'1-1'}
+    ]
+  },
+  'dir-03': {
+    name: 'VALENTIN CARIDE',
+    role: 'Director',
+    portrait: '',
+    bio: [
+      'Character-driven storytelling. Comedy and lifestyle work that pulls performance out of casting — the cast IS the script.',
+      "A director's director — talent, agencies and brands return for the rare combination of comedic timing and emotional truth."
+    ],
+    specs: ['Comedy','Casting-led','Lifestyle','Performance'],
+    work: [
+      {type:'video', title:'The Wrong House',  client:'Telco brand',  aspect:'16-9', span:2, video:'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4'},
+      {type:'video', title:'Office Hours',     client:'Insurance',    aspect:'4-5',  video:'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4'},
+      {type:'photo', title:'Lunes',            client:'FMCG',         aspect:'4-5'},
+      {type:'video', title:"Mom's Spaghetti",  client:'Food brand',   aspect:'3-4',  video:'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4'},
+      {type:'photo', title:'No Camera',        client:'Retail',       aspect:'3-4'},
+      {type:'video', title:'A.M./P.M.',        client:'Beverage',     aspect:'1-1',  video:'https://sujan-experience.b-cdn.net/campari.mp4'},
+      {type:'photo', title:'Vecinos',          client:'Series pilot', aspect:'1-1'},
+      {type:'video', title:'Pause',            client:'Tech brand',   aspect:'16-9', span:2, video:'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'}
+    ]
+  },
+  'ph-01': {
+    name: 'MARTIN SIGAL',
+    role: 'Photographer',
+    portrait: '',
+    bio: [
+      'Editorial portrait and fashion photography. Documentary instinct paired with controlled studio lighting — equally at home in a daylight street and a black studio.',
+      'Long-running collaborations with international magazines and fashion houses.'
+    ],
+    specs: ['Editorial','Portrait','Fashion','Studio'],
+    work: [
+      {type:'photo', title:'Black Sun',        client:'Editorial',        aspect:'4-5'},
+      {type:'photo', title:'Sigal x Issue 14', client:'Magazine',         aspect:'4-5'},
+      {type:'photo', title:'Holdout',          client:'Fashion house',    aspect:'16-9', span:2},
+      {type:'photo', title:'Casa Linda',       client:'Resort campaign',  aspect:'3-4'},
+      {type:'photo', title:'Late Bloom',       client:'Fashion editorial',aspect:'3-4'},
+      {type:'photo', title:'Estudio 9',        client:'Beauty brand',     aspect:'1-1'},
+      {type:'photo', title:'Two Sisters',      client:'Personal',         aspect:'1-1'},
+      {type:'photo', title:'Cold Cover',       client:'Magazine cover',   aspect:'4-5'}
+    ]
+  },
+  'ph-02': {
+    name: 'IVAN RESNIK',
+    role: 'Photographer',
+    portrait: '',
+    bio: [
+      'Product, beverage, and tabletop specialist. Studio-based work with exquisite light control — the kind of frame where every reflection is a decision.',
+      'A go-to for spirits, fragrance, and high-craft product launches.'
+    ],
+    specs: ['Product','Tabletop','Beverage','Studio'],
+    work: [
+      {type:'photo', title:'Glass / Ice',     client:'Spirits brand', aspect:'4-5'},
+      {type:'photo', title:'Aperitivo Hour',  client:'Campari',       aspect:'4-5'},
+      {type:'photo', title:'Mirror Bottle',   client:'Fragrance',     aspect:'16-9', span:2},
+      {type:'photo', title:'Citrus Studies',  client:'Beverage',      aspect:'3-4'},
+      {type:'photo', title:'Velvet Set',      client:'Luxury launch', aspect:'3-4'},
+      {type:'photo', title:'Cold Stack',      client:'Tech product',  aspect:'1-1'}
+    ]
+  },
+  'ph-03': {
+    name: 'MATIAS POSTI',
+    role: 'Photographer',
+    portrait: '',
+    bio: [
+      'Documentary lifestyle photography. Available-light, on-location, real people — never overly staged, never lifeless.',
+      'Specialist in outdoor and sports lifestyle for global brands.'
+    ],
+    specs: ['Lifestyle','Sports','Outdoor','Documentary'],
+    work: [
+      {type:'photo', title:'Pacific',         client:'Outdoor brand', aspect:'16-9', span:2},
+      {type:'photo', title:'Andes',           client:'Outdoor brand', aspect:'4-5'},
+      {type:'photo', title:'Surf / Salt',     client:'Apparel',       aspect:'4-5'},
+      {type:'photo', title:'Trail Diaries',   client:'Footwear',      aspect:'3-4'},
+      {type:'photo', title:'Concrete',        client:'Sportswear',    aspect:'3-4'},
+      {type:'photo', title:'Sunday Run',      client:'Personal',      aspect:'1-1'},
+      {type:'photo', title:'Coastline',       client:'Editorial',     aspect:'1-1'}
+    ]
+  }
+};
+
+// ===== Read director ID from URL =====
+function getDirId(){
+  const params = new URLSearchParams(window.location.search);
+  return params.get('id') || 'dir-01';
+}
+
+// ===== Populate page =====
+function getInitials(fullName){
+  return fullName.split(/\s+/).map(p => p[0]).slice(0,2).join('').toUpperCase();
+}
+
+function populate(){
+  const id = getDirId();
+  const data = DIRECTORS[id] || DIRECTORS['dir-01'];
+
+  document.getElementById('dirName').textContent = data.name;
+  document.getElementById('dirRoleLabel').textContent = data.role.toUpperCase();
+
+  // Portrait — use real image if provided, otherwise fall back to initials
+  const portraitEl = document.getElementById('dirPortrait');
+  const initialsEl = document.getElementById('dirPortraitInitials');
+  if (data.portrait) {
+    portraitEl.style.backgroundImage = `url("${data.portrait}")`;
+    portraitEl.classList.add('has-image');
+  }
+  initialsEl.textContent = getInitials(data.name);
+
+  const bioEl = document.getElementById('dirBio');
+  bioEl.innerHTML = data.bio.map(p => `<p>${p}</p>`).join('');
+
+  const specsEl = document.getElementById('dirSpecs');
+  specsEl.innerHTML = data.specs.map(s => `<span>${s}</span>`).join('');
+
+  const workEl = document.getElementById('dirWork');
+  workEl.innerHTML = data.work.map((w, i) => {
+    const spanClass = w.span === 2 ? ' span-2' : '';
+    const aspectClass = ` aspect-${w.aspect}`;
+    const typeClass = w.type === 'video' ? ' is-video' : ' is-photo';
+    const num = String(i+1).padStart(2,'0');
+    const posterStyle = w.poster ? ` style="background-image:url('${w.poster}')"` : '';
+    const videoSrc = w.type === 'video' && w.video ? w.video : '';
+    return `
+      <div class="work-tile${spanClass}${aspectClass}${typeClass}" data-video="${videoSrc}">
+        <div class="work-tile-media" aria-hidden="true"${posterStyle}></div>
+        ${w.type === 'video' ? '<div class="work-tile-play" aria-hidden="true"></div>' : ''}
+        <span class="work-tile-label">${w.title}</span>
+        <span class="work-tile-meta">${w.client} · ${num}</span>
+      </div>
+    `;
+  }).join('');
+
+  document.title = 'Paradise · ' + data.name;
+
+  // Wire up click-to-play for video tiles
+  workEl.querySelectorAll('.work-tile.is-video').forEach(tile => {
+    tile.style.cursor = 'pointer';
+    tile.addEventListener('click', () => {
+      // pause any other playing tile
+      workEl.querySelectorAll('.work-tile.is-playing').forEach(other => {
+        if (other !== tile) {
+          other.classList.remove('is-playing');
+          const v = other.querySelector('video');
+          if (v) { v.pause(); }
+        }
+      });
+
+      // toggle this one
+      const isPlaying = tile.classList.contains('is-playing');
+      if (isPlaying) {
+        tile.classList.remove('is-playing');
+        const v = tile.querySelector('video');
+        if (v) v.pause();
+        return;
+      }
+
+      const src = tile.getAttribute('data-video');
+      if (!src) return;
+
+      let video = tile.querySelector('video.work-tile-video');
+      if (!video) {
+        video = document.createElement('video');
+        video.className = 'work-tile-video';
+        video.src = src;
+        video.controls = true;
+        video.playsInline = true;
+        video.preload = 'metadata';
+        tile.appendChild(video);
+      }
+      tile.classList.add('is-playing');
+      video.currentTime = 0;
+      video.play().catch(() => { /* autoplay blocked — user can hit native play */ });
+    });
+  });
+}
+
+populate();
+
+// ===== Reveal on scroll =====
+(function(){
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.12, rootMargin: '0px 0px -10% 0px' });
+  document.querySelectorAll('.reveal,.reveal-stagger').forEach(el => io.observe(el));
+})();
+
+// ===== Theme toggle (synced with localStorage if main wireframe uses it) =====
+(function(){
+  const root = document.documentElement;
+  const KEY = 'paradise-theme';
+  const saved = localStorage.getItem(KEY);
+  if (saved === 'dark') root.classList.add('dark');
+  document.getElementById('themeToggle')?.addEventListener('click', () => {
+    root.classList.toggle('dark');
+    localStorage.setItem(KEY, root.classList.contains('dark') ? 'dark' : 'light');
+  });
+})();
+
+// ===== Live BUE clock (matches main wireframe) =====
+(function(){
+  const el = document.querySelector('#navClock .text');
+  if (!el) return;
+  function tick(){
+    const now = new Date();
+    const bue = new Date(now.toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' }));
+    const hh = String(bue.getHours()).padStart(2,'0');
+    const mm = String(bue.getMinutes()).padStart(2,'0');
+    el.textContent = `BUE · ${hh}:${mm}`;
+  }
+  tick();
+  setInterval(tick, 30 * 1000);
+})();
+</script>
+
+</body>
+</html>
