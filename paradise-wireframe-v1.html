@@ -1162,15 +1162,42 @@ section.section{
 .stat .big{font-family:var(--font-display);font-size:64px;font-weight:300;letter-spacing:-0.03em;color:var(--ink);line-height:1}
 .stat .lbl{font-family:var(--font-display);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-top:8px;font-weight:500}
 
+/* ============= Section display title (big "CRAFT MODE" / "ALWAYS ON MODE") ============= */
+.section-display{
+  font-family:var(--font-display);
+  font-weight:500;
+  font-size:clamp(64px, 13vw, 200px);
+  line-height:0.88;
+  letter-spacing:-0.035em;
+  text-transform:uppercase;
+  margin:0 0 56px;
+  display:block;
+  color:var(--ink);
+}
+.section-display .dash{
+  font-family:var(--font-display);
+  color:var(--muted);
+  margin-right:0.18em;
+  font-weight:500;
+}
+
 /* ============= 04 CRAFT MODE ============= */
 #craft{background:var(--bg);transition:background .35s;padding-top:96px;padding-bottom:96px}
-/* Smaller sec-title variant for compact sections */
+/* Smaller sec-title variant for compact sections — now used as subtitle under .section-display */
 .sec-title.sec-title--sm{
-  font-size:clamp(34px,6vw,84px);
-  line-height:0.96;
-  letter-spacing:-0.02em;
+  font-size:clamp(22px,3vw,40px);
+  line-height:1.15;
+  letter-spacing:-0.01em;
+  max-width:900px;
+  text-transform:none;
+  font-weight:500;
 }
-#craft .sec-head{margin-bottom:48px}
+.sec-title.sec-title--sm em{
+  font-size:1em;
+  text-transform:none;
+}
+#craft .sec-head{margin-bottom:48px;align-items:flex-end}
+#craft .sec-sub{max-width:380px}
 #craft .roster-detail-inner{padding:10px 0 28px;gap:24px}
 #craft .director-photo{font-size:36px}
 #craft .portfolio-item{flex:0 0 200px}
@@ -1822,7 +1849,7 @@ footer{
 .marquee .marquee-track{transition:animation-duration .4s}
 
 /* Velocity-squash on titulars (set by JS) */
-.sec-title,.studio-tagline,.foot-tagline,.hero-headline{
+.sec-title,.section-display,.studio-tagline,.foot-tagline,.hero-headline{
   transform-origin:left center;
   transition:transform .12s cubic-bezier(.25,.46,.45,.94);
 }
@@ -2170,9 +2197,10 @@ footer{
 <section id="always-on" class="section">
   <div class="section-marker">Always On Mode <span class="num">03</span></div>
   <div class="container">
+    <h2 class="section-display reveal text-reveal">Always On Mode</h2>
     <div class="always-on-hero reveal">
       <div class="always-on-text">
-        <h2 class="sec-title text-reveal">Continuous content, not just <em>campaigns</em>.</h2>
+        <h3 class="sec-title sec-title--sm text-reveal">Continuous content, not just <em>campaigns</em>.</h3>
         <p class="sec-sub">We don't create the mother concept. <strong>We amplify it.</strong> We translate the agency or client's idea into Always-On systems — volume with criterion, AI as a tool, a monthly retainer instead of one-off campaigns. So the brand compounds presence instead of flickering.</p>
       </div>
 
@@ -2302,8 +2330,9 @@ footer{
 <section id="craft" class="section">
   <div class="section-marker">Craft Mode <span class="num">04</span></div>
   <div class="container">
+    <h2 class="section-display reveal text-reveal">Craft Mode</h2>
     <div class="sec-head reveal">
-      <h2 class="sec-title sec-title--sm text-reveal">Roster of <em>directors</em> &amp; photographers.</h2>
+      <h3 class="sec-title sec-title--sm text-reveal">Roster of <em>directors</em> &amp; photographers.</h3>
       <p class="sec-sub">A roster, not a list. Signed talent for the projects that need a singular eye — not stock, not sourced. The difference between a good job and an epic one.</p>
     </div>
 
@@ -2818,7 +2847,7 @@ footer{
   function applySquash(){
     const skew = Math.max(-2.5, Math.min(2.5, velocity * 0.04));
     const scaleY = 1 - Math.min(0.04, Math.abs(velocity) * 0.0008);
-    const titles = document.querySelectorAll('.sec-title, .studio-tagline, .foot-tagline');
+    const titles = document.querySelectorAll('.sec-title, .section-display, .studio-tagline, .foot-tagline');
     titles.forEach(t => {
       t.style.transform = `skewY(${skew}deg) scaleY(${scaleY})`;
     });
