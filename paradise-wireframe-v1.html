@@ -1685,6 +1685,41 @@ section.section{
   font-size:14px;line-height:1.6;color:var(--ink);
 }
 .contact-meta #clock{font-feature-settings:'tnum';color:var(--muted)}
+
+/* Live BUE clock — big prominent timer for the Contact section */
+.bue-live{
+  margin-top:6px;
+  display:flex;align-items:baseline;gap:14px;
+  font-family:var(--font-display);
+  font-feature-settings:'tnum';
+  color:var(--ink);
+}
+.bue-live .bue-live-time{
+  font-size:clamp(32px, 4vw, 56px);
+  font-weight:500;letter-spacing:-0.012em;
+  line-height:1;
+}
+.bue-live .bue-live-time .sec{
+  color:var(--muted);
+  font-weight:400;
+}
+.bue-live .bue-live-meta{
+  display:flex;flex-direction:column;gap:2px;
+  font-family:var(--font-display);
+  font-size:10px;letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--muted);font-weight:500;
+}
+.bue-live .bue-live-meta .live-dot{
+  display:inline-flex;align-items:center;gap:6px;
+  color:var(--ink);
+}
+.bue-live .bue-live-meta .live-dot::before{
+  content:'';
+  width:6px;height:6px;border-radius:50%;
+  background:#22c55e;
+  box-shadow:0 0 8px rgba(34,197,94,0.7);
+  animation:livePulse 2s ease-in-out infinite;
+}
 .contact-socials{
   display:flex;flex-direction:column;gap:12px;margin-top:4px;
 }
@@ -1901,6 +1936,52 @@ footer{
 }
 .note-banner.hide{display:none}
 
+/* ============= PAGE CURTAIN — Salient-style top→bottom transition ============= */
+.page-curtain{
+  position:fixed;
+  left:0;right:0;top:0;
+  height:100vh;
+  background:#0a0a0a;
+  z-index:999;
+  pointer-events:none;
+  transform:translateY(-100%);
+  will-change:transform;
+  display:flex;
+  align-items:center;justify-content:center;
+}
+.page-curtain.show{
+  transform:translateY(0);
+  transition:transform 0.55s cubic-bezier(0.76, 0, 0.24, 1);
+}
+.page-curtain.exit{
+  transform:translateY(100%);
+  transition:transform 0.55s cubic-bezier(0.76, 0, 0.24, 1);
+}
+.curtain-wordmark{
+  font-family:var(--font-display);
+  color:#E5E5E5;
+  font-size:clamp(40px, 6vw, 84px);
+  font-weight:500;
+  letter-spacing:-0.012em;
+  opacity:0;
+  transform:translateY(8px);
+  display:flex;align-items:baseline;gap:5px;
+}
+.curtain-wordmark sup{font-size:0.30em;color:rgba(229,229,229,0.55);font-weight:400;letter-spacing:0.04em}
+.page-curtain.show .curtain-wordmark{
+  opacity:1;
+  transform:none;
+  transition:opacity 0.35s ease 0.18s, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.18s;
+}
+.page-curtain.exit .curtain-wordmark{
+  opacity:0;
+  transform:translateY(-6px);
+  transition:opacity 0.2s ease, transform 0.3s ease;
+}
+@media (prefers-reduced-motion: reduce){
+  .page-curtain{display:none}
+}
+
 /* ============= MOBILE ============= */
 @media (max-width:900px){
   :root{--section-pad:80px;--pad:20px}
@@ -1944,6 +2025,11 @@ footer{
 </style>
 </head>
 <body class="intro-active">
+
+<!-- ============= PAGE CURTAIN — top→bottom transition between sections ============= -->
+<div class="page-curtain" id="pageCurtain" aria-hidden="true">
+  <span class="curtain-wordmark">Paradise<sup>®LA</sup></span>
+</div>
 
 <!-- ============= INTRO LOADER ============= -->
 <div class="intro-overlay" id="introOverlay" role="status" aria-label="Loading">
@@ -2695,7 +2781,6 @@ footer{
   <div class="container">
     <div class="sec-head reveal">
       <h2 class="sec-title text-reveal">Get in <em>touch</em>.</h2>
-      <p class="sec-sub">Same studio, direct relationship with the owners. We answer within the day on weekdays — over WhatsApp within the hour for Always-On clients.</p>
     </div>
 
     <div class="contact-layout reveal">
@@ -2716,10 +2801,13 @@ footer{
         </div>
 
         <div class="contact-block">
-          <div class="contact-lbl">Hours · Time</div>
-          <div class="contact-meta">
-            Mon — Fri · 10:00 to 19:00<br>
-            <span id="clock">BUE · 13:30</span>
+          <div class="contact-lbl">Local time · Buenos Aires</div>
+          <div class="bue-live" aria-label="Live time, Buenos Aires">
+            <div class="bue-live-time" id="bueLiveTime"><span class="hm">--:--</span><span class="sec">:--</span></div>
+            <div class="bue-live-meta">
+              <span class="live-dot">LIVE</span>
+              <span>GMT-3 · Mon — Fri 10–19</span>
+            </div>
           </div>
         </div>
 
@@ -3437,17 +3525,93 @@ reveals.forEach(r=>io.observe(r));
   go(0);
 })();
 
-// Live clock — Buenos Aires only
+// ===== Page-curtain transition (Salient-style top→bottom wipe between sections) =====
+(function(){
+  const curtain = document.getElementById('pageCurtain');
+  if (!curtain) return;
+
+  const DROP_MS = 560;   // matches the CSS transition duration (0.55s + buffer)
+  let busy = false;
+
+  function jumpTo(target){
+    // Pause Lenis (if active) for an instant teleport, then resume on next frame
+    if (typeof lenis !== 'undefined' && lenis && lenis.scrollTo){
+      lenis.scrollTo(target, { immediate: true, lock: true, force: true });
+    } else {
+      const y = target.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo(0, y);
+    }
+  }
+
+  function transition(target){
+    if (busy) return;
+    busy = true;
+
+    // Phase 1: drop curtain from top
+    curtain.classList.remove('exit');
+    curtain.classList.add('show');
+
+    // Phase 2: when fully covered, teleport scroll
+    setTimeout(() => {
+      jumpTo(target);
+
+      // Phase 3: slide curtain off the bottom
+      requestAnimationFrame(() => {
+        curtain.classList.remove('show');
+        curtain.classList.add('exit');
+      });
+
+      // Phase 4: clean up
+      setTimeout(() => {
+        curtain.classList.remove('exit');
+        busy = false;
+      }, DROP_MS + 40);
+    }, DROP_MS);
+  }
+
+  // Intercept all in-page anchor clicks
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    if (a.classList.contains('no-curtain')) return;
+    const href = a.getAttribute('href');
+    if (!href || href === '#' || href.length < 2) return;
+    let target;
+    try { target = document.querySelector(href); } catch(_) { return; }
+    if (!target) return;
+    e.preventDefault();
+    transition(target);
+  }, true);
+})();
+
+// Live clock — Buenos Aires, real time (with seconds for the Contact section timer)
 function updateClock(){
-  const opts = {hour:'2-digit',minute:'2-digit',hour12:false};
-  const bue = new Date().toLocaleTimeString('en-GB',{...opts,timeZone:'America/Argentina/Buenos_Aires'});
+  const tz = 'America/Argentina/Buenos_Aires';
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false, timeZone:tz
+  }).formatToParts(new Date()).reduce((o,p) => (o[p.type]=p.value, o), {});
+  const hm = `${parts.hour}:${parts.minute}`;
+  const ss = `:${parts.second}`;
+
+  // Nav clock — minute precision
   const navText = document.querySelector('#navClock .text');
-  if(navText) navText.textContent = `BUE · ${bue}`;
+  if(navText) navText.textContent = `BUE · ${hm}`;
+
+  // Contact section — big live timer with animated seconds
+  const liveEl = document.getElementById('bueLiveTime');
+  if(liveEl){
+    const hmEl  = liveEl.querySelector('.hm');
+    const secEl = liveEl.querySelector('.sec');
+    if(hmEl)  hmEl.textContent  = hm;
+    if(secEl) secEl.textContent = ss;
+  }
+
+  // Legacy small inline clock (still in DOM if used elsewhere)
   const clk = document.getElementById('clock');
-  if(clk) clk.textContent = `BUE · ${bue}`;
+  if(clk) clk.textContent = `BUE · ${hm}`;
 }
 updateClock();
-setInterval(updateClock,30000);
+setInterval(updateClock, 1000);
 </script>
 </body>
 </html>
