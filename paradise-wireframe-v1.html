@@ -784,6 +784,19 @@ section.section{
   pointer-events:none;font-weight:500;text-align:center;
 }
 
+/* Embedded YouTube preview inside a slide (covers the slide frame) */
+.slide-yt{
+  position:absolute;
+  inset:0;
+  width:100%;height:100%;
+  border:0;
+  /* let click pass through to the slide-video-frame (which navigates to project) */
+  pointer-events:none;
+  /* slight scale to crop YouTube branding chrome at edges */
+  transform:scale(1.02);
+  transform-origin:center center;
+}
+
 .slide-cta{
   position:absolute;
   bottom:20px;right:20px;
@@ -2084,7 +2097,13 @@ footer{
           <div class="slide-progress-track"><div class="slide-progress-fill"></div></div>
           <div class="slide-video-frame" data-href="paradise-project-axion.html">
             <div class="slide-video-bg"></div>
-            <span class="slide-frame-label">[ video · 16:9 · loop · muted · max 4MB ]</span>
+            <iframe class="slide-yt"
+                    src="https://www.youtube-nocookie.com/embed/QLru8_M_bdo?autoplay=1&amp;mute=1&amp;loop=1&amp;playlist=QLru8_M_bdo&amp;controls=0&amp;modestbranding=1&amp;showinfo=0&amp;rel=0&amp;playsinline=1&amp;disablekb=1&amp;iv_load_policy=3"
+                    title="Axion Energy — Camino a la Victoria"
+                    frameborder="0"
+                    allow="autoplay; encrypted-media"
+                    allowfullscreen
+                    referrerpolicy="strict-origin-when-cross-origin"></iframe>
             <a class="slide-cta" href="paradise-project-axion.html">View project →</a>
           </div>
         </div>
