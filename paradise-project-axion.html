@@ -196,9 +196,11 @@ nav.topnav{
   overflow:hidden;
   border-radius:2px;
 }
-.proj-video-frame video{
+.proj-video-frame video,
+.proj-video-frame iframe{
   width:100%;height:100%;object-fit:cover;
   display:block;
+  border:0;
 }
 .proj-video-frame .frame-label{
   position:absolute;top:50%;left:50%;
@@ -613,20 +615,14 @@ footer{
     <h1 class="proj-title">Camino a la Victoria</h1>
     <div class="proj-subtitle">— a film that races itself</div>
 
-    <div class="proj-progress-track" aria-label="Video time progress">
-      <div class="proj-progress-fill" id="projProgress"></div>
-    </div>
-
     <div class="proj-video-frame">
-      <video id="projHeroVideo" autoplay muted loop playsinline preload="auto"
-             poster="data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 9'&gt;&lt;rect width='16' height='9' fill='%230a0a0a'/&gt;&lt;/svg&gt;">
-        <source src="https://sujan-experience.b-cdn.net/campari.mp4" type="video/mp4">
-        <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4">
-      </video>
-      <span class="frame-label" id="projFrameLabel">[ project reel · 16:9 · loop · muted · h264 · max 6MB ]</span>
-      <button class="mute-btn" id="projMuteBtn" aria-label="Toggle sound">
-        <span id="projMuteIco">🔇</span><span id="projMuteLbl">Sound off</span>
-      </button>
+      <iframe id="projHeroVideo"
+              src="https://www.youtube-nocookie.com/embed/QLru8_M_bdo?modestbranding=1&amp;rel=0&amp;playsinline=1&amp;color=white&amp;iv_load_policy=3"
+              title="Axion Energy — Camino a la Victoria"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+              allowfullscreen
+              referrerpolicy="strict-origin-when-cross-origin"></iframe>
     </div>
   </div>
 </section>
@@ -891,17 +887,17 @@ function splitWords(el){
   update();
 })();
 
-// ===== Project hero: video time progress + mute toggle =====
+// ===== Project hero: native-video progress + mute toggle =====
+// (YouTube iframe handles its own controls; we only wire this up if the hero is a <video>)
 (function(){
   const v = document.getElementById('projHeroVideo');
+  if (!v || v.tagName !== 'VIDEO') return;
   const fill = document.getElementById('projProgress');
   const lbl = document.getElementById('projFrameLabel');
   const mb = document.getElementById('projMuteBtn');
   const mIco = document.getElementById('projMuteIco');
   const mLbl = document.getElementById('projMuteLbl');
-  if (!v) return;
 
-  // Hide placeholder label once video actually plays
   v.addEventListener('playing', () => {
     setTimeout(() => lbl?.classList.add('hidden'), 1500);
     if (lbl) lbl.style.opacity = 0;
@@ -910,7 +906,6 @@ function splitWords(el){
     if (lbl) lbl.textContent = '[ video failed to load · check src ]';
   });
 
-  // Tie progress bar to video time (loops with the video)
   function tick(){
     if (v.duration && isFinite(v.duration)) {
       const pct = (v.currentTime / v.duration) * 100;
@@ -920,7 +915,6 @@ function splitWords(el){
   }
   requestAnimationFrame(tick);
 
-  // Mute toggle
   mb?.addEventListener('click', () => {
     v.muted = !v.muted;
     if (v.muted) { if (mIco) mIco.textContent = '🔇'; if (mLbl) mLbl.textContent = 'Sound off'; }
