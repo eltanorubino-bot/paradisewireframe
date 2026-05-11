@@ -331,14 +331,15 @@ nav.topnav .nav-inner{
 .brand{
   font-family:var(--font-display);
   font-weight:500;
-  font-size:22px;
-  letter-spacing:-0.01em;
+  font-size:30px;
+  letter-spacing:-0.012em;
   display:flex;
   align-items:baseline;
   gap:4px;
   text-transform:none;
+  line-height:1;
 }
-.brand sup{font-size:9px;color:var(--muted);font-weight:400;letter-spacing:0.04em}
+.brand sup{font-size:11px;color:var(--muted);font-weight:400;letter-spacing:0.04em}
 .nav-links{
   display:flex;
   gap:28px;
@@ -878,15 +879,24 @@ section.section{
 #always-on .sec-sub{color:var(--muted)}
 #always-on .section-marker{color:var(--muted)}
 #always-on .section-marker .num{color:var(--muted)}
-/* Always On — 2-column hero block (title left, phone mockup right) */
+/* Always On — 2-column hero block (title+text left, phone mockup right) */
 .always-on-hero{
   display:grid;
   grid-template-columns:1.55fr 1fr;
-  gap:64px;
+  gap:56px;
   align-items:center;
-  margin-bottom:88px;
+  margin-bottom:64px;
 }
-.always-on-text{display:flex;flex-direction:column;gap:32px}
+.always-on-left{
+  display:flex;flex-direction:column;
+  gap:20px;
+}
+.always-on-left .section-display{
+  margin:0;            /* keep section-display tight to subtitle */
+  font-size:clamp(56px, 9vw, 132px);
+  line-height:0.92;
+}
+.always-on-text{display:flex;flex-direction:column;gap:18px}
 .always-on-text .sec-sub{
   text-align:left;
   max-width:520px;
@@ -1487,17 +1497,17 @@ section.section{
 .title-marquee{
   background:#000;
   color:#fff;
-  padding:28px 0;
+  padding:14px 0;
   overflow:hidden;
   /* Break out to full viewport width (when nested inside .container) */
   width:100vw;
   margin-left:calc(-1 * (50vw - 50%));
-  margin-bottom:64px;
+  margin-bottom:48px;
   position:relative;
 }
 .title-marquee-track{
   display:flex;
-  gap:64px;
+  gap:56px;
   animation:titleMarquee 28s linear infinite;
   white-space:nowrap;
   width:fit-content;
@@ -1506,10 +1516,10 @@ section.section{
   animation-duration:14s;
 }
 .title-marquee-item{
-  display:flex;align-items:center;gap:48px;
+  display:flex;align-items:center;gap:40px;
   font-family:var(--font-display);
-  font-size:clamp(40px, 6vw, 80px);
-  font-weight:500;letter-spacing:-0.025em;
+  font-size:clamp(28px, 4vw, 56px);
+  font-weight:500;letter-spacing:-0.022em;
   text-transform:uppercase;
   color:#fff;
   line-height:1;
@@ -2197,11 +2207,13 @@ footer{
 <section id="always-on" class="section">
   <div class="section-marker">Always On Mode <span class="num">03</span></div>
   <div class="container">
-    <h2 class="section-display reveal text-reveal">Always On Mode</h2>
     <div class="always-on-hero reveal">
-      <div class="always-on-text">
-        <h3 class="sec-title sec-title--sm text-reveal">Continuous content, not just <em>campaigns</em>.</h3>
-        <p class="sec-sub">We don't create the mother concept. <strong>We amplify it.</strong> We translate the agency or client's idea into Always-On systems — volume with criterion, AI as a tool, a monthly retainer instead of one-off campaigns. So the brand compounds presence instead of flickering.</p>
+      <div class="always-on-left">
+        <h2 class="section-display reveal text-reveal">Always On Mode</h2>
+        <div class="always-on-text">
+          <h3 class="sec-title sec-title--sm text-reveal">Continuous content, not just <em>campaigns</em>.</h3>
+          <p class="sec-sub">We don't create the mother concept. <strong>We amplify it.</strong> We translate the agency or client's idea into Always-On systems — volume with criterion, AI as a tool, a monthly retainer instead of one-off campaigns. So the brand compounds presence instead of flickering.</p>
+        </div>
       </div>
 
       <div class="always-on-phone">
