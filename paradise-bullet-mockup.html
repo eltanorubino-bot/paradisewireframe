@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paradise — Bullet Marker Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&family=Mona+Sans:wght@300;400;500;600&family=Kapakana:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#E5E5E5;
+  --ink:#000;
+  --muted:#6E6E6E;
+  --line:rgba(0,0,0,0.16);
+  --pad:48px;
+  --font-display:'Work Sans',sans-serif;
+  --font-body:'Mona Sans',sans-serif;
+}
+body{
+  font-family:var(--font-body);
+  background:var(--bg);
+  color:var(--ink);
+  font-weight:300;
+  line-height:1.5;
+  font-size:15px;
+  padding:64px var(--pad);
+  max-width:1400px;
+  margin:0 auto;
+}
+
+h1.page-title{
+  font-family:var(--font-display);
+  font-weight:500;
+  font-size:48px;letter-spacing:-0.02em;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+.page-sub{
+  font-size:15px;color:var(--muted);
+  max-width:700px;
+  margin-bottom:64px;
+  line-height:1.55;
+}
+
+h2.test-title{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:13px;letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--ink);
+  margin:64px 0 24px;
+  padding-bottom:12px;
+  border-bottom:1px solid var(--line);
+}
+
+/* Comparison grid: before / after */
+.compare{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:48px;
+  padding:36px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:0;
+  margin-bottom:32px;
+}
+.compare > div{display:flex;flex-direction:column;gap:8px}
+.compare-tag{
+  font-family:var(--font-display);
+  font-size:10px;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--muted);font-weight:600;
+  margin-bottom:14px;
+  padding-bottom:8px;
+  border-bottom:1px dashed var(--line);
+}
+.compare-tag.after{color:#FF3D00}
+
+/* ===== LABEL STYLES ===== */
+
+/* Style A — small filled square */
+.lbl-a{
+  font-family:var(--font-display);
+  font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;
+  color:var(--muted);
+  display:inline-flex;align-items:center;gap:10px;
+}
+.lbl-a::before{
+  content:"";
+  display:inline-block;
+  width:8px;height:8px;
+  background:currentColor;
+  flex-shrink:0;
+}
+
+/* Style B — small outlined square */
+.lbl-b{
+  font-family:var(--font-display);
+  font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;
+  color:var(--muted);
+  display:inline-flex;align-items:center;gap:10px;
+}
+.lbl-b::before{
+  content:"";
+  display:inline-block;
+  width:8px;height:8px;
+  border:1.2px solid currentColor;
+  flex-shrink:0;
+}
+
+/* Style C — slightly bigger filled square + ink color (more dominant) */
+.lbl-c{
+  font-family:var(--font-display);
+  font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;
+  color:var(--ink);
+  display:inline-flex;align-items:center;gap:12px;
+}
+.lbl-c::before{
+  content:"";
+  display:inline-block;
+  width:10px;height:10px;
+  background:currentColor;
+  flex-shrink:0;
+}
+
+/* Style D — em-dash + label (alternative) */
+.lbl-d{
+  font-family:var(--font-display);
+  font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;
+  color:var(--muted);
+  display:inline-flex;align-items:center;gap:8px;
+}
+.lbl-d::before{
+  content:"—";
+  color:currentColor;
+  flex-shrink:0;
+}
+
+/* Style E — circle filled */
+.lbl-e{
+  font-family:var(--font-display);
+  font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;
+  color:var(--muted);
+  display:inline-flex;align-items:center;gap:10px;
+}
+.lbl-e::before{
+  content:"";
+  display:inline-block;
+  width:7px;height:7px;
+  background:currentColor;
+  border-radius:50%;
+  flex-shrink:0;
+}
+
+/* Big email line for visual */
+.email-big{
+  font-family:var(--font-display);
+  font-size:36px;font-weight:500;letter-spacing:-0.02em;line-height:1;
+  color:var(--ink);
+  margin-top:6px;
+}
+
+.address-line{font-family:var(--font-body);font-size:15px;color:var(--ink);margin-top:6px;line-height:1.55}
+
+/* Footer mock */
+.footer-mock{
+  background:var(--bg);
+  padding:32px;
+  border:1px solid var(--line);
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr 1fr;
+  gap:32px;
+}
+.footer-mock h5{margin-bottom:14px}
+.footer-mock ul{list-style:none}
+.footer-mock ul li{margin-bottom:6px;font-size:13px;color:var(--ink)}
+
+/* All-styles grid */
+.styles-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:24px;
+  background:#fff;
+  padding:36px;
+  border:1px solid var(--line);
+}
+.styles-grid > div{display:flex;flex-direction:column;gap:8px}
+.styles-grid .style-name{
+  font-family:var(--font-display);
+  font-size:9px;letter-spacing:0.16em;text-transform:uppercase;
+  color:#FF3D00;font-weight:600;
+}
+
+/* Section marker mocks */
+.section-mark-a{
+  font-family:var(--font-display);
+  font-size:13px;letter-spacing:0.04em;font-weight:500;
+  color:var(--ink);
+  display:inline-flex;align-items:center;gap:10px;
+}
+.section-mark-a::before{
+  content:"";display:inline-block;
+  width:9px;height:9px;background:currentColor;
+  flex-shrink:0;
+}
+.section-mark-a .num{
+  margin-left:8px;color:var(--muted);font-weight:400;
+}
+.section-mark-a .num::before{content:"("}
+.section-mark-a .num::after{content:")"}
+
+/* Phone handle mock */
+.phone-handle-mock{
+  background:#0a0a0a;color:#fff;padding:14px 16px;border-radius:20px;
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--font-display);font-size:13px;font-weight:600;letter-spacing:0.02em;
+}
+.phone-handle-mock .dot-on{
+  width:10px;height:10px;border-radius:50%;
+  background:linear-gradient(135deg,#FF3D00,#C13E89);
+  box-shadow:0 0 0 1.5px #fff;
+}
+
+.note{
+  background:#fff;border-left:3px solid #FF3D00;padding:18px 24px;
+  font-size:14px;color:var(--ink);line-height:1.55;margin:32px 0;
+}
+.note strong{font-weight:600}
+</style>
+</head>
+<body>
+
+<h1 class="page-title">Bullet Marker · Mockup</h1>
+<p class="page-sub">5 style variations of the ■ marker applied to Paradise's small labels (Keen-Folks-inspired). Side-by-side: current label vs. variation.</p>
+
+<!-- ============= ALL 5 STYLES OVERVIEW ============= -->
+<h2 class="test-title">All 5 styles — side-by-side comparison</h2>
+<div class="styles-grid">
+  <div>
+    <span class="style-name">Style A · ■ filled square</span>
+    <span class="lbl-a">Studio</span>
+    <span class="lbl-a">Email</span>
+    <span class="lbl-a">Reach Out</span>
+  </div>
+  <div>
+    <span class="style-name">Style B · □ outlined square</span>
+    <span class="lbl-b">Studio</span>
+    <span class="lbl-b">Email</span>
+    <span class="lbl-b">Reach Out</span>
+  </div>
+  <div>
+    <span class="style-name">Style C · ■ bigger + ink</span>
+    <span class="lbl-c">Studio</span>
+    <span class="lbl-c">Email</span>
+    <span class="lbl-c">Reach Out</span>
+  </div>
+  <div>
+    <span class="style-name">Style D · — em-dash (current)</span>
+    <span class="lbl-d">Studio</span>
+    <span class="lbl-d">Email</span>
+    <span class="lbl-d">Reach Out</span>
+  </div>
+  <div>
+    <span class="style-name">Style E · ● filled circle</span>
+    <span class="lbl-e">Studio</span>
+    <span class="lbl-e">Email</span>
+    <span class="lbl-e">Reach Out</span>
+  </div>
+</div>
+
+<div class="note">
+  <strong>My recommendation: Style A</strong> — small filled square (8px), gray color matching the muted text. It's the most "Keen Folks" look and reads as a deliberate design element rather than a generic bullet. Style B (outlined) is also nice, more architectural. Below I show how Style A would look in actual Paradise contexts.
+</div>
+
+<!-- ============= CONTEXT 1: SECTION MARKERS ============= -->
+<h2 class="test-title">Context 1 · Section markers (top-left of each section)</h2>
+<div class="compare">
+  <div>
+    <span class="compare-tag">Current — paradise-wireframe</span>
+    <span style="font-family:var(--font-display);font-size:13px;font-weight:500;letter-spacing:0.04em;color:var(--ink)">Selected Work <span style="color:var(--muted);font-weight:400;margin-left:8px">(02)</span></span>
+    <span style="font-family:var(--font-display);font-size:13px;font-weight:500;letter-spacing:0.04em;color:var(--ink)">Always On Mode <span style="color:var(--muted);font-weight:400;margin-left:8px">(03)</span></span>
+    <span style="font-family:var(--font-display);font-size:13px;font-weight:500;letter-spacing:0.04em;color:var(--ink)">Craft Mode <span style="color:var(--muted);font-weight:400;margin-left:8px">(04)</span></span>
+    <span style="font-family:var(--font-display);font-size:13px;font-weight:500;letter-spacing:0.04em;color:var(--ink)">Why Paradise <span style="color:var(--muted);font-weight:400;margin-left:8px">(05)</span></span>
+  </div>
+  <div>
+    <span class="compare-tag after">With Style A · ■</span>
+    <span class="section-mark-a">Selected Work <span class="num">02</span></span>
+    <span class="section-mark-a">Always On Mode <span class="num">03</span></span>
+    <span class="section-mark-a">Craft Mode <span class="num">04</span></span>
+    <span class="section-mark-a">Why Paradise <span class="num">05</span></span>
+  </div>
+</div>
+
+<!-- ============= CONTEXT 2: CONTACT LABELS ============= -->
+<h2 class="test-title">Context 2 · Contact section labels</h2>
+<div class="compare">
+  <div>
+    <span class="compare-tag">Current</span>
+    <span style="font-family:var(--font-display);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;color:var(--muted)">Email</span>
+    <span class="email-big">hola@paradise.la</span>
+    <span style="font-family:var(--font-display);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;color:var(--muted);margin-top:24px">Studio</span>
+    <span class="address-line">Manzanares 4559<br>Ciudad de Buenos Aires<br>Argentina</span>
+    <span style="font-family:var(--font-display);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;color:var(--muted);margin-top:24px">Hours · Time</span>
+    <span class="address-line">Mon — Fri · 10:00 to 19:00</span>
+    <span style="font-family:var(--font-display);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;color:var(--muted);margin-top:24px">Follow</span>
+  </div>
+  <div>
+    <span class="compare-tag after">With Style A · ■</span>
+    <span class="lbl-a">Email</span>
+    <span class="email-big">hola@paradise.la</span>
+    <span class="lbl-a" style="margin-top:24px">Studio</span>
+    <span class="address-line">Manzanares 4559<br>Ciudad de Buenos Aires<br>Argentina</span>
+    <span class="lbl-a" style="margin-top:24px">Hours · Time</span>
+    <span class="address-line">Mon — Fri · 10:00 to 19:00</span>
+    <span class="lbl-a" style="margin-top:24px">Follow</span>
+  </div>
+</div>
+
+<!-- ============= CONTEXT 3: FOOTER COLUMN HEADERS ============= -->
+<h2 class="test-title">Context 3 · Footer column headers</h2>
+<div class="compare" style="grid-template-columns:1fr">
+  <div>
+    <span class="compare-tag">Current</span>
+    <div class="footer-mock">
+      <div></div>
+      <div>
+        <h5 style="font-family:var(--font-display);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);font-weight:500">Sections</h5>
+        <ul><li>Home</li><li>Selected Work</li><li>Always On Mode</li><li>Team</li></ul>
+      </div>
+      <div>
+        <h5 style="font-family:var(--font-display);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);font-weight:500">Social</h5>
+        <ul><li>Instagram</li><li>LinkedIn</li><li>YouTube</li></ul>
+      </div>
+      <div>
+        <h5 style="font-family:var(--font-display);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);font-weight:500">Reach Out</h5>
+        <ul><li>hola@paradise.la</li><li>Manzanares 4559</li></ul>
+      </div>
+    </div>
+  </div>
+  <div>
+    <span class="compare-tag after">With Style A · ■</span>
+    <div class="footer-mock">
+      <div></div>
+      <div>
+        <h5 class="lbl-a">Sections</h5>
+        <ul><li>Home</li><li>Selected Work</li><li>Always On Mode</li><li>Team</li></ul>
+      </div>
+      <div>
+        <h5 class="lbl-a">Social</h5>
+        <ul><li>Instagram</li><li>LinkedIn</li><li>YouTube</li></ul>
+      </div>
+      <div>
+        <h5 class="lbl-a">Reach Out</h5>
+        <ul><li>hola@paradise.la</li><li>Manzanares 4559</li></ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============= CONTEXT 4: STUDIO SPLIT LABEL ============= -->
+<h2 class="test-title">Context 4 · Studio split label (Studio section)</h2>
+<div class="compare">
+  <div>
+    <span class="compare-tag">Current</span>
+    <span style="font-family:var(--font-display);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);font-weight:500">— Studio</span>
+    <h3 style="font-family:var(--font-display);font-size:48px;font-weight:500;letter-spacing:-0.025em;text-transform:uppercase;line-height:1;margin:14px 0 16px">Founded in 2005. <em style="font-family:'Kapakana',cursive;font-style:italic;font-size:1.15em;text-transform:none;font-weight:500">Boutique</em> by choice.</h3>
+    <p style="color:var(--muted);font-size:14px;line-height:1.65;max-width:480px">We work close to our clients, mixing craft, technology and people.</p>
+  </div>
+  <div>
+    <span class="compare-tag after">With Style A · ■</span>
+    <span class="lbl-a">Studio</span>
+    <h3 style="font-family:var(--font-display);font-size:48px;font-weight:500;letter-spacing:-0.025em;text-transform:uppercase;line-height:1;margin:14px 0 16px">Founded in 2005. <em style="font-family:'Kapakana',cursive;font-style:italic;font-size:1.15em;text-transform:none;font-weight:500">Boutique</em> by choice.</h3>
+    <p style="color:var(--muted);font-size:14px;line-height:1.65;max-width:480px">We work close to our clients, mixing craft, technology and people.</p>
+  </div>
+</div>
+
+<!-- ============= CONTEXT 5: PHONE REEL HANDLE (already has dot) ============= -->
+<h2 class="test-title">Context 5 · Phone reel handle (Always On Mode mockup) — currently has gradient dot</h2>
+<div class="compare">
+  <div>
+    <span class="compare-tag">Current — keep as is (it's a "live" indicator, not a label)</span>
+    <span class="phone-handle-mock"><span class="dot-on"></span> @axion.energy</span>
+  </div>
+  <div>
+    <span class="compare-tag after">No change recommended</span>
+    <span class="phone-handle-mock"><span class="dot-on"></span> @axion.energy</span>
+  </div>
+</div>
+
+<div class="note">
+  <strong>Notes:</strong>
+  <br><br>
+  • <strong>Keep ■ for static labels</strong> (Studio, Email, Footer headers, Section markers) — adds editorial signature.
+  <br>
+  • <strong>Don't replace functional indicators</strong> — the phone reel "live dot" with gradient already communicates "live", different purpose.
+  <br>
+  • <strong>The "(02)" parentheses</strong> we already added in v20 stay — they sit AFTER the section name. The ■ goes BEFORE.
+  <br><br>
+  Format becomes: <code>■ Selected Work (02)</code>
+</div>
+
+<!-- ============= STYLE COMBOS WITH OTHER MARKER VARIATIONS ============= -->
+<h2 class="test-title">Bonus · Section marker variations to choose from</h2>
+<div class="compare" style="grid-template-columns:repeat(3,1fr);gap:24px">
+  <div>
+    <span class="compare-tag">Variation 1 · ■ + (NN) — recommended</span>
+    <span class="section-mark-a">Selected Work <span class="num">02</span></span>
+    <span class="section-mark-a">Always On Mode <span class="num">03</span></span>
+    <span class="section-mark-a">Why Paradise <span class="num">05</span></span>
+  </div>
+  <div>
+    <span class="compare-tag">Variation 2 · ■ + /NN — slash format</span>
+    <span style="font-family:var(--font-display);font-size:13px;font-weight:500;letter-spacing:0.04em;color:var(--ink);display:inline-flex;align-items:center;gap:10px">
+      <span style="display:inline-block;width:9px;height:9px;background:currentColor"></span>
+      Selected Work <span style="margin-left:8px;color:var(--muted);font-weight:400">/02</span>
+    </span>
+    <span style="font-family:var(--font-display);font-size:13px;font-weight:500;letter-spacing:0.04em;color:var(--ink);display:inline-flex;align-items:center;gap:10px">
+      <span style="display:inline-block;width:9px;height:9px;background:currentColor"></span>
+      Always On Mode <span style="margin-left:8px;color:var(--muted);font-weight:400">/03</span>
+    </span>
+    <span style="font-family:var(--font-display);font-size:13px;font-weight:500;letter-spacing:0.04em;color:var(--ink);display:inline-flex;align-items:center;gap:10px">
+      <span style="display:inline-block;width:9px;height:9px;background:currentColor"></span>
+      Why Paradise <span style="margin-left:8px;color:var(--muted);font-weight:400">/05</span>
+    </span>
+  </div>
+  <div>
+    <span class="compare-tag">Variation 3 · NN ■ name — number first</span>
+    <span style="font-family:var(--font-display);font-size:13px;font-weight:500;letter-spacing:0.04em;color:var(--ink);display:inline-flex;align-items:center;gap:10px">
+      <span style="color:var(--muted);font-weight:400">02</span>
+      <span style="display:inline-block;width:9px;height:9px;background:currentColor"></span>
+      Selected Work
+    </span>
+    <span style="font-family:var(--font-display);font-size:13px;font-weight:500;letter-spacing:0.04em;color:var(--ink);display:inline-flex;align-items:center;gap:10px">
+      <span style="color:var(--muted);font-weight:400">03</span>
+      <span style="display:inline-block;width:9px;height:9px;background:currentColor"></span>
+      Always On Mode
+    </span>
+    <span style="font-family:var(--font-display);font-size:13px;font-weight:500;letter-spacing:0.04em;color:var(--ink);display:inline-flex;align-items:center;gap:10px">
+      <span style="color:var(--muted);font-weight:400">05</span>
+      <span style="display:inline-block;width:9px;height:9px;background:currentColor"></span>
+      Why Paradise
+    </span>
+  </div>
+</div>
+
+<div class="note">
+  <strong>Decisión que necesito de vos:</strong>
+  <br><br>
+  1. <strong>¿Style A (■ filled), B (□ outlined), C (■ ink color), D (— em-dash) o E (● circle)?</strong>
+  <br>
+  2. <strong>¿Variation 1 (■ Name + (NN)), 2 (■ Name + /NN) o 3 (NN ■ Name) para los section markers?</strong>
+  <br>
+  3. <strong>¿Aplico a TODO el sitio o querés que skip algunos labels específicos?</strong>
+  <br><br>
+  Decime las 3 cosas y aplico al wireframe en 2 minutos.
+</div>
+
+</body>
+</html>
