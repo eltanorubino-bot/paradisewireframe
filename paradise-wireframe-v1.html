@@ -1475,7 +1475,8 @@ section.section{
 .studio-split-photo{
   background:#1a1a1a;
   position:relative;overflow:hidden;
-  aspect-ratio:4/5;
+  /* No aspect-ratio — matches the height of the left text column via grid stretch */
+  min-height:280px;
   display:flex;align-items:center;justify-content:center;
 }
 .studio-split-photo .placeholder-label{
@@ -1613,16 +1614,32 @@ footer{
   border-top:1px solid var(--line);
   transition:background .35s;
 }
-/* Full-width movie barcode gradient strip at top of footer */
+/* Full-width animated movie barcode gradient strip — reusable */
+.gradient-strip{
+  width:100vw;
+  height:18px;
+  background:var(--movie-barcode);
+  background-size:200% 100%;
+  background-repeat:repeat-x;
+  margin-left:calc(-1 * (50vw - 50%));
+  animation:gradientFlow 22s linear infinite;
+  display:block;
+}
+@keyframes gradientFlow{
+  from{background-position:0% 50%}
+  to{background-position:200% 50%}
+}
+/* Footer-specific positioning (top of footer, edge-to-edge) */
 .foot-gradient{
   width:100vw;
   height:18px;
   background:var(--movie-barcode);
-  background-size:100% 100%;
+  background-size:200% 100%;
   margin-left:calc(-1 * var(--pad));
   margin-right:calc(-1 * var(--pad));
   margin-top:-48px;
   margin-bottom:56px;
+  animation:gradientFlow 22s linear infinite;
 }
 .foot-grid{
   max-width:var(--max);
@@ -1817,9 +1834,6 @@ footer{
   <div class="intro-bar" id="introBar"></div>
 </div>
 
-<!-- Custom kinetic cursor -->
-<div class="cursor" id="cursor" aria-hidden="true"></div>
-
 <!-- Top scroll progress bar -->
 <div class="scroll-progress" id="scrollProgress"></div>
 
@@ -1893,6 +1907,9 @@ footer{
     </div>
   </div>
 </section>
+
+<!-- Animated gradient strip — divider after hero -->
+<div class="gradient-strip" aria-hidden="true"></div>
 
 <!-- ============= BRAND MARQUEE (own strip, below hero) ============= -->
 <div class="marquee" aria-label="Brands that trust us">
@@ -2063,6 +2080,9 @@ footer{
     </div>
   </div>
 </section>
+
+<!-- Animated gradient strip — transition into the dark Always On block -->
+<div class="gradient-strip" aria-hidden="true"></div>
 
 <!-- ============= 03 ALWAYS ON MODE ============= -->
 <section id="always-on" class="section">
@@ -2639,45 +2659,11 @@ footer{
 <!-- Lenis (smooth scroll, Vucko-style buttery feel) -->
 <script src="https://unpkg.com/lenis@1.3.5/dist/lenis.min.js"></script>
 <script>
-// ===== Kinetic interactions (cursor + magnetic + tilt + velocity) =====
+// ===== Kinetic interactions (magnetic + tilt + velocity, no custom cursor) =====
 (function(){
   // Skip on touch / coarse-pointer devices
   const isFine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   if (!isFine) return;
-  document.body.classList.add('has-cursor');
-
-  // ---- Custom cursor with lag ----
-  const cursor = document.getElementById('cursor');
-  let mx = window.innerWidth/2, my = window.innerHeight/2;
-  let cx = mx, cy = my;
-  let active = false;
-
-  document.addEventListener('mousemove', (e) => {
-    mx = e.clientX; my = e.clientY;
-    if (!active) { active = true; cursor && (cursor.style.opacity = '1'); }
-  });
-  document.addEventListener('mouseleave', () => { cursor && (cursor.style.opacity = '0'); });
-  document.addEventListener('mouseenter', () => { cursor && (cursor.style.opacity = '1'); });
-
-  function rafCursor(){
-    cx += (mx - cx) * 0.18;
-    cy += (my - cy) * 0.18;
-    if (cursor) cursor.style.transform = `translate3d(${cx}px, ${cy}px, 0) translate(-50%, -50%)`;
-    requestAnimationFrame(rafCursor);
-  }
-  rafCursor();
-
-  // Hover state on interactive elements
-  const hoverSel = 'a, button, [data-cursor="hover"], .nav-links a, .btn-pill, .contact-cta, .roster-row, .slide-cta, .slider-controls button, .thumb-pill, .phone-side-btn, .theme-toggle, .back-btn, .back-top';
-  const mediaSel = '.slide-video-frame, .phone-frame, .work-card, .media';
-  document.querySelectorAll(hoverSel).forEach(el => {
-    el.addEventListener('mouseenter', () => cursor?.classList.add('cursor--hover'));
-    el.addEventListener('mouseleave', () => cursor?.classList.remove('cursor--hover'));
-  });
-  document.querySelectorAll(mediaSel).forEach(el => {
-    el.addEventListener('mouseenter', () => cursor?.classList.add('cursor--media'));
-    el.addEventListener('mouseleave', () => cursor?.classList.remove('cursor--media'));
-  });
 
   // ---- Magnetic hover on small interactive targets ----
   document.querySelectorAll('[data-magnetic], .btn-pill, .contact-cta, .slider-controls button, .phone-side-btn, .back-btn').forEach(el => {
