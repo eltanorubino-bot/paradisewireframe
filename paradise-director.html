@@ -130,7 +130,7 @@ html.dark .toggle-thumb{transform:translateX(20px)}
 
 /* ===== Layout ===== */
 .page{
-  padding-top:calc(var(--nav-h) + 56px);
+  padding-top:calc(var(--nav-h) + 28px);
   padding-bottom:120px;
   padding-left:var(--pad);padding-right:var(--pad);
   max-width:var(--max);margin:0 auto;
@@ -140,7 +140,7 @@ html.dark .toggle-thumb{transform:translateX(20px)}
   display:inline-flex;align-items:center;gap:8px;
   font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
   opacity:0.6;transition:opacity .2s ease;
-  margin-bottom:48px;
+  margin-bottom:24px;
 }
 .back-link:hover{opacity:1}
 .back-link .arr{display:inline-block;transition:transform .2s ease}
@@ -148,25 +148,30 @@ html.dark .toggle-thumb{transform:translateX(20px)}
 
 .dir-grid{
   display:grid;
-  grid-template-columns:minmax(280px, 380px) 1fr;
-  gap:64px;
+  grid-template-columns:minmax(260px, 340px) 1fr;
+  gap:56px;
   align-items:start;
 }
 
-/* ===== Left column: sticky bio ===== */
+/* ===== Left column: sticky bio (fits in viewport) ===== */
 .dir-bio-col{
-  position:sticky;top:120px;
+  position:sticky;
+  top:calc(var(--nav-h) + 28px);
+  /* keep bio + portrait + name in one viewport */
+  max-height:calc(100vh - var(--nav-h) - 56px);
+  display:flex;flex-direction:column;
 }
 .dir-portrait{
   width:100%;
-  max-width:300px;
-  aspect-ratio:3/4;          /* vertical portrait format */
+  max-width:220px;
+  aspect-ratio:3/4;
   background:var(--thumb-bg);
   background-size:cover;
   background-position:center top;
-  margin-bottom:28px;
+  margin-bottom:20px;
   position:relative;
   overflow:hidden;
+  flex-shrink:0;
 }
 .dir-portrait::after{
   /* placeholder texture until a real photo is added */
@@ -181,7 +186,7 @@ html.dark .toggle-thumb{transform:translateX(20px)}
   display:flex;align-items:center;justify-content:center;
   font-family:'Work Sans',sans-serif;
   font-weight:500;
-  font-size:64px;
+  font-size:52px;
   letter-spacing:0.04em;
   color:rgba(229,229,229,0.55);
   z-index:1;
@@ -194,46 +199,46 @@ html.dark .toggle-thumb{transform:translateX(20px)}
 .dir-name{
   font-family:'Work Sans',sans-serif;
   font-weight:500;
-  font-size:clamp(40px, 5vw, 72px);
-  line-height:0.95;
+  font-size:clamp(32px, 3.6vw, 52px);
+  line-height:0.96;
   letter-spacing:-0.01em;
   text-transform:uppercase;
-  margin-bottom:36px;
+  margin-bottom:18px;
   word-break:break-word;
 }
 .dir-role-label{
   font-family:'Space Mono',monospace;
   font-size:11px;letter-spacing:0.14em;text-transform:uppercase;
   opacity:0.5;
-  margin-bottom:14px;
+  margin-bottom:8px;
   display:block;
 }
 .dir-bio{
   font-family:'Mona Sans','Work Sans',sans-serif;
   font-weight:300;
-  font-size:15px;line-height:1.55;
+  font-size:14px;line-height:1.5;
   opacity:0.85;
   max-width:380px;
 }
-.dir-bio p+p{margin-top:14px}
+.dir-bio p+p{margin-top:8px}
 .dir-specs{
-  margin-top:28px;
-  display:flex;flex-wrap:wrap;gap:8px;
+  margin-top:16px;
+  display:flex;flex-wrap:wrap;gap:6px;
 }
 .dir-specs span{
   font-family:'Space Mono',monospace;
   font-size:10px;letter-spacing:0.10em;text-transform:uppercase;
-  padding:6px 10px;
+  padding:5px 9px;
   border:1px solid var(--line);
   opacity:0.7;
 }
 .dir-contact{
-  margin-top:36px;
-  padding-top:24px;
+  margin-top:auto;
+  padding-top:18px;
   border-top:1px solid var(--line);
   font-family:'Space Mono',monospace;
-  font-size:11px;letter-spacing:0.10em;text-transform:uppercase;
-  display:flex;flex-direction:column;gap:8px;
+  font-size:10px;letter-spacing:0.10em;text-transform:uppercase;
+  display:flex;flex-direction:column;gap:6px;
 }
 .dir-contact a{opacity:0.7;transition:opacity .2s ease}
 .dir-contact a:hover{opacity:1;text-decoration:underline}
@@ -380,7 +385,8 @@ html.dark .toggle-thumb{transform:translateX(20px)}
   .brand{font-size:18px}
   .page{padding:calc(var(--nav-h) + 32px) 20px 80px}
   .dir-grid{grid-template-columns:1fr;gap:40px}
-  .dir-bio-col{position:relative;top:auto}
+  .dir-bio-col{position:relative;top:auto;max-height:none}
+  .dir-portrait{max-width:260px}
   .dir-work-col{grid-template-columns:1fr;gap:14px}
   .work-tile.span-2{grid-column:span 1}
 }
