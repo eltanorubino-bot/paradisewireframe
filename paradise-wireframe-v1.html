@@ -6,7 +6,7 @@
 <title>Paradise — Wireframe v1</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&family=Mona+Sans:wght@200;300;400;500;600;700&family=Kapakana:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&family=Mona+Sans:wght@200;300;400;500;600;700&family=Kapakana:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{
   /* Brandbook palette: only two colors */
@@ -1170,46 +1170,128 @@ section.section{
   line-height:0.96;
   letter-spacing:-0.02em;
 }
-#craft .sec-head{margin-bottom:40px}
-#craft .craft-roster .roster-row{padding:18px 0}
-#craft .craft-roster .name{font-size:18px}
+#craft .sec-head{margin-bottom:48px}
 #craft .roster-detail-inner{padding:10px 0 28px;gap:24px}
 #craft .director-photo{font-size:36px}
 #craft .portfolio-item{flex:0 0 200px}
 .craft-layout{
   display:block;
 }
+/* PSYOP-STYLE roster — centered monospace names, hover reveals thumbnail (left) + (VIEW) (right) */
 .craft-roster{
   border-top:1px solid var(--line);
+  position:relative;
 }
 .roster-item{
   border-bottom:1px solid var(--line);
+  position:relative;
+  transition:border-color .3s;
+}
+.roster-item:hover{
+  border-top-color:#FF3D00;
+  z-index:2;
 }
 .craft-roster .roster-row{
-  display:grid;
-  grid-template-columns:80px 1fr auto;
-  gap:24px;
+  display:flex;
+  justify-content:center;
   align-items:center;
-  padding:22px 0;
+  padding:18px 0;
   cursor:pointer;
-  transition:padding-left .25s ease;
   user-select:none;
+  position:relative;
+  transition:color .3s;
 }
-.craft-roster .roster-row:hover{padding-left:14px}
-.roster-item.open .roster-row{padding-left:14px}
-.craft-roster .role{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);font-weight:500}
-.craft-roster .name{font-size:22px;letter-spacing:-0.02em;font-weight:500}
+.craft-roster .role{
+  display:none; /* Psyop doesn't show role per row */
+}
+.craft-roster .name{
+  font-family:'Space Mono','IBM Plex Mono',monospace;
+  font-size:clamp(28px, 4.5vw, 56px);
+  font-weight:400;
+  letter-spacing:0.01em;
+  text-transform:uppercase;
+  color:rgba(0,0,0,0.22);
+  transition:color .35s ease;
+  text-align:center;
+  line-height:1;
+  display:inline-flex;
+  align-items:baseline;
+  gap:0.45em;
+}
+.craft-roster .name .role-tag{
+  font-family:'Space Mono','IBM Plex Mono',monospace;
+  font-size:0.30em;
+  font-weight:400;
+  letter-spacing:0.08em;
+  color:inherit;
+  opacity:0.7;
+  text-transform:uppercase;
+}
+[data-theme="dark"] .craft-roster .name{
+  color:rgba(229,229,229,0.22);
+}
+.craft-roster .roster-row:hover .name{
+  color:var(--ink);
+}
+.roster-item.open .name{color:var(--ink)}
+
+/* Hover thumbnail (left side, absolute positioned) */
+.craft-roster .roster-thumb{
+  position:absolute;
+  left:0;
+  top:50%;
+  transform:translateY(-50%) scale(0.96);
+  width:200px;
+  height:130px;
+  background:#1a1a1a;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .3s, transform .35s cubic-bezier(.25,.46,.45,.94);
+  z-index:3;
+  overflow:hidden;
+}
+.craft-roster .roster-row:hover ~ .roster-thumb,
+.craft-roster .roster-row:hover .roster-thumb{
+  opacity:1;
+  transform:translateY(-50%) scale(1);
+}
+.roster-item:nth-child(1) .roster-thumb{background:radial-gradient(circle at 40% 50%,#7a1f1f,#0a0a0a)}
+.roster-item:nth-child(2) .roster-thumb{background:radial-gradient(circle at 60% 50%,#7a4a1f,#0a0a0a)}
+.roster-item:nth-child(3) .roster-thumb{background:radial-gradient(circle at 50% 50%,#1f4a7a,#0a0a0a)}
+.roster-item:nth-child(4) .roster-thumb{background:radial-gradient(circle at 50% 50%,#1f7a4a,#0a0a0a)}
+.roster-item:nth-child(5) .roster-thumb{background:radial-gradient(circle at 50% 50%,#7a1f5a,#0a0a0a)}
+.roster-item:nth-child(6) .roster-thumb{background:radial-gradient(circle at 50% 50%,#3a3a3a,#0a0a0a)}
+
+/* "(VIEW)" link on right of hovered row */
 .craft-roster .expand-cue{
-  font-size:11px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase;
-  display:inline-flex;align-items:center;gap:8px;
-  transition:transform .35s cubic-bezier(.25,.46,.45,.94), color .25s;
+  position:absolute;
+  right:0;
+  top:50%;
+  transform:translateY(-50%);
+  font-family:'Space Mono','IBM Plex Mono',monospace;
+  font-size:14px;
+  font-weight:400;
+  letter-spacing:0.04em;
+  color:#FF3D00;
+  text-transform:uppercase;
+  opacity:0;
+  transition:opacity .3s;
+  z-index:3;
+  pointer-events:none;
 }
-.craft-roster .expand-cue .arrow{
-  display:inline-block;
-  transition:transform .35s cubic-bezier(.25,.46,.45,.94);
+.craft-roster .roster-row:hover .expand-cue,
+.roster-item.open .expand-cue{
+  opacity:1;
 }
-.roster-item.open .expand-cue{color:var(--ink)}
-.roster-item.open .expand-cue .arrow{transform:rotate(180deg)}
+.craft-roster .expand-cue .lbl::before{content:"("}
+.craft-roster .expand-cue .lbl::after{content:")"}
+.craft-roster .expand-cue .lbl{
+  text-transform:uppercase;
+  font-weight:400;
+}
+.craft-roster .expand-cue .arrow{display:none}
+.roster-item.open .expand-cue .lbl::before{content:"(close · "}
+.roster-item.open .expand-cue .lbl::after{content:")"}
 
 /* Expandable detail panel */
 .roster-detail{
@@ -2231,8 +2313,9 @@ footer{
         <div class="roster-item" data-id="dir-01">
           <div class="roster-row">
             <span class="role">DIR</span>
-            <span class="name">Lucia Valdemoros</span>
-            <span class="expand-cue"><span class="lbl">View</span> <span class="arrow">↓</span></span>
+            <span class="name">Lucia Valdemoros <span class="role-tag">(Dir)</span></span>
+            <span class="expand-cue"><span class="lbl">view</span></span>
+            <div class="roster-thumb" aria-hidden="true"></div>
           </div>
           <div class="roster-detail">
             <div class="roster-detail-inner">
@@ -2263,8 +2346,9 @@ footer{
         <div class="roster-item" data-id="dir-02">
           <div class="roster-row">
             <span class="role">DIR</span>
-            <span class="name">Juanjo Cobo</span>
-            <span class="expand-cue"><span class="lbl">View</span> <span class="arrow">↓</span></span>
+            <span class="name">Juanjo Cobo <span class="role-tag">(Dir)</span></span>
+            <span class="expand-cue"><span class="lbl">view</span></span>
+            <div class="roster-thumb" aria-hidden="true"></div>
           </div>
           <div class="roster-detail">
             <div class="roster-detail-inner">
@@ -2294,8 +2378,9 @@ footer{
         <div class="roster-item" data-id="dir-03">
           <div class="roster-row">
             <span class="role">DIR</span>
-            <span class="name">Valentin Caride</span>
-            <span class="expand-cue"><span class="lbl">View</span> <span class="arrow">↓</span></span>
+            <span class="name">Valentin Caride <span class="role-tag">(Dir)</span></span>
+            <span class="expand-cue"><span class="lbl">view</span></span>
+            <div class="roster-thumb" aria-hidden="true"></div>
           </div>
           <div class="roster-detail">
             <div class="roster-detail-inner">
@@ -2327,8 +2412,9 @@ footer{
         <div class="roster-item" data-id="ph-01">
           <div class="roster-row">
             <span class="role">PHOTO</span>
-            <span class="name">Martin Sigal</span>
-            <span class="expand-cue"><span class="lbl">View</span> <span class="arrow">↓</span></span>
+            <span class="name">Martin Sigal <span class="role-tag">(Ph)</span></span>
+            <span class="expand-cue"><span class="lbl">view</span></span>
+            <div class="roster-thumb" aria-hidden="true"></div>
           </div>
           <div class="roster-detail">
             <div class="roster-detail-inner">
@@ -2361,8 +2447,9 @@ footer{
         <div class="roster-item" data-id="ph-02">
           <div class="roster-row">
             <span class="role">PHOTO</span>
-            <span class="name">Ivan Resnik</span>
-            <span class="expand-cue"><span class="lbl">View</span> <span class="arrow">↓</span></span>
+            <span class="name">Ivan Resnik <span class="role-tag">(Ph)</span></span>
+            <span class="expand-cue"><span class="lbl">view</span></span>
+            <div class="roster-thumb" aria-hidden="true"></div>
           </div>
           <div class="roster-detail">
             <div class="roster-detail-inner">
@@ -2393,8 +2480,9 @@ footer{
         <div class="roster-item" data-id="ph-03">
           <div class="roster-row">
             <span class="role">PHOTO</span>
-            <span class="name">Matias Posti</span>
-            <span class="expand-cue"><span class="lbl">View</span> <span class="arrow">↓</span></span>
+            <span class="name">Matias Posti <span class="role-tag">(Ph)</span></span>
+            <span class="expand-cue"><span class="lbl">view</span></span>
+            <div class="roster-thumb" aria-hidden="true"></div>
           </div>
           <div class="roster-detail">
             <div class="roster-detail-inner">
@@ -3135,30 +3223,18 @@ reveals.forEach(r=>io.observe(r));
   show(0);
 })();
 
-// ===== Roster expand/collapse (Craft Mode) =====
+// ===== Roster click → navigate to director page (Craft Mode) =====
 (function(){
   const items = document.querySelectorAll('.roster-item');
   if (!items.length) return;
   items.forEach(item => {
     const row = item.querySelector('.roster-row');
     row?.addEventListener('click', () => {
-      const wasOpen = item.classList.contains('open');
-      // close all
-      items.forEach(i => i.classList.remove('open'));
-      // open this one (unless it was the open one — toggle)
-      if (!wasOpen) {
-        item.classList.add('open');
-        // smooth scroll to keep it in view after expansion
-        setTimeout(() => {
-          const rect = item.getBoundingClientRect();
-          if (rect.top < 100) {
-            const y = window.scrollY + rect.top - 100;
-            if (typeof lenis !== 'undefined' && lenis && lenis.scrollTo) lenis.scrollTo(y, { duration: 0.8 });
-            else window.scrollTo({ top: y, behavior: 'smooth' });
-          }
-        }, 80);
-      }
+      const id = item.getAttribute('data-id');
+      if (!id) return;
+      window.location.href = 'paradise-director.html?id=' + encodeURIComponent(id);
     });
+    row?.style.setProperty('cursor', 'pointer');
   });
 })();
 
