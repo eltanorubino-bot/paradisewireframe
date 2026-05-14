@@ -758,11 +758,16 @@ section.section{
   position:relative;
   width:100%;
   aspect-ratio:16/9;
-  max-height:calc(100vh - 380px);
+  max-height:calc(100vh - 420px);
   background:#1a1a1a;
   overflow:hidden;
   cursor:pointer;
   border-radius:2px;
+  transition:transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin:center center;
+}
+.slide-video-frame:hover{
+  transform:scale(1.015);
 }
 .slide-video-bg{
   position:absolute;inset:0;
@@ -797,28 +802,26 @@ section.section{
   transform-origin:center center;
 }
 
+/* View Project CTA — sits centered BELOW the video, not on top */
+.slide-cta-row{
+  display:flex;justify-content:center;
+  margin-top:18px;
+}
 .slide-cta{
-  position:absolute;
-  bottom:20px;right:20px;
-  font-size:11px;color:#fff;
+  font-family:var(--font-display);
+  font-size:11px;color:var(--ink);
   letter-spacing:0.16em;text-transform:uppercase;font-weight:600;
-  background:rgba(0,0,0,0.55);
-  border:1px solid rgba(255,255,255,0.4);
-  padding:11px 20px;border-radius:999px;
-  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
-  opacity:0;
-  transform:translateY(8px);
-  transition:opacity .35s ease, transform .35s ease, background .25s, color .25s;
+  background:transparent;
+  border:1px solid var(--ink);
+  padding:11px 22px;border-radius:999px;
+  transition:background .25s ease, color .25s ease, transform .25s ease;
   text-decoration:none;
   display:inline-flex;align-items:center;gap:8px;
-  pointer-events:none;
 }
-.slide-video-frame:hover .slide-cta{
-  opacity:1;
-  transform:none;
-  pointer-events:auto;
-}
-.slide-cta:hover{background:#fff;color:var(--ink);border-color:#fff}
+.slide-cta:hover{background:var(--ink);color:var(--bg);transform:translateY(-1px)}
+
+/* Filter: hide slides that don't match active category */
+.slide.is-hidden{display:none}
 
 /* Bottom slider chrome */
 .slider-bar{
@@ -932,39 +935,49 @@ section.section{
 .phone-side-controls{
   display:flex;
   flex-direction:column;
-  justify-content:space-between;
+  justify-content:center;
   align-items:center;
-  padding:48px 0;
-  pointer-events:auto;
-}
-.phone-side-btn{
-  width:36px;height:36px;
-  border:1px solid var(--line-strong);
-  border-radius:50%;
-  background:transparent;
-  color:var(--ink);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;
-  transition:all .25s cubic-bezier(.25,.46,.45,.94);
   padding:0;
+  pointer-events:auto;
+  gap:14px;
 }
-.phone-side-btn svg{display:block;stroke:currentColor;fill:none;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
-.phone-side-btn:hover{
-  background:var(--ink);
-  color:var(--bg);
-  border-color:var(--ink);
-  transform:scale(1.08);
+/* SWIPE hand indicator (replaces up/down arrows) */
+.swipe-hand{
+  width:54px;height:74px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:grab;
+  color:var(--ink);
+  position:relative;
+  transition:transform .25s cubic-bezier(.25,.46,.45,.94);
 }
-.phone-side-btn.up{animation:arrowFloatUp 2.6s ease-in-out infinite}
-.phone-side-btn.down{animation:arrowFloatDown 2.6s ease-in-out infinite;animation-delay:1.3s}
-@keyframes arrowFloatUp{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-@keyframes arrowFloatDown{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
-.phone-side-label{
+.swipe-hand svg{
+  display:block;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:1.4;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  width:100%;height:100%;
+}
+.swipe-hand .hand{
+  transform-origin:50% 60%;
+  animation:swipeHand 2.4s ease-in-out infinite;
+}
+@keyframes swipeHand{
+  0%   {transform:translateY(8px); opacity:0.55}
+  20%  {transform:translateY(8px); opacity:1}
+  60%  {transform:translateY(-12px); opacity:1}
+  85%  {transform:translateY(-12px); opacity:0.4}
+  100% {transform:translateY(8px); opacity:0.55}
+}
+.swipe-hand:hover{transform:scale(1.06)}
+.swipe-label{
   font-family:var(--font-display);
-  font-size:9px;letter-spacing:0.16em;text-transform:uppercase;
-  color:var(--muted);
+  font-size:10px;letter-spacing:0.20em;text-transform:uppercase;
+  color:var(--muted);font-weight:600;
+  writing-mode:vertical-rl;
+  transform:rotate(180deg);
   margin-top:6px;
-  font-weight:500;
 }
 .phone-frame{
   width:300px;
@@ -1659,7 +1672,9 @@ section.section{
 .team-meta .rl{font-size:10px;color:#ffffff99;letter-spacing:0.08em;text-transform:uppercase;margin-top:4px}
 
 /* ============= 07 CONTACT ============= */
-#contact{background:var(--bg);color:var(--ink);overflow:hidden;transition:background .35s, color .35s}
+#contact{background:var(--bg);color:var(--ink);overflow:hidden;position:relative;transition:background .35s, color .35s}
+#contact > .container{position:relative;z-index:2}
+#contact > .section-marker{z-index:3}
 #contact .sec-title,#contact .section-marker{color:inherit}
 #contact .section-marker{color:var(--muted)}
 #contact .section-marker .num{background:var(--ink);color:var(--bg)}
@@ -1950,6 +1965,41 @@ footer{
 }
 .note-banner.hide{display:none}
 
+/* ============= LIQUID AMBIENT BLOBS ============= */
+/* Soft, slow-morphing gradient blobs sitting behind certain sections — adds a 'liquid' organic feel */
+.liquid-blob{
+  position:absolute;
+  width:780px;height:780px;
+  top:50%;left:50%;
+  border-radius:60% 40% 30% 70% / 60% 30% 70% 40%;
+  background:linear-gradient(135deg,#6FB6E0 0%,#C72A1F 35%,#B92E5A 65%,#C13E89 100%);
+  filter:blur(90px);
+  opacity:0.18;
+  mix-blend-mode:screen;
+  pointer-events:none;
+  z-index:0;
+  animation:liquidMorph 16s ease-in-out infinite;
+  will-change:transform, border-radius;
+}
+.liquid-blob.b2{
+  width:520px;height:520px;
+  top:auto;bottom:-10%;left:auto;right:-10%;
+  background:linear-gradient(135deg,#2C72A8 0%,#E84E1F 60%,#C13E89 100%);
+  animation:liquidMorph 22s ease-in-out -6s infinite reverse;
+  opacity:0.14;
+}
+@keyframes liquidMorph{
+  0%   {border-radius:60% 40% 30% 70% / 60% 30% 70% 40%; transform:translate(-50%, -50%) rotate(0deg) scale(1)}
+  25%  {border-radius:40% 60% 60% 40% / 50% 70% 30% 50%; transform:translate(-46%, -54%) rotate(45deg) scale(1.04)}
+  50%  {border-radius:30% 70% 50% 50% / 40% 50% 50% 60%; transform:translate(-54%, -46%) rotate(-30deg) scale(0.96)}
+  75%  {border-radius:50% 50% 70% 30% / 60% 40% 60% 40%; transform:translate(-48%, -52%) rotate(15deg) scale(1.02)}
+  100% {border-radius:60% 40% 30% 70% / 60% 30% 70% 40%; transform:translate(-50%, -50%) rotate(360deg) scale(1)}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .liquid-blob{animation:none}
+}
+
 /* ============= MOBILE ============= */
 @media (max-width:900px){
   :root{--section-pad:80px;--pad:20px}
@@ -2123,18 +2173,18 @@ footer{
 <section id="work">
   <div class="section-marker">Selected Work <span class="num">02</span></div>
 
-  <div class="work-cats-overlay">
-    <span class="on">All</span>
-    <span>Motion</span>
-    <span>Digital</span>
-    <span>Photo</span>
-    <span>Film &amp; TV</span>
+  <div class="work-cats-overlay" id="workCats">
+    <span class="on" data-cat="all">All</span>
+    <span data-cat="motion">Motion</span>
+    <span data-cat="digital">Digital</span>
+    <span data-cat="photo">Photo</span>
+    <span data-cat="film">Film &amp; TV</span>
   </div>
 
   <div class="work-track-wrap">
     <div class="work-track" id="workTrack">
 
-      <article class="slide active" data-href="paradise-project-axion.html">
+      <article class="slide active" data-href="paradise-project-axion.html" data-cat="film,digital">
         <div class="slide-inner">
           <div class="slide-text-row">
             <div class="slide-text-left">
@@ -2153,12 +2203,12 @@ footer{
                     allow="autoplay; encrypted-media"
                     allowfullscreen
                     referrerpolicy="strict-origin-when-cross-origin"></iframe>
-            <a class="slide-cta" href="paradise-project-axion.html">View project →</a>
           </div>
+          <div class="slide-cta-row"><a class="slide-cta" href="paradise-project-axion.html">View project →</a></div>
         </div>
       </article>
 
-      <article class="slide" data-href="paradise-project-axion.html">
+      <article class="slide" data-href="paradise-project-axion.html" data-cat="digital">
         <div class="slide-inner">
           <div class="slide-text-row">
             <div class="slide-text-left">
@@ -2171,12 +2221,12 @@ footer{
           <div class="slide-video-frame" data-href="paradise-project-axion.html">
             <div class="slide-video-bg"></div>
             <span class="slide-frame-label">[ video · 16:9 ]</span>
-            <a class="slide-cta" href="paradise-project-axion.html">View project →</a>
           </div>
+          <div class="slide-cta-row"><a class="slide-cta" href="paradise-project-axion.html">View project →</a></div>
         </div>
       </article>
 
-      <article class="slide" data-href="paradise-project-axion.html">
+      <article class="slide" data-href="paradise-project-axion.html" data-cat="photo">
         <div class="slide-inner">
           <div class="slide-text-row">
             <div class="slide-text-left">
@@ -2189,12 +2239,12 @@ footer{
           <div class="slide-video-frame" data-href="paradise-project-axion.html">
             <div class="slide-video-bg"></div>
             <span class="slide-frame-label">[ video · 16:9 ]</span>
-            <a class="slide-cta" href="paradise-project-axion.html">View project →</a>
           </div>
+          <div class="slide-cta-row"><a class="slide-cta" href="paradise-project-axion.html">View project →</a></div>
         </div>
       </article>
 
-      <article class="slide" data-href="paradise-project-axion.html">
+      <article class="slide" data-href="paradise-project-axion.html" data-cat="motion">
         <div class="slide-inner">
           <div class="slide-text-row">
             <div class="slide-text-left">
@@ -2207,12 +2257,12 @@ footer{
           <div class="slide-video-frame" data-href="paradise-project-axion.html">
             <div class="slide-video-bg"></div>
             <span class="slide-frame-label">[ video · 16:9 ]</span>
-            <a class="slide-cta" href="paradise-project-axion.html">View project →</a>
           </div>
+          <div class="slide-cta-row"><a class="slide-cta" href="paradise-project-axion.html">View project →</a></div>
         </div>
       </article>
 
-      <article class="slide" data-href="paradise-project-axion.html">
+      <article class="slide" data-href="paradise-project-axion.html" data-cat="film">
         <div class="slide-inner">
           <div class="slide-text-row">
             <div class="slide-text-left">
@@ -2225,12 +2275,12 @@ footer{
           <div class="slide-video-frame" data-href="paradise-project-axion.html">
             <div class="slide-video-bg"></div>
             <span class="slide-frame-label">[ video · 16:9 ]</span>
-            <a class="slide-cta" href="paradise-project-axion.html">View project →</a>
           </div>
+          <div class="slide-cta-row"><a class="slide-cta" href="paradise-project-axion.html">View project →</a></div>
         </div>
       </article>
 
-      <article class="slide" data-href="paradise-project-axion.html">
+      <article class="slide" data-href="paradise-project-axion.html" data-cat="motion,digital">
         <div class="slide-inner">
           <div class="slide-text-row">
             <div class="slide-text-left">
@@ -2243,8 +2293,8 @@ footer{
           <div class="slide-video-frame" data-href="paradise-project-axion.html">
             <div class="slide-video-bg"></div>
             <span class="slide-frame-label">[ video · 16:9 ]</span>
-            <a class="slide-cta" href="paradise-project-axion.html">View project →</a>
           </div>
+          <div class="slide-cta-row"><a class="slide-cta" href="paradise-project-axion.html">View project →</a></div>
         </div>
       </article>
 
@@ -2360,13 +2410,31 @@ footer{
           </div>
         </div>
 
-        <div class="phone-side-controls" aria-label="Reel navigation">
-          <button class="phone-side-btn up" id="phoneUpBtn" aria-label="Previous reel">
-            <svg width="14" height="9" viewBox="0 0 14 9"><path d="M1 8L7 1.5L13 8"/></svg>
-          </button>
-          <button class="phone-side-btn down" id="phoneDownBtn" aria-label="Next reel">
-            <svg width="14" height="9" viewBox="0 0 14 9"><path d="M1 1L7 7.5L13 1"/></svg>
-          </button>
+        <div class="phone-side-controls" aria-label="Swipe to navigate reels">
+          <div class="swipe-hand" role="button" aria-label="Swipe up to next reel" id="phoneSwipeHint">
+            <svg viewBox="0 0 48 64" aria-hidden="true">
+              <!-- swipe-up arrow above the hand -->
+              <path d="M24 4 v8 M20 8 l4 -4 l4 4" opacity="0.55"/>
+              <!-- hand: extended index finger pointing up, palm + folded fingers -->
+              <g class="hand">
+                <!-- index finger (pointing up) -->
+                <path d="M22 18 v-4 a2 2 0 0 1 4 0 v18"/>
+                <!-- middle finger fold -->
+                <path d="M26 26 v-4 a2 2 0 0 1 4 0 v8"/>
+                <!-- ring finger fold -->
+                <path d="M30 28 v-2 a2 2 0 0 1 4 0 v6"/>
+                <!-- pinky -->
+                <path d="M34 30 v-1 a2 2 0 0 1 4 0 v4"/>
+                <!-- thumb -->
+                <path d="M22 30 a4 4 0 0 0 -4 4 v4"/>
+                <!-- palm bottom curve -->
+                <path d="M18 38 c 0 6 4 14 10 14 c 6 0 10 -4 10 -10 v-8"/>
+                <!-- wrist -->
+                <path d="M22 52 v8 M34 52 v8"/>
+              </g>
+            </svg>
+          </div>
+          <span class="swipe-label">Swipe</span>
         </div>
         </div>
       </div>
@@ -2741,6 +2809,8 @@ footer{
 <!-- ============= 07 CONTACT ============= -->
 <section id="contact" class="section">
   <div class="section-marker">Contact <span class="num">07</span></div>
+  <div class="liquid-blob" aria-hidden="true"></div>
+  <div class="liquid-blob b2" aria-hidden="true"></div>
   <div class="container">
     <div class="sec-head reveal">
       <h2 class="sec-title text-reveal">Get in <em>touch</em>.</h2>
@@ -3316,9 +3386,8 @@ reveals.forEach(r=>io.observe(r));
   phoneEl?.addEventListener('mouseenter', () => isHover = true);
   phoneEl?.addEventListener('mouseleave', () => isHover = false);
 
-  // Side arrow buttons → manual navigation (no more wheel hijack so page scroll works normally)
-  document.getElementById('phoneUpBtn')?.addEventListener('click', () => prev());
-  document.getElementById('phoneDownBtn')?.addEventListener('click', () => next());
+  // Swipe hint: click advances to next reel
+  document.getElementById('phoneSwipeHint')?.addEventListener('click', () => next());
 
   // Touch swipe inside the phone (mobile only — no page-scroll conflict)
   let touchStartY = 0;
@@ -3349,34 +3418,58 @@ reveals.forEach(r=>io.observe(r));
   });
 })();
 
-// ===== Selected Work — horizontal scroll slider =====
+// ===== Selected Work — horizontal scroll slider with category filters =====
 (function(){
   const track = document.getElementById('workTrack');
-  const slides = Array.from(document.querySelectorAll('#workTrack .slide'));
-  const thumbs = Array.from(document.querySelectorAll('#slideThumbs .thumb-pill'));
-  const fills  = Array.from(document.querySelectorAll('.slide-progress-fill'));
+  const allSlides = Array.from(document.querySelectorAll('#workTrack .slide'));
+  const allThumbs = Array.from(document.querySelectorAll('#slideThumbs .thumb-pill'));
+  const cats = document.getElementById('workCats');
   const counterNow = document.querySelector('.slider-counter .now');
+  const counterTotal = document.querySelector('.slider-counter .total');
   const workSection = document.getElementById('work');
-  const total = slides.length;
   const DURATION = 8000;
-  if (!track || !total) return;
+  if (!track || !allSlides.length) return;
 
+  // visible = current filter result (subset of allSlides + their thumbs/fills)
+  let visible = allSlides.slice();
+  let visibleThumbs = allThumbs.slice();
+  let visibleFills = allSlides.map(s => s.querySelector('.slide-progress-fill'));
+  let activeCat = 'all';
   let cur = 0;
-  let autoTimer = null;
   let progStart = 0;
   let rafId = null;
   let isInView = true;
   let isHover = false;
+
+  function rebuildVisible(){
+    const f = activeCat;
+    visible = allSlides.filter(s => {
+      if (f === 'all') return true;
+      const c = (s.getAttribute('data-cat') || '').split(',').map(x => x.trim());
+      return c.includes(f);
+    });
+    // hide vs show — display:none removes from layout flow so visible slides flow contiguously
+    allSlides.forEach(s => {
+      const isVis = visible.includes(s);
+      s.classList.toggle('is-hidden', !isVis);
+    });
+    visibleFills = visible.map(s => s.querySelector('.slide-progress-fill'));
+    // sync thumbs: show only thumbs matching visible slides (by position in original allSlides array)
+    visibleThumbs = visible.map(s => allThumbs[allSlides.indexOf(s)]).filter(Boolean);
+    allThumbs.forEach(t => { t.style.display = visibleThumbs.includes(t) ? '' : 'none'; });
+    if (counterTotal) counterTotal.textContent = String(visible.length).padStart(2, '0');
+  }
 
   function setX(px, animate){
     track.style.transition = animate ? '' : 'none';
     track.style.transform = `translate3d(${px}px, 0, 0)`;
   }
   function go(i, opts){
-    cur = ((i % total) + total) % total;
+    if (!visible.length) return;
+    cur = ((i % visible.length) + visible.length) % visible.length;
     setX(-cur * window.innerWidth, true);
-    slides.forEach((s, idx) => s.classList.toggle('active', idx === cur));
-    thumbs.forEach((t, idx) => t.classList.toggle('active', idx === cur));
+    visible.forEach((s, idx) => s.classList.toggle('active', idx === cur));
+    visibleThumbs.forEach((t, idx) => t.classList.toggle('active', idx === cur));
     if (counterNow) counterNow.textContent = String(cur+1).padStart(2,'0');
     resetProgress();
   }
@@ -3384,27 +3477,37 @@ reveals.forEach(r=>io.observe(r));
   const prev = () => go(cur - 1);
 
   function resetProgress(){
-    fills.forEach((f, idx) => { f.style.width = idx === cur ? '0%' : (idx < cur ? '100%' : '0%'); });
+    visibleFills.forEach((f, idx) => { if (f) f.style.width = idx === cur ? '0%' : (idx < cur ? '100%' : '0%'); });
     progStart = performance.now();
     if (rafId) cancelAnimationFrame(rafId);
     tickProgress();
   }
   function tickProgress(){
     if (!isInView || isHover) {
-      // freeze, but resume from where we are
-      progStart = performance.now() - (parseFloat(fills[cur].style.width || '0') / 100) * DURATION;
+      const cf = visibleFills[cur];
+      progStart = performance.now() - (parseFloat((cf && cf.style.width) || '0') / 100) * DURATION;
       rafId = requestAnimationFrame(tickProgress);
       return;
     }
     const elapsed = performance.now() - progStart;
     const pct = Math.min(100, (elapsed / DURATION) * 100);
-    if (fills[cur]) fills[cur].style.width = pct + '%';
+    if (visibleFills[cur]) visibleFills[cur].style.width = pct + '%';
     if (pct >= 100) {
       next();
       return;
     }
     rafId = requestAnimationFrame(tickProgress);
   }
+
+  // ===== Category filter wiring =====
+  cats?.querySelectorAll('span[data-cat]').forEach(t => {
+    t.addEventListener('click', () => {
+      activeCat = t.getAttribute('data-cat') || 'all';
+      cats.querySelectorAll('span').forEach(s => s.classList.toggle('on', s === t));
+      rebuildVisible();
+      go(0);
+    });
+  });
 
   function startAuto(){
     isHover = false;
@@ -3417,7 +3520,11 @@ reveals.forEach(r=>io.observe(r));
   // Controls
   document.getElementById('nextSlide')?.addEventListener('click', () => { next(); });
   document.getElementById('prevSlide')?.addEventListener('click', () => { prev(); });
-  thumbs.forEach((t, i) => t.addEventListener('click', () => go(i)));
+  allThumbs.forEach((t, i) => t.addEventListener('click', () => {
+    const slide = allSlides[i];
+    const idx = visible.indexOf(slide);
+    if (idx >= 0) go(idx);
+  }));
 
   // Hover pauses auto (computer only — touch doesn't trigger)
   workSection?.addEventListener('mouseenter', stopAuto);
@@ -3464,7 +3571,7 @@ reveals.forEach(r=>io.observe(r));
     dragDX = 0;
   }
   // prevent click navigation if a drag happened
-  slides.forEach(slide => {
+  allSlides.forEach(slide => {
     const frame = slide.querySelector('.slide-video-frame');
     if (!frame) return;
     frame.addEventListener('click', (e) => {
@@ -3485,6 +3592,7 @@ reveals.forEach(r=>io.observe(r));
   window.addEventListener('resize', () => setX(-cur * window.innerWidth, false));
 
   // Init
+  rebuildVisible();
   go(0);
 })();
 
