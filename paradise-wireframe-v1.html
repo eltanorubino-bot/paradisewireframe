@@ -3284,35 +3284,6 @@ function splitWords(el){
   targets.forEach(t => io.observe(t));
 })();
 
-// ===== Marquee speed reacts to scroll velocity (Salient-style) =====
-(function(){
-  const tracks = document.querySelectorAll('.title-marquee-track, .marquee-track');
-  if (!tracks.length) return;
-  let lastY = window.scrollY;
-  let vel = 0;
-  let raf;
-
-  function tick(){
-    // ease back toward 0
-    vel *= 0.92;
-    const speedMult = 1 + Math.min(8, Math.abs(vel) * 0.55);
-    tracks.forEach(t => {
-      const base = parseFloat(t.dataset.baseDur || (t.classList.contains('title-marquee-track') ? 28 : 40));
-      if (!t.dataset.baseDur) t.dataset.baseDur = base;
-      t.style.animationDuration = (base / speedMult).toFixed(2) + 's';
-    });
-    if (Math.abs(vel) > 0.05) raf = requestAnimationFrame(tick);
-    else raf = null;
-  }
-
-  document.addEventListener('scroll', () => {
-    const y = window.scrollY;
-    vel = (y - lastY) * 0.5 + vel * 0.5; // smooth
-    lastY = y;
-    if (!raf) raf = requestAnimationFrame(tick);
-  }, { passive: true });
-})();
-
 // ===== Apply .dim to filler words in .text-reveal sections too =====
 (function(){
   const dimWords = new Set(['at','the','of','that','and','an','a','in','to','for','with','on','or','as','its','our']);
