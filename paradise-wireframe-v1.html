@@ -1965,6 +1965,81 @@ footer{
 }
 .note-banner.hide{display:none}
 
+/* ============= CINEMATIC LAYERED ANIMATIONS ============= */
+
+/* Char-by-char reveal for big section-display titles (Craft Mode / Always On Mode) */
+.section-display .char{
+  display:inline-block;
+  opacity:0;
+  transform:translateY(0.55em) rotateX(-50deg);
+  transform-origin:50% 100%;
+  transition:opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change:transform, opacity;
+}
+.section-display.in .char{opacity:1; transform:none}
+.section-display .space{display:inline-block;width:0.28em}
+
+/* Team cards: clip-path mask reveal on scroll into view */
+.team-grid .team-card{
+  clip-path:inset(0 0 100% 0);
+  opacity:0;
+  transition:clip-path 0.95s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.6s ease, transform .8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.team-grid.in .team-card{clip-path:inset(0 0 0 0); opacity:1}
+.team-grid.in .team-card:nth-child(1){transition-delay:0.05s, 0.05s, 0s}
+.team-grid.in .team-card:nth-child(2){transition-delay:0.12s, 0.12s, 0s}
+.team-grid.in .team-card:nth-child(3){transition-delay:0.19s, 0.19s, 0s}
+.team-grid.in .team-card:nth-child(4){transition-delay:0.26s, 0.26s, 0s}
+.team-grid.in .team-card:nth-child(5){transition-delay:0.33s, 0.33s, 0s}
+.team-grid.in .team-card:nth-child(6){transition-delay:0.40s, 0.40s, 0s}
+.team-card:hover{transform:translateY(-3px)}
+.team-card .team-meta .nm{transition:transform .35s cubic-bezier(0.16, 1, 0.3, 1)}
+.team-card:hover .team-meta .nm{transform:translateX(4px)}
+
+/* Phone mockup ambient floating (after entry animation completes) */
+.always-on-hero.in .phone-stack{
+  animation:phoneFloat 7s ease-in-out infinite 1.4s;
+}
+@keyframes phoneFloat{
+  0%,100%{transform:translateY(0)}
+  50%   {transform:translateY(-9px)}
+}
+
+/* Year counter — slot machine style */
+.year-count{
+  display:inline-block;
+  font-variant-numeric:tabular-nums;
+  font-feature-settings:'tnum';
+  min-width:3.5ch;
+}
+
+/* Roster row: subtle horizontal slide-in on scroll into view */
+.craft-roster .roster-item{
+  opacity:0;
+  transform:translateX(-24px);
+  transition:opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.craft-roster.in .roster-item{opacity:1; transform:none}
+.craft-roster.in .roster-item:nth-child(1){transition-delay:0.05s}
+.craft-roster.in .roster-item:nth-child(2){transition-delay:0.10s}
+.craft-roster.in .roster-item:nth-child(3){transition-delay:0.15s}
+.craft-roster.in .roster-item:nth-child(4){transition-delay:0.20s}
+.craft-roster.in .roster-item:nth-child(5){transition-delay:0.25s}
+.craft-roster.in .roster-item:nth-child(6){transition-delay:0.30s}
+
+/* Brand logo: subtle "breathing" animation on idle */
+nav.topnav .brand{
+  transition:transform .5s cubic-bezier(0.16, 1, 0.3, 1), opacity .25s ease;
+}
+nav.topnav .brand:hover{transform:scale(1.04)}
+
+@media (prefers-reduced-motion: reduce){
+  .section-display .char,
+  .team-grid .team-card,
+  .craft-roster .roster-item{transition:none;opacity:1;transform:none;clip-path:none}
+  .always-on-hero.in .phone-stack{animation:none}
+}
+
 /* ============= LIQUID AMBIENT BLOBS ============= */
 /* Soft, slow-morphing gradient blobs sitting behind certain sections — adds a 'liquid' organic feel */
 .liquid-blob{
@@ -2128,7 +2203,7 @@ footer{
   <div class="container hero-content">
     <h1 class="hero-headline hero-stagger">
       Hybrid creative production company.<br>
-      <strong>Production, judgment & technology</strong> at the pace of brands that need <em>continuous presence</em>.
+      <strong>Judgment &amp; technology</strong> at the pace of brands.
     </h1>
   </div>
   <div class="container hero-foot">
@@ -2327,7 +2402,7 @@ footer{
   <div class="container">
     <div class="always-on-hero reveal">
       <div class="always-on-left">
-        <h2 class="section-display reveal text-reveal">Always On Mode</h2>
+        <h2 class="section-display reveal char-reveal">Always On Mode</h2>
         <div class="always-on-text">
           <h3 class="sec-title sec-title--sm text-reveal">Continuous content, not just <em>campaigns</em>.</h3>
           <p class="sec-sub">We don't create the mother concept. <strong>We amplify it.</strong> We translate the agency or client's idea into Always-On systems — volume with criterion, AI as a tool, a monthly retainer instead of one-off campaigns. So the brand compounds presence instead of flickering.</p>
@@ -2478,7 +2553,7 @@ footer{
 <section id="craft" class="section">
   <div class="section-marker">Craft Mode <span class="num">04</span></div>
   <div class="container">
-    <h2 class="section-display reveal text-reveal">Craft Mode</h2>
+    <h2 class="section-display reveal char-reveal">Craft Mode</h2>
     <div class="sec-head reveal">
       <h3 class="sec-title sec-title--sm text-reveal">Roster of <em>directors</em> &amp; photographers.</h3>
       <p class="sec-sub">A roster, not a list. Signed talent for the projects that need a singular eye — not stock, not sourced. The difference between a good job and an epic one.</p>
@@ -2750,16 +2825,16 @@ footer{
 <section id="studio" class="section">
   <div class="section-marker">Team <span class="num">06</span></div>
   <div class="container">
-    <h2 class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Small by choice. Demanding by nature.</h2>
+    <h2 class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Boutique studio. Global brands.</h2>
     <div class="title-marquee" aria-hidden="true">
       <div class="title-marquee-track">
-        <span class="title-marquee-item">Small by choice. <em>Demanding</em> by nature.<span class="sep">✦</span></span>
-        <span class="title-marquee-item">Small by choice. <em>Demanding</em> by nature.<span class="sep">✦</span></span>
-        <span class="title-marquee-item">Small by choice. <em>Demanding</em> by nature.<span class="sep">✦</span></span>
+        <span class="title-marquee-item">Boutique studio. <em>Global</em> brands.<span class="sep">✦</span></span>
+        <span class="title-marquee-item">Boutique studio. <em>Global</em> brands.<span class="sep">✦</span></span>
+        <span class="title-marquee-item">Boutique studio. <em>Global</em> brands.<span class="sep">✦</span></span>
         <!-- duplicate for seamless loop -->
-        <span class="title-marquee-item">Small by choice. <em>Demanding</em> by nature.<span class="sep">✦</span></span>
-        <span class="title-marquee-item">Small by choice. <em>Demanding</em> by nature.<span class="sep">✦</span></span>
-        <span class="title-marquee-item">Small by choice. <em>Demanding</em> by nature.<span class="sep">✦</span></span>
+        <span class="title-marquee-item">Boutique studio. <em>Global</em> brands.<span class="sep">✦</span></span>
+        <span class="title-marquee-item">Boutique studio. <em>Global</em> brands.<span class="sep">✦</span></span>
+        <span class="title-marquee-item">Boutique studio. <em>Global</em> brands.<span class="sep">✦</span></span>
       </div>
     </div>
 
@@ -2767,7 +2842,7 @@ footer{
     <div class="studio-split reveal">
       <div class="studio-split-text">
         <span class="lbl">— Studio</span>
-        <h3>Founded in 2005. <em>Boutique</em> by choice.</h3>
+        <h3>Founded in <span class="year-count" data-target="2010" data-from="1995">2010</span>. <em>Demanding</em> by nature.</h3>
         <p>We work close to our clients, mixing craft, technology and people. We get into the ideas to make them mean something — pieces that work for us and for the people who proposed them.</p>
         <p>Direct relationship with the founders. No account-management layer. No meeting theater. Just the people who actually do the work.</p>
       </div>
@@ -3147,6 +3222,95 @@ function splitWords(el){
     const clean = w.textContent.toLowerCase().replace(/[.,;:&—\-]/g,'');
     if (dimWords.has(clean)) w.classList.add('dim');
   });
+})();
+
+// ===== Cinematic char-by-char reveal for big section-display titles =====
+(function(){
+  const titles = document.querySelectorAll('.char-reveal');
+  if (!titles.length) return;
+  titles.forEach(el => {
+    const txt = el.textContent;
+    el.textContent = '';
+    let charIdx = 0;
+    [...txt].forEach(ch => {
+      if (ch === ' ') { const sp = document.createElement('span'); sp.className = 'space'; el.appendChild(sp); return; }
+      const span = document.createElement('span');
+      span.className = 'char';
+      span.textContent = ch;
+      span.style.transitionDelay = (charIdx * 0.028) + 's, ' + (charIdx * 0.028) + 's';
+      el.appendChild(span);
+      charIdx++;
+    });
+  });
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.18, rootMargin: '0px 0px -8% 0px' });
+  titles.forEach(t => io.observe(t));
+})();
+
+// ===== Year counter — counts up when in view =====
+(function(){
+  const els = document.querySelectorAll('.year-count');
+  if (!els.length) return;
+  const animate = el => {
+    const target = parseInt(el.dataset.target, 10);
+    const from = parseInt(el.dataset.from || '0', 10);
+    const dur = 1400;
+    const start = performance.now();
+    function tick(now){
+      const t = Math.min(1, (now - start) / dur);
+      const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
+      const cur = Math.round(from + (target - from) * eased);
+      el.textContent = cur;
+      if (t < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  };
+  const io = new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { animate(e.target); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.6 });
+  els.forEach(el => { el.textContent = el.dataset.from || '0'; io.observe(el); });
+})();
+
+// ===== Stagger reveal observers (team grid, roster) =====
+(function(){
+  const targets = document.querySelectorAll('.team-grid, .craft-roster');
+  if (!targets.length) return;
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.10, rootMargin: '0px 0px -6% 0px' });
+  targets.forEach(t => io.observe(t));
+})();
+
+// ===== Marquee speed reacts to scroll velocity (Salient-style) =====
+(function(){
+  const tracks = document.querySelectorAll('.title-marquee-track, .brands-marquee-track');
+  if (!tracks.length) return;
+  let lastY = window.scrollY;
+  let vel = 0;
+  let raf;
+
+  function tick(){
+    // ease back toward 0
+    vel *= 0.92;
+    const speedMult = 1 + Math.min(8, Math.abs(vel) * 0.55);
+    tracks.forEach(t => {
+      const base = parseFloat(t.dataset.baseDur || (t.classList.contains('title-marquee-track') ? 28 : 40));
+      if (!t.dataset.baseDur) t.dataset.baseDur = base;
+      t.style.animationDuration = (base / speedMult).toFixed(2) + 's';
+    });
+    if (Math.abs(vel) > 0.05) raf = requestAnimationFrame(tick);
+    else raf = null;
+  }
+
+  document.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    vel = (y - lastY) * 0.5 + vel * 0.5; // smooth
+    lastY = y;
+    if (!raf) raf = requestAnimationFrame(tick);
+  }, { passive: true });
 })();
 
 // ===== Apply .dim to filler words in .text-reveal sections too =====
